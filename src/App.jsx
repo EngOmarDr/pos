@@ -1,35 +1,34 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { Navigate, NavLink } from "react-router-dom";
+import { Outlet } from "react-router-dom";
+import { FaHome, FaFileInvoiceDollar, FaHourglassHalf, FaUserClock, FaCashRegister } from "react-icons/fa";
 
-function App() {
-  const [count, setCount] = useState(0)
+export default function App(){
+    if(!localStorage.getItem('isLogin')) return <Navigate to='/login'/>
+    return (
+        <div className="app-container">
+            <nav className="app-navbar">
 
-  return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+                <NavLink to='.' className={({isActive})=> isActive ? "active-navLink" : null}>
+                    <FaHome className="nav-icon"/> Home 
+                </NavLink>
+
+                <NavLink to='completed-invoices' className={({isActive})=> isActive ? "active-navLink" : null}>
+                    <FaFileInvoiceDollar className="nav-icon"/> Completed Invoices 
+                </NavLink>
+
+                <NavLink to='pending-invoices' className={({isActive})=> isActive ? "active-navLink" : null}>
+                    <FaHourglassHalf className="nav-icon"/> Pending Invoices 
+                </NavLink>
+
+                <NavLink to='custmers-debts' className={({isActive})=> isActive ? "active-navLink" : null}>
+                    <FaUserClock className="nav-icon"/> Custmers Debts 
+                </NavLink>
+
+                <NavLink to='shift-close' className={({isActive})=> isActive ? "active-navLink" : null}>
+                    <FaCashRegister className="nav-icon"/> Shift Close 
+                </NavLink>
+            </nav>
+            <Outlet/>
+        </div>
+    )
 }
-
-export default App
