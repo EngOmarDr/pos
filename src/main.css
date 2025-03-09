@@ -5,12 +5,15 @@
 }
 :root{
     --primaryColor: #2A9D8F;
+    --darkerPrimaryColor: #21867A;
     --secondaryColor: #264653;
     --thirdColor: #E9C46A;
     --fourthColor: #F4A261;
+    --darkerFourthColor: #E78C50;
     --backgroundColor: #F4F4F4;
     --buttonColor: #E76F51;
     --buttonColorDarker: #D64B36;
+    --softGray: #E9E9E9;
     --mainBoxShadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
     --mainTransition: 0.3s;
     --mainBorderRadius: 8px;
@@ -150,12 +153,13 @@ form .input-field{
 
 /* Home Page  */
 .home-container{
-    min-height: calc(100vh - 75px);
+    height: calc(100vh - 75px);
     display: flex;
 }
 .products-section{
-    min-height: inherit;
+    height: 100%;
     width: 70%;
+    overflow-y: auto;
 }
 .products-section .options{
     display: flex;
@@ -261,21 +265,149 @@ form .input-field{
     font-size: 16px;
     font-weight: bold;
 }
-
-
 .product-unitPrice {
     color: var(--primaryColor);
     font-size: 14px;
     font-weight: bold;
 }
-.calculator-section{
+.invoice-section{
     box-shadow: var(--mainBoxShadow);
     min-height: inherit;
     width: 30%;
-    /* just for now (befor doing the actule calculator) */
+    background-color: #DDD;
+    padding: 16px;
+}
+.invoice-section .empty-invoice{
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    height: 100%;
+}
+.empty-invoice .empty-icon{
+    font-size: 50px;
+    color: var(--buttonColor);
+}
+.empty-invoice .main-text{
+    color: var(--secondaryColor);
     font-size: 18px;
+    font-weight: bold;
+}
+.empty-invoice .sub-text{
+    font-size: 14px;
+    color: #555;
+}
+.invoice-body{
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+.invoice-body .invoice-items{
+    height: 80%;
+    overflow-y: auto;
+}
+.invoice-items::-webkit-scrollbar {
+    width: 8px;
+}
+
+.invoice-items::-webkit-scrollbar-track {
+    background: var(--backgroundColor);
+    border-radius: var(--mainBorderRadius);
+}
+
+.invoice-items::-webkit-scrollbar-thumb {
+    background: var(--primaryColor);
+    border-radius: var(--mainBorderRadius);
+    transition:  var(--mainTransition);
+}
+
+.invoice-items::-webkit-scrollbar-thumb:hover {
+    background: var(--darkerPrimaryColor);
+}
+.invoice-items table{
+    width: 100%;
+    border-collapse: collapse;
+    background-color: white;
+    border-radius: 10px;
+}
+.invoice-items table thead {
+    background-color: var(--secondaryColor); 
+    color: white;
+}
+.invoice-items table tr {
+    border-bottom: 1px solid #DDD;
+}
+
+.invoice-items table tbody tr:nth-child(even) {
+    background-color: var(--softGray);
+}
+.invoice-items table tfoot {
+    background-color:  var(--thirdColor);
+    font-weight: bold;
+}
+.invoice-items table td {
+    padding: 10px;
+}
+.invoice-items tbody tr td.quantity{
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: white;
+    gap: 8px;
+}
+.quantity .plus-circle {
+    color: var(--primaryColor);
+    cursor: pointer;
+    font-size: 18px;
+}
+.quantity .minus-circle {
+    color: var(--buttonColor);
+    cursor: pointer;
+    font-size: 18px;
+}
+td.trash-can{
+    color: var(--buttonColor);
+    cursor: pointer;
+    font-size: 18px;
+}
+.invoice-body .invoice-options{
+    /* height: 20%; */
+    display: flex;
+    justify-content: space-around;
+    gap: 8xp;
+    margin-top: 10px;
+}
+.invoice-options button {
+    display: flex;
+    align-items: center;
+    gap: 3px;
+    padding: 24px 12px ;
+    border: none;
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: var(--mainTransition);
+}
+.pend-btn {    
+    background-color: var(--fourthColor);
+    color: white;
+}
+.pend-btn:hover {
+    background-color: var(--darkerFourthColor);
+}
+.complete-btn {
+    background-color: var(--primaryColor);
+    color: white;
+}
+.complete-btn:hover {
+    background-color: var(--darkerPrimaryColor);
+}
+.cancel-btn {
+    background-color: var(--buttonColor);
+    color: white;
+}
+.cancel-btn:hover {
+    background-color: var(--buttonColorDarker)
 }
