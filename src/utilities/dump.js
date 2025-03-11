@@ -112,3 +112,35 @@ export const products = [
     },
     
 ]
+export const specialCustmers = [
+    {
+        id:0,
+        name: 'none',
+        dicount:0
+    },
+    {
+        id:1,
+        name:'Hamad',
+        dicount: 5 
+    },
+    {
+        id:2,
+        name:'Hamza',
+        dicount: 8 
+    },
+    {
+        id:3,
+        name:'Omar',
+        dicount: 10
+    },
+    {
+        id:4,
+        name:'Mossab',
+        dicount: 10 
+    },
+    {
+        id:5,
+        name:'Amr',
+        dicount: 12.5
+    },
+]

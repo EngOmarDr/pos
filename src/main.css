@@ -15,6 +15,7 @@
     --buttonColorDarker: #D64B36;
     --softGray: #E9E9E9;
     --mainBoxShadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    --poupupWindowBoxShadow:0px 10px 20px rgba(0, 0, 0, 0.2);
     --mainTransition: 0.3s;
     --mainBorderRadius: 8px;
 }
@@ -311,43 +312,45 @@ form .input-field{
 .invoice-items::-webkit-scrollbar {
     width: 8px;
 }
-
 .invoice-items::-webkit-scrollbar-track {
     background: var(--backgroundColor);
     border-radius: var(--mainBorderRadius);
 }
-
 .invoice-items::-webkit-scrollbar-thumb {
     background: var(--primaryColor);
     border-radius: var(--mainBorderRadius);
     transition:  var(--mainTransition);
 }
-
 .invoice-items::-webkit-scrollbar-thumb:hover {
     background: var(--darkerPrimaryColor);
 }
-.invoice-items table{
+.invoice-items table,
+.final-invoice-section table{
     width: 100%;
     border-collapse: collapse;
     background-color: white;
     border-radius: 10px;
 }
-.invoice-items table thead {
+.invoice-items table thead ,
+.final-invoice-section table thead {
     background-color: var(--secondaryColor); 
     color: white;
 }
-.invoice-items table tr {
+.invoice-items table tr,
+.final-invoice-section table tr {
     border-bottom: 1px solid #DDD;
 }
-
-.invoice-items table tbody tr:nth-child(even) {
+.invoice-items table tbody tr:nth-child(even),
+.final-invoice-section table tbody tr:nth-child(even){
     background-color: var(--softGray);
 }
-.invoice-items table tfoot {
+.invoice-items table tfoot,
+.final-invoice-section table tfoot {
     background-color:  var(--thirdColor);
     font-weight: bold;
 }
-.invoice-items table td {
+.invoice-items table td,
+.final-invoice-section table td{
     padding: 10px;
 }
 .invoice-items tbody tr td.quantity{
@@ -411,3 +414,233 @@ td.trash-can{
 .cancel-btn:hover {
     background-color: var(--buttonColorDarker)
 }
+/* Payment Popup Window */
+.popup-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.3);
+    backdrop-filter: blur(5px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    opacity: 0;
+    visibility: hidden;
+    transition:  var(--mainTransition);
+}
+.popup-overlay.show {
+    opacity: 1;
+    visibility: visible;
+}
+.popup-overlay.hide {
+    opacity: 0;
+    visibility: hidden;
+}
+.popup-payment-window{
+    position: fixed;
+    width: 85%;
+    height: 85vh;
+    background-color: var(--backgroundColor);
+    box-shadow: var(--poupupWindowBoxShadow);
+    padding: 20px;
+    border-radius: var(--mainBorderRadius);
+    display: flex;
+    gap: 8px;
+    opacity: 0;
+    transform: scale(0.95);
+    animation: fadeIn 0.3s ease-in-out forwards;
+}
+.popup-payment-window.hide{
+    animation: fadeOut 0.3s ease-in-out forwards;
+}
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: scale(0.95);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+@keyframes fadeOut {
+    from {
+        opacity: 1;
+        transform: scale(1);
+    }
+    to {
+        opacity: 0;
+        transform: scale(0.95);
+    }
+}
+
+.popup-payment-window .close-btn {
+    position: absolute;
+    top: 25px;
+    right: 30px;
+    background: none;
+    border: none;
+    font-size: 20px;
+    cursor: pointer;
+    color: var(--buttonColor);
+    transition: var(--mainTransition)
+}
+.popup-payment-window .close-btn:hover {
+    color: var(--buttonColorDarker)
+}
+.final-invoice-section{
+    height: 100%;
+    flex: 0.4;
+    overflow-y: auto;
+}
+.payment-section{
+    height: 100%;
+    flex: 0.6;
+    background-color: var(--backgroundColor);
+    padding: 16px;
+    border-radius: var(--mainBorderRadius);
+    box-shadow: var(--mainBoxShadow);
+}
+.process-info h2 {
+    color: var(--secondaryColor);
+    font-size: 22px;
+    margin-bottom: 8px;
+}
+.process-info p{
+    color: #555;
+}
+.custmer-discount {
+    padding: 10px;
+    border-radius: var(--mainBorderRadius);
+    margin-top: 10px;
+    transition: var(--mainTransition);
+}
+.apply-descount {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 8px;
+    border-radius: 6px;
+    background-color: var(--backgroundColor);
+}
+.apply-descount span {
+    font-size: 16px;
+    font-weight: bold;
+    color: var(--secondaryColor);
+}
+
+.payment-methods{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    margin: 8px 0;
+}
+.payment-methods button {
+    width: 80%;
+    padding: 12px;
+    font-size: 16px;
+    font-weight: bold;
+    border-radius: 6px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    transition: var(--mainTransition)
+}
+.cash-btn {
+    background-color: var(--primaryColor);
+    color: white;
+    border: none;
+}
+.cash-btn:hover {
+    background-color: var(--darkerPrimaryColor); 
+}
+.custmer-account-btn {
+    background-color: var(--fourthColor); 
+    color: white;
+    border: none;
+}
+.custmer-account-btn:hover {
+    background-color: var(--darkerFourthColor);
+}
+.apply-descount-btn {
+    background-color: var(--buttonColor);
+    color: white;
+    border: none;
+    padding: 8px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: var(--mainTransition);
+}
+
+.apply-descount-btn:hover {
+    background-color: var(--buttonColorDarker);
+}
+.check-cash-btn,.add-to-custmer-acount-btn{
+    background-color: var(--primaryColor);
+    color: white;
+    border: none;
+    padding: 8px;
+    border-radius: var(--mainBorderRadius);
+    cursor: pointer;
+    transition: var(--mainTransition);
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    margin: 8px 0;
+}
+.check-cash-btn:hover, .add-to-custmer-acount-btn:hover {
+    background-color: var(--darkerPrimaryColor);
+}
+.process-calculation{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.process-calculation h2 {
+    color: var(--darkerPrimaryColor);
+    font-size: 18px;
+}
+label {
+    font-weight: bold;
+    color: var(--secondaryColor);
+    font-size: 16px;
+    margin-bottom: 5px;
+    display: block;
+}
+select {
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    border: 2px solid var(--primaryColor); 
+    border-radius: 6px;
+    background-color: white;
+    color: var(--secondaryColor);
+    transition: var(--mainTransition);
+    cursor: pointer;
+}
+select:focus {
+    border-color: var(--darkerPrimaryColor); 
+    outline: none;
+}
+input {
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    border: 2px solid var(--primaryColor);
+    border-radius: 6px;
+    background-color: white;
+    color: var(--secondaryColor);
+    transition: var(--mainTransition);
+}
+input:focus {
+    border-color: var(--darkerPrimaryColor);
+    outline: none;
+}
+
+/* Payment Popup Window */

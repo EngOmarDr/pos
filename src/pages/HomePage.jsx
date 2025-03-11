@@ -1,4 +1,4 @@
-import {categories ,products} from '../utilities/dump.js'
+import {categories ,products, specialCustmers} from '../utilities/dump.js'
 import Category from '../components/Category.jsx'
 import { useState } from 'react'
 import Product from '../components/Product.jsx'
@@ -7,16 +7,36 @@ import {
   FaCheckCircle, 
   FaClock, 
   FaMinusCircle, 
+  FaMoneyBillWave, 
   FaPlusCircle, 
+  FaTags, 
+  FaTimes, 
   FaTimesCircle, 
-  FaTrashAlt } 
+  FaTrashAlt, 
+  FaUserCircle} 
   from 'react-icons/fa'
 import Swal from 'sweetalert2'
 import withReactContent from 'sweetalert2-react-content'
+import { toast, ToastContainer } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css';
 
 export default function HomePage(){
+  const fixedTax = 20
   const [activeCatagory,setActiveCatagory] = useState(null)
   const [onGoingInvoice,setOnGoingInvoice] = useState([])
+  const [showPayment,setShowPayment] = useState(false)
+  const [showCashInput,setShowCashInput] = useState(false)
+  const [showCustmerAccountInput,setShowCustmerAccountInput] = useState(false)
+  const [paymentInfo,setPaymentInfo] = useState({
+    remaining: 0,
+    chang:0,
+  })
+  const[paymentFormData,setPaymentFormData] = useState({
+    cashAmount: 0,
+    custmerAccount:'none',
+    custmerDescount:0,
+  })
+  const [showApplyBtn,setShowApplyBtn] = useState(true)
   const filters = categories.map((category)=>{
     return  <Category
               key={category.name}
@@ -55,7 +75,23 @@ export default function HomePage(){
   function handelActiveFilter(name){
     setActiveCatagory(name)
   }
-
+  function handelCheckCash(){
+    paymentFormData.cashAmount < paymentInfo.remaining 
+    ? setPaymentInfo(prev=>({
+      ...prev,
+      remaining: prev.remaining - paymentFormData.cashAmount
+    }))
+    : setPaymentInfo(prev=>({
+      remaining: 0,
+      chang: paymentFormData.cashAmount - prev.remaining + prev.chang
+    }))
+  }
+  function getTotal(){
+    return (onGoingInvoice.reduce((acc,cur)=>{
+      return acc + cur.unitPrice * cur.quantity
+    },0)+fixedTax).toFixed(2)
+  }
+  
   function handelClearFilter(){
     setActiveCatagory(null)
   }
@@ -116,7 +152,89 @@ export default function HomePage(){
     });
     }
   }
-  const fixedTax = 20
+  function handelChange(event) {
+    const {name , value} = event.target
+    setPaymentFormData(prev=> ({
+      ...prev,
+      [name] : value
+    }))
+  }
+  function handelShowPayment(){
+      setShowPayment(prev=>!prev)
+      setPaymentInfo(prev=>({
+        remaining:getTotal(),
+        chang:0
+      }))
+      setPaymentFormData({
+        cashAmount: 0,
+        custmerAccount:'none',
+        custmerDescount:0,
+      })
+      setShowApplyBtn(true)
+  }
+  function handelShowCashToggel(){
+    return setShowCashInput(prev=>!prev)
+  }
+  function setShowCustmerAccountToggel(){
+    return setShowCustmerAccountInput(prev=>!prev)
+  }
+  function handelApplyDescount(){
+    setPaymentInfo(prev=>({
+      ...prev,
+      remaining: prev.remaining - (paymentFormData.custmerDescount/100 * prev.remaining)
+    }))
+    setShowApplyBtn(false)
+  }
+  async function handelAddingToCustmerAcount(){
+    let result;
+    if(paymentFormData.custmerAccount == 'none'){
+      toast.warn('You Got To Chose One First ! ', {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: false,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+        });
+    }else{
+      paymentInfo.remaining == 0
+      ? toast.warn('Nothing Left To Add ', {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: false,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+        })
+        // Fake Add debts to custmer Account 
+      : result = await MySwal.fire({
+        title: 'Add To Custmer Account?',
+        text: `This action will add The ${paymentInfo.remaining}$ To ${paymentFormData.custmerAccount} Account `,
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#E76F51',
+        cancelButtonColor: '#264653',
+        confirmButtonText: 'Yes, Add It',
+        cancelButtonText: "No, Do Not Add It",
+    })
+      if(result.isConfirmed){
+        setPaymentInfo(prev=>({
+          ...prev,
+          remaining:0
+        }))
+        MySwal.fire({
+          title:'Amount Added successfully',
+          text:`The amount Hase been successfully added To ${paymentFormData.custmerAccount}.`,
+          icon:'success',
+          confirmButtonColor:'#2A9D8F'
+      });
+      }
+    }
+  }
   const currentInvoiceItems = 
     <table>
       <caption>Invoice Items</caption>
@@ -153,15 +271,151 @@ export default function HomePage(){
         </tr>
         <tr>
           <td colSpan={4}>Total:</td>
-          <td >{(onGoingInvoice.reduce((acc,cur)=>{
-            return acc + cur.unitPrice * cur.quantity
-          },0) + fixedTax).toFixed(2)}$
+          <td >{getTotal()}$
           </td>
         </tr>
       </tfoot>
     </table>
+    const finalInvoiceItems =
+    <table>
+    <caption>Invoice Items</caption>
+    <thead>
+      <tr>
+        <td>Name</td>
+        <td>Unit Price</td>
+        <td>Quantity</td>
+        <td>Total</td>
+      </tr>
+    </thead>
+    <tbody>
+      {
+        onGoingInvoice.map(product=>{
+          return <tr key={product.id}>
+                    <td>{product.name}</td>
+                    <td>{product.unitPrice}$</td>
+                    <td className='quantity'>{product.quantity}</td>
+                    <td>{(product.unitPrice * product.quantity).toFixed(2)}$</td>
+                </tr>
+        })
+      }
+    </tbody>
+    <tfoot>
+      <tr>
+        <td colSpan={3}>Taxes:</td>
+        <td>{fixedTax}$</td>
+      </tr>
+      <tr>
+        <td colSpan={3}>Total:</td>
+        <td >{getTotal()}$
+        </td>
+      </tr>
+    </tfoot>
+  </table>
+
   return (
     <div className="home-container">
+      <div className={`popup-overlay ${showPayment ? 'show' : 'hide'}`}>
+        <div className={`popup-payment-window ${!showPayment ? 'hide' : ''}`}>
+          <button className='close-btn' onClick={()=>handelShowPayment()}><FaTimes/></button>
+          <div className='final-invoice-section'>
+            {finalInvoiceItems}
+          </div>
+          <div className='payment-section'>
+            <div className='process-info'>
+              <h2>Choise A Pyment Methode :</h2>
+              <p>You Can Chosie More Than one </p>
+            </div>
+          <div className='custmer-discount'>
+              {showApplyBtn && 
+              <>
+                <label htmlFor='custmerDescount'>Apply Custmer Discount:</label>
+                <select 
+                id='custmerDescount' 
+                name='custmerDescount' 
+                onChange={handelChange}
+                value={paymentFormData.custmerDescount}
+                >
+                  {
+                    specialCustmers.map(custmer=>{
+                      return  <option key={custmer.id} value={custmer.dicount}>
+                                {custmer.name}
+                              </option>
+                    })
+                  }
+                </select>
+              </>
+              }
+              {paymentFormData.custmerDescount > 0 && showApplyBtn
+              &&  <div className='apply-descount'>
+                    <span> you have a descount of {paymentFormData.custmerDescount}%</span>
+                    <button onClick={()=>{handelApplyDescount()}} className='apply-descount-btn'>
+                      <FaTags className="btn-icon" /> Apply
+                    </button>
+                  </div>
+              }
+            </div>
+            <div className='payment-methods'>
+              <button className='cash-btn' onClick={()=>handelShowCashToggel()}>
+                <FaMoneyBillWave className="btn-icon" /> Cash
+              </button>
+              <button className='custmer-account-btn' onClick={()=>setShowCustmerAccountToggel()}>
+              <FaUserCircle className="btn-icon" /> Custmer Account
+              </button>
+            </div>
+            <div className='payments'>
+              {
+              showCashInput &&
+              (
+                <div className='cash-method'>
+                  <label htmlFor='cashAmount'>Enter An Amount:</label>
+                  <input 
+                    id='cashAmount' 
+                    name='cashAmount' 
+                    value={paymentFormData.cashAmount} 
+                    onChange={handelChange} 
+                    type='number' 
+                    min='0'
+                  />
+                  <button onClick={()=>handelCheckCash()} className='check-cash-btn'>
+                  <FaCheckCircle className="btn-icon" /> check
+                  </button>
+                </div>
+              )
+              }
+              {
+              showCustmerAccountInput &&
+              (
+                <div className='custmer-Account-method'>
+                  <label htmlFor='custmerAccount'>Choise A Custmer:</label>
+                  <select 
+                    id='custmerAccount' 
+                    name='custmerAccount' 
+                    onChange={handelChange}
+                    value={paymentFormData.custmerAccount}
+                  >
+                    {
+                      specialCustmers.map(custmer=>{
+                        return  <option key={custmer.id} value={custmer.name}>
+                                  {custmer.name}
+                                </option>
+                      })
+                    }
+                  </select>
+                  <button className='add-to-custmer-acount-btn' onClick={()=>handelAddingToCustmerAcount()} > 
+                    <FaPlusCircle/> Add Remaning To Custmer Acount 
+                  </button>
+                  <ToastContainer/>
+                </div>
+              )
+              }
+              <div className='process-calculation'>
+                <h2 className='pyment-remaining'>Remaining:{paymentInfo.remaining} </h2>
+                <h2 className='pyment-change'>chang:{paymentInfo.chang}</h2>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
       <div className="invoice-section">
         {
           onGoingInvoice.length !== 0
@@ -174,7 +428,7 @@ export default function HomePage(){
                 <button className='pend-btn'>
                   <FaClock/> Pend Invoice
                 </button>
-                <button className='complete-btn'>
+                <button className='complete-btn' onClick={()=>{handelShowPayment()}}>
                   <FaCheckCircle/> Complete Invoice
                 </button>
                 <button onClick={()=>handelCancleOnGoinigInvoice()} className='cancel-btn'>
