@@ -7,13 +7,16 @@
     --primaryColor: #2A9D8F;
     --darkerPrimaryColor: #21867A;
     --secondaryColor: #264653;
-    --thirdColor: #E9C46A;
+    --thirdColor: #E9C46A; 
+    --darkerThirdColor: #D4A373; 
     --fourthColor: #F4A261;
     --darkerFourthColor: #E78C50;
     --backgroundColor: #F4F4F4;
     --buttonColor: #E76F51;
     --buttonColorDarker: #D64B36;
     --softGray: #E9E9E9;
+    --softBlue:#3085D6;
+    --darkersoftBlue: #256CB5;
     --mainBoxShadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
     --poupupWindowBoxShadow:0px 10px 20px rgba(0, 0, 0, 0.2);
     --mainTransition: 0.3s;
@@ -324,33 +327,27 @@ form .input-field{
 .invoice-items::-webkit-scrollbar-thumb:hover {
     background: var(--darkerPrimaryColor);
 }
-.invoice-items table,
-.final-invoice-section table{
+table{
     width: 100%;
     border-collapse: collapse;
     background-color: white;
     border-radius: 10px;
 }
-.invoice-items table thead ,
-.final-invoice-section table thead {
+table thead{
     background-color: var(--secondaryColor); 
     color: white;
 }
-.invoice-items table tr,
-.final-invoice-section table tr {
+table tr{
     border-bottom: 1px solid #DDD;
 }
-.invoice-items table tbody tr:nth-child(even),
-.final-invoice-section table tbody tr:nth-child(even){
+table tbody tr:nth-child(even){
     background-color: var(--softGray);
 }
-.invoice-items table tfoot,
-.final-invoice-section table tfoot {
+table tfoot{
     background-color:  var(--thirdColor);
     font-weight: bold;
 }
-.invoice-items table td,
-.final-invoice-section table td{
+table td{
     padding: 10px;
 }
 .invoice-items tbody tr td.quantity{
@@ -430,6 +427,11 @@ td.trash-can{
     visibility: hidden;
     transition:  var(--mainTransition);
 }
+.pending-invoice-section .popup-overlay,
+.complated-invoice-section .popup-overlay{
+    padding: 25px;
+    overflow-y: auto;
+}
 .popup-overlay.show {
     opacity: 1;
     visibility: visible;
@@ -476,7 +478,7 @@ td.trash-can{
     }
 }
 
-.popup-payment-window .close-btn {
+.close-btn{
     position: absolute;
     top: 25px;
     right: 30px;
@@ -487,7 +489,8 @@ td.trash-can{
     color: var(--buttonColor);
     transition: var(--mainTransition)
 }
-.popup-payment-window .close-btn:hover {
+.close-btn:hover
+{
     color: var(--buttonColorDarker)
 }
 .final-invoice-section{
@@ -499,7 +502,7 @@ td.trash-can{
     height: 100%;
     flex: 0.6;
     background-color: var(--backgroundColor);
-    padding: 16px;
+    padding: 10px;
     border-radius: var(--mainBorderRadius);
     box-shadow: var(--mainBoxShadow);
 }
@@ -606,6 +609,23 @@ td.trash-can{
     color: var(--darkerPrimaryColor);
     font-size: 18px;
 }
+.process-calculation .confirm-btn{
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 12px;
+    font-size: 16px;
+    font-weight: bold;
+    border-radius: var(--mainBorderRadius);
+    cursor: pointer;
+    transition: var(--mainTransition);
+    border: none;
+    background-color: var(--primaryColor);
+    color: white;
+}
+.process-calculation .confirm-btn:hover{
+    background-color: var(--darkerPrimaryColor);
+}
 label {
     font-weight: bold;
     color: var(--secondaryColor);
@@ -642,5 +662,144 @@ input:focus {
     border-color: var(--darkerPrimaryColor);
     outline: none;
 }
+.receipt-section{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 25px;
+    flex: 0.6;
+}
+.receipt-section h2{
+    color: var(--secondaryColor);
+    font-size: 22px;
+    margin-bottom: 15px;
+    opacity: 0;
+    animation: TextfadeIn 0.5s ease-in-out forwards;
+}
 
+@keyframes TextfadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+.receipt-section .check-svg {
+    font-size: 23px;
+    margin-left: 15px;
+    color: var(--darkerPrimaryColor);
+    vertical-align: text-bottom;
+}
 /* Payment Popup Window */
+
+/* PendingInvoicesPage &&  Complated Invoice Page  */
+.pending-invoice-page,
+.complated-invoice-page{
+    display: flex;
+    justify-content: center;
+    margin-top: 15px;
+}
+.pending-invoice-section,
+.complated-invoice-section{
+    flex: .8;
+    padding: 20px;
+    overflow-y: auto;
+    border-radius: var(--mainBorderRadius);
+    background-color: white;
+    box-shadow: var(--mainBoxShadow);
+}
+.pending-invoice,
+.completed-invoice{
+    background-color: var(--backgroundColor);
+    border-radius: 10px;
+    padding: 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+.pending-invoice .info h2,
+.completed-invoice .info h2{ 
+    color: var(--secondaryColor);
+    font-size: 18px;
+    margin-bottom: 5px;
+}
+.pending-invoice .info p,
+.completed-invoice .info p{
+    color: #555;
+    font-size: 14px;
+}
+.options {
+    display: flex;
+    gap: 8px;
+}
+.options button {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 12px;
+    font-size: 16px;
+    font-weight: bold;
+    border-radius: var(--mainBorderRadius);
+    cursor: pointer;
+    transition: var(--mainTransition);
+    border: none;
+}
+.complete-btn,
+.copy-btn,
+.new-order-btn{
+    background-color: var(--primaryColor);
+    color: white;
+}
+.complete-btn:hover,
+.copy-btn:hover,
+.new-order-btn:hover{
+    background-color: var(--darkerPrimaryColor);
+}
+.cancel-btn {
+    background-color: var(--buttonColor);
+    color: white;
+}
+.cancel-btn:hover {
+    background-color: var(--buttonColorDarker);
+}
+.show-btn {
+    background-color: var(--thirdColor);
+    color: white;
+}
+.show-btn:hover {
+    background-color: var(darkerThirdColor);
+}
+.print-btn {
+    background-color: var(--softBlue); /* Blue */
+    color: white;
+}
+.print-btn:hover {
+    background-color: var(--darkersoftBlue); /* Darker Blue */
+}
+
+.receipt {
+    width: 100%;
+    padding: 20px;
+    font-family: Arial, sans-serif;
+    text-align: center;
+    border: 1px solid #ddd;
+    background-color: white;
+}
+.receipt table {
+    width: 100%;
+    margin: 10px 0;
+}
+.receipt th, .receipt td {
+    border: 1px solid #ddd;
+    padding: 5px;
+    text-align: left;
+    color: black;
+}
+.receipt th {
+    background-color: var(--backgroundColor);
+}

@@ -1,6 +1,6 @@
-import {categories ,products, specialCustmers} from '../utilities/dump.js'
+import {categories ,pendingInvoices,products, specialCustmers} from '../utilities/dump.js'
 import Category from '../components/Category.jsx'
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import Product from '../components/Product.jsx'
 import { EmptyInvoice } from '../components/EmptyInvoice.jsx'
 import { 
@@ -9,6 +9,7 @@ import {
   FaMinusCircle, 
   FaMoneyBillWave, 
   FaPlusCircle, 
+  FaPrint, 
   FaTags, 
   FaTimes, 
   FaTimesCircle, 
@@ -19,9 +20,14 @@ import Swal from 'sweetalert2'
 import withReactContent from 'sweetalert2-react-content'
 import { toast, ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css';
+import { useReactToPrint } from 'react-to-print'
+import {Receipt}  from '../components/Receipt.jsx'
 
 export default function HomePage(){
   const fixedTax = 20
+  const receiptRef = useRef()
+  console.log(receiptRef.current);
+  
   const [activeCatagory,setActiveCatagory] = useState(null)
   const [onGoingInvoice,setOnGoingInvoice] = useState([])
   const [showPayment,setShowPayment] = useState(false)
@@ -37,6 +43,7 @@ export default function HomePage(){
     custmerDescount:0,
   })
   const [showApplyBtn,setShowApplyBtn] = useState(true)
+  const [showReceipt,setShowReceipt] = useState(false)
   const filters = categories.map((category)=>{
     return  <Category
               key={category.name}
@@ -152,6 +159,27 @@ export default function HomePage(){
     });
     }
   }
+  async function handelPendingOnGoinigInvoice() {
+    const result = await MySwal.fire({
+      title: 'Pend Invoice?',
+      text: "This action will pend This ongoing Invoice.",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#E76F51',
+      cancelButtonColor: '#264653',
+      confirmButtonText: 'Yes, Pend It',
+      cancelButtonText: "No, Keep It",
+  });
+    if(result.isConfirmed){
+      setOnGoingInvoice([])
+      MySwal.fire({
+        title:'Invoice Pended',
+        text:'The invoice has been successfully pended.',
+        icon:'success',
+        confirmButtonColor:'#2A9D8F'
+    });
+    }
+  }
   function handelChange(event) {
     const {name , value} = event.target
     setPaymentFormData(prev=> ({
@@ -161,7 +189,7 @@ export default function HomePage(){
   }
   function handelShowPayment(){
       setShowPayment(prev=>!prev)
-      setPaymentInfo(prev=>({
+      setPaymentInfo(()=>({
         remaining:getTotal(),
         chang:0
       }))
@@ -235,6 +263,47 @@ export default function HomePage(){
       }
     }
   }
+  async function handelConfirmPayment(){
+    var result
+    paymentInfo.remaining  !== 0 
+    ? toast.warn('Amount has not been paid yet ! ', {
+      position: "top-right",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: false,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "light",
+      })
+    : result = await MySwal.fire({
+      title: 'Confirm Payment?',
+      text: "This action will Confirm Payment and Complet The Invoice",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#E76F51',
+      cancelButtonColor: '#264653',
+      confirmButtonText: 'Yes, Confirm It',
+      cancelButtonText: "No, don't Confirm It ",
+  });
+    if(result.isConfirmed){
+      setShowReceipt(prev=>!prev)
+    //   MySwal.fire({
+    //     title:'Payment Completed',
+    //     text:'The Payment has been successfully Completed.',
+    //     icon:'success',
+    //     confirmButtonColor:'#2A9D8F'
+    // });
+    }
+  }
+  function handelNewOrder(){
+      setOnGoingInvoice([])
+      setShowPayment(prev=>!prev)
+      setShowReceipt(prev=>!prev)
+  }
+  const handelPrinting = useReactToPrint({
+    contentRef: receiptRef,
+  })
   const currentInvoiceItems = 
     <table>
       <caption>Invoice Items</caption>
@@ -276,6 +345,7 @@ export default function HomePage(){
         </tr>
       </tfoot>
     </table>
+
     const finalInvoiceItems =
     <table>
     <caption>Invoice Items</caption>
@@ -312,108 +382,134 @@ export default function HomePage(){
     </tfoot>
   </table>
 
+  const receiptSection = 
+          <div className='receipt-section'>
+            <h2>Payment Has Completed successfully <FaCheckCircle className='check-svg'/> </h2>
+            <div className='options'>
+              <button className='print-btn' onClick={handelPrinting}> 
+                <FaPrint/> Print Receipt
+              </button>
+              <button className='new-order-btn' onClick={()=>handelNewOrder()}> 
+                <FaPlusCircle/> New Order
+              </button>
+            </div>
+            {/* Test With Invoice From dump.sj */}
+            <div style={{ display: "none" }}>
+              <Receipt ref={receiptRef} invoiceData={pendingInvoices[0]} />
+            </div>
+          </div>
   return (
     <div className="home-container">
       <div className={`popup-overlay ${showPayment ? 'show' : 'hide'}`}>
         <div className={`popup-payment-window ${!showPayment ? 'hide' : ''}`}>
-          <button className='close-btn' onClick={()=>handelShowPayment()}><FaTimes/></button>
           <div className='final-invoice-section'>
             {finalInvoiceItems}
           </div>
-          <div className='payment-section'>
-            <div className='process-info'>
-              <h2>Choise A Pyment Methode :</h2>
-              <p>You Can Chosie More Than one </p>
-            </div>
-          <div className='custmer-discount'>
-              {showApplyBtn && 
-              <>
-                <label htmlFor='custmerDescount'>Apply Custmer Discount:</label>
-                <select 
-                id='custmerDescount' 
-                name='custmerDescount' 
-                onChange={handelChange}
-                value={paymentFormData.custmerDescount}
-                >
-                  {
-                    specialCustmers.map(custmer=>{
-                      return  <option key={custmer.id} value={custmer.dicount}>
-                                {custmer.name}
-                              </option>
-                    })
+          {
+            showReceipt 
+            ? receiptSection
+            : <>
+                <div className='payment-section'>
+                <div className='process-info'>
+                  <h2>Choise A Pyment Methode :</h2>
+                  <p>You Can Chosie More Than one </p>
+                </div>
+              <div className='custmer-discount'>
+                  {showApplyBtn && 
+                  <>
+                    <label htmlFor='custmerDescount'>Apply Custmer Discount:</label>
+                    <select 
+                    id='custmerDescount' 
+                    name='custmerDescount' 
+                    onChange={handelChange}
+                    value={paymentFormData.custmerDescount}
+                    >
+                      {
+                        specialCustmers.map(custmer=>{
+                          return  <option key={custmer.id} value={custmer.dicount}>
+                                    {custmer.name}
+                                  </option>
+                        })
+                      }
+                    </select>
+                  </>
                   }
-                </select>
-              </>
-              }
-              {paymentFormData.custmerDescount > 0 && showApplyBtn
-              &&  <div className='apply-descount'>
-                    <span> you have a descount of {paymentFormData.custmerDescount}%</span>
-                    <button onClick={()=>{handelApplyDescount()}} className='apply-descount-btn'>
-                      <FaTags className="btn-icon" /> Apply
+                  {paymentFormData.custmerDescount > 0 && showApplyBtn
+                  &&  <div className='apply-descount'>
+                        <span> you have a descount of {paymentFormData.custmerDescount}%</span>
+                        <button onClick={()=>{handelApplyDescount()}} className='apply-descount-btn'>
+                          <FaTags className="btn-icon" /> Apply
+                        </button>
+                      </div>
+                  }
+                </div>
+                <div className='payment-methods'>
+                  <button className='cash-btn' onClick={()=>handelShowCashToggel()}>
+                    <FaMoneyBillWave className="btn-icon" /> Cash
+                  </button>
+                  <button className='custmer-account-btn' onClick={()=>setShowCustmerAccountToggel()}>
+                  <FaUserCircle className="btn-icon" /> Custmer Account
+                  </button>
+                </div>
+                <div className='payments'>
+                  {
+                  showCashInput &&
+                  (
+                    <div className='cash-method'>
+                      <label htmlFor='cashAmount'>Enter An Amount:</label>
+                      <input 
+                        id='cashAmount' 
+                        name='cashAmount' 
+                        value={paymentFormData.cashAmount} 
+                        onChange={handelChange} 
+                        type='number' 
+                        min='0'
+                      />
+                      <button onClick={()=>handelCheckCash()} className='check-cash-btn'>
+                      <FaCheckCircle className="btn-icon" /> check
+                      </button>
+                    </div>
+                  )
+                  }
+                  {
+                  showCustmerAccountInput &&
+                  (
+                    <div className='custmer-Account-method'>
+                      <label htmlFor='custmerAccount'>Choise A Custmer:</label>
+                      <select 
+                        id='custmerAccount' 
+                        name='custmerAccount' 
+                        onChange={handelChange}
+                        value={paymentFormData.custmerAccount}
+                      >
+                        {
+                          specialCustmers.map(custmer=>{
+                            return  <option key={custmer.id} value={custmer.name}>
+                                      {custmer.name}
+                                    </option>
+                          })
+                        }
+                      </select>
+                      <button className='add-to-custmer-acount-btn' onClick={()=>handelAddingToCustmerAcount()} > 
+                        <FaPlusCircle/> Add Remaning To Custmer Acount 
+                      </button>
+                      <ToastContainer/>
+                    </div>
+                  )
+                  }
+                  <div className='process-calculation'>
+                    <h2 className='pyment-remaining'>Remaining:{paymentInfo.remaining} </h2>
+                    <h2 className='pyment-change'>chang:{paymentInfo.chang}</h2>
+                    <button className='confirm-btn' onClick={()=>handelConfirmPayment()}>
+                      <FaCheckCircle/> Confirm Payment
+                      <ToastContainer/>
                     </button>
                   </div>
-              }
-            </div>
-            <div className='payment-methods'>
-              <button className='cash-btn' onClick={()=>handelShowCashToggel()}>
-                <FaMoneyBillWave className="btn-icon" /> Cash
-              </button>
-              <button className='custmer-account-btn' onClick={()=>setShowCustmerAccountToggel()}>
-              <FaUserCircle className="btn-icon" /> Custmer Account
-              </button>
-            </div>
-            <div className='payments'>
-              {
-              showCashInput &&
-              (
-                <div className='cash-method'>
-                  <label htmlFor='cashAmount'>Enter An Amount:</label>
-                  <input 
-                    id='cashAmount' 
-                    name='cashAmount' 
-                    value={paymentFormData.cashAmount} 
-                    onChange={handelChange} 
-                    type='number' 
-                    min='0'
-                  />
-                  <button onClick={()=>handelCheckCash()} className='check-cash-btn'>
-                  <FaCheckCircle className="btn-icon" /> check
-                  </button>
                 </div>
-              )
-              }
-              {
-              showCustmerAccountInput &&
-              (
-                <div className='custmer-Account-method'>
-                  <label htmlFor='custmerAccount'>Choise A Custmer:</label>
-                  <select 
-                    id='custmerAccount' 
-                    name='custmerAccount' 
-                    onChange={handelChange}
-                    value={paymentFormData.custmerAccount}
-                  >
-                    {
-                      specialCustmers.map(custmer=>{
-                        return  <option key={custmer.id} value={custmer.name}>
-                                  {custmer.name}
-                                </option>
-                      })
-                    }
-                  </select>
-                  <button className='add-to-custmer-acount-btn' onClick={()=>handelAddingToCustmerAcount()} > 
-                    <FaPlusCircle/> Add Remaning To Custmer Acount 
-                  </button>
-                  <ToastContainer/>
-                </div>
-              )
-              }
-              <div className='process-calculation'>
-                <h2 className='pyment-remaining'>Remaining:{paymentInfo.remaining} </h2>
-                <h2 className='pyment-change'>chang:{paymentInfo.chang}</h2>
               </div>
-            </div>
-          </div>
+              <button className='close-btn' onClick={()=>handelShowPayment()}><FaTimes/></button>
+              </>
+          }
         </div>
       </div>
       <div className="invoice-section">
@@ -425,7 +521,7 @@ export default function HomePage(){
                 {currentInvoiceItems}
               </div>
               <div className='invoice-options'>
-                <button className='pend-btn'>
+                <button className='pend-btn' onClick={()=>handelPendingOnGoinigInvoice()}>
                   <FaClock/> Pend Invoice
                 </button>
                 <button className='complete-btn' onClick={()=>{handelShowPayment()}}>

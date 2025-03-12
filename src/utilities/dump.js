@@ -144,3 +144,65 @@ export const specialCustmers = [
         dicount: 12.5
     },
 ]
+const date = new Date();
+const year = date.getFullYear();
+const month = (date.getMonth()) + 1 ;
+const dayOfTheMounth = date.getDate();
+const hours= date.getHours();
+const minutes= date.getMinutes();
+export const pendingInvoices = [
+    {
+        invoiceId:1,
+        date: `${year}-${month}-${dayOfTheMounth}  ${hours}:${minutes}`,
+        items:[
+            {
+                id:3,
+                name: 'Yougert',
+                category:"Dairy-Derivatives",
+                unitPrice: 2.50,
+                quantity:3,
+            },
+            {
+                id:4,
+                name: 'Butter',
+                category:"Dairy-Derivatives",
+                unitPrice: 5.00,
+                quantity:3,
+            },
+            {
+                id:5,
+                name: 'tomatoes',
+                category:"Vegetables",
+                unitPrice: 3.50,
+                quantity:3,
+            },
+            {
+                id:6,
+                name: 'lettuce',
+                category:"Vegetables",
+                unitPrice: 1.50,
+                quantity:3,
+            },
+        ]
+    },
+    {
+        invoiceId:2,
+        date: `${year}-${month}-${dayOfTheMounth}  ${hours+3}:${minutes}`,
+        items:[
+            {
+                id:3,
+                name: 'Yougert',
+                category:"Dairy-Derivatives",
+                unitPrice: 2.50,
+                quantity:3,
+            },
+            {
+                id:4,
+                name: 'Butter',
+                category:"Dairy-Derivatives",
+                unitPrice: 5.00,
+                quantity:3,
+            },
+        ]
+    }
+]
