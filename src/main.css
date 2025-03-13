@@ -390,11 +390,13 @@ td.trash-can{
     cursor: pointer;
     transition: var(--mainTransition);
 }
-.pend-btn {    
+.pend-btn ,
+.return-btn{    
     background-color: var(--fourthColor);
     color: white;
 }
-.pend-btn:hover {
+.pend-btn:hover,
+.return-btn:hover {
     background-color: var(--darkerFourthColor);
 }
 .complete-btn {
@@ -696,15 +698,17 @@ input:focus {
 }
 /* Payment Popup Window */
 
-/* PendingInvoicesPage &&  Complated Invoice Page  */
+/* PendingInvoicesPage &&  Complated Invoice Page  && Custmers Debts Page */
 .pending-invoice-page,
-.complated-invoice-page{
+.complated-invoice-page,
+.custmers-debts-page{
     display: flex;
     justify-content: center;
     margin-top: 15px;
 }
 .pending-invoice-section,
-.complated-invoice-section{
+.complated-invoice-section,
+.custmers-debts-section{
     flex: .8;
     padding: 20px;
     overflow-y: auto;
@@ -713,7 +717,8 @@ input:focus {
     box-shadow: var(--mainBoxShadow);
 }
 .pending-invoice,
-.completed-invoice{
+.completed-invoice,
+.custmer-debt{
     background-color: var(--backgroundColor);
     border-radius: 10px;
     padding: 16px;
@@ -723,13 +728,15 @@ input:focus {
     margin-bottom: 10px;
 }
 .pending-invoice .info h2,
-.completed-invoice .info h2{ 
+.completed-invoice .info h2, 
+.custmer-debt .info h2{ 
     color: var(--secondaryColor);
     font-size: 18px;
     margin-bottom: 5px;
 }
 .pending-invoice .info p,
-.completed-invoice .info p{
+.completed-invoice .info p,
+.custmer-debt .info p{
     color: #555;
     font-size: 14px;
 }
@@ -751,13 +758,17 @@ input:focus {
 }
 .complete-btn,
 .copy-btn,
-.new-order-btn{
+.new-order-btn,
+.pay-off-btn,
+.debt-closure-btn{
     background-color: var(--primaryColor);
     color: white;
 }
 .complete-btn:hover,
 .copy-btn:hover,
-.new-order-btn:hover{
+.new-order-btn:hover,
+.pay-off-btn:hover,
+.debt-closure-btn:hover{
     background-color: var(--darkerPrimaryColor);
 }
 .cancel-btn {
@@ -767,11 +778,13 @@ input:focus {
 .cancel-btn:hover {
     background-color: var(--buttonColorDarker);
 }
-.show-btn {
+.show-btn, 
+.pay-part-btn {
     background-color: var(--thirdColor);
     color: white;
 }
-.show-btn:hover {
+.show-btn:hover,
+.pay-part-btn:hover {
     background-color: var(darkerThirdColor);
 }
 .print-btn {
@@ -781,7 +794,32 @@ input:focus {
 .print-btn:hover {
     background-color: var(--darkersoftBlue); /* Darker Blue */
 }
+.debts-amount {
+    background-color: white;
+    padding: 20px;
+    border-radius: var(--mainBorderRadius);
+    width: 500px;
+    box-shadow: var(--mainBoxShadow);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
 
+}
+.debts-amount input{
+    text-align: center;
+}
+.debts-amount button {
+    width: 80%;
+    padding: 10px;
+    font-size: 16px;
+    border-radius: var(--mainBorderRadius);
+    cursor: pointer;
+    margin-top: 8px;
+    border: none;
+}
+/* Payment Receipt */
 .receipt {
     width: 100%;
     padding: 20px;
@@ -802,4 +840,106 @@ input:focus {
 }
 .receipt th {
     background-color: var(--backgroundColor);
+}
+
+/* Shift Close Page  */
+.shift-close-page{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: calc(100vh - 75px);
+}
+.shift-close-section{
+    padding: 20px;
+    width: 600px;
+    overflow-y: auto;
+    border-radius: var(--mainBorderRadius);
+    background-color: white;
+    box-shadow: var(--mainBoxShadow);
+}
+.currency-input-filed input::-webkit-outer-spin-button,
+.currency-input-filed input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+.currency-input-filed input {
+    -moz-appearance: textfield;
+}
+.shift-close-section h1 {
+    color: var(--primaryColor);
+    font-size: 22px;
+    margin-bottom: 20px;
+}
+.currency-denominations{
+    display: flex;
+    flex-wrap: wrap;
+    /* justify-content: center; */
+    align-items: center;
+    gap: 20px;
+}
+.currency {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 10px;
+}
+.currency label {
+    font-size: 16px;
+    font-weight: bold;
+    color: var(--secondaryColor); 
+    margin-bottom: 5px;
+}
+.currency-input-filed {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+.currency-input-filed input {
+    width: 60px;
+    text-align: center;
+    font-size: 16px;
+    padding: 5px;
+    border: 2px solid var(--primaryColor); 
+    border-radius: var(--mainBorderRadius);
+    background-color: white;
+    color: var(--secondaryColor);
+}
+.currency-input-filed button {
+    background: none;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+    transition: var(--mainTransition);
+}
+.currency-input-filed .increase-btn {
+    color: var(--primaryColor); 
+}
+.currency-input-filed .increase-btn:hover {
+    color: var(--darkerPrimaryColor); 
+}
+.currency-input-filed .decrease-btn {
+    color: var(--buttonColor); 
+}
+.currency-input-filed .decrease-btn:hover {
+    color: var(--buttonColorDarker); 
+}
+.check-total-btn{
+    background-color: var(--primaryColor);
+    color: white;
+    padding: 10px;
+    font-size: 16px;
+    font-weight: bold;
+    border-radius: var(--mainBorderRadius);
+    cursor: pointer;
+    border: none;
+    margin: 15px 0;
+    transition: var(--mainTransition);
+}
+.check-total-btn:hover {
+    background-color: var(--darkerPrimaryColor);
+}
+.total-amount {
+    color: var(--darkerFourthColor); 
+    font-size: 20px;
+    font-weight: bold;
 }

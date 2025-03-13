@@ -1,6 +1,6 @@
-import { FaCopy, FaEye, FaPrint } from "react-icons/fa";
+import { FaCopy, FaEye, FaPrint, FaUndoAlt } from "react-icons/fa";
 
-export default function CompletedInvoice({invoiceId ,date, items, handelShowItems}){
+export default function CompletedInvoice({invoiceId ,date, items, handelShowItems, handelReturnGoods}){
 
     return (
         <div className="completed-invoice">
@@ -17,6 +17,9 @@ export default function CompletedInvoice({invoiceId ,date, items, handelShowItem
                 </button>
                 <button className="show-btn" onClick={()=>handelShowItems(items)}>
                     <FaEye/> Show
+                </button>
+                <button className="return-btn" onClick={handelReturnGoods}>
+                    <FaUndoAlt /> Return
                 </button>
             </div>
         </div>

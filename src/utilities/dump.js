@@ -116,32 +116,38 @@ export const specialCustmers = [
     {
         id:0,
         name: 'none',
-        dicount:0
+        dicount:0,
+        debt: 0, 
     },
     {
         id:1,
         name:'Hamad',
-        dicount: 5 
+        dicount: 5,
+        debt: 350,
     },
     {
         id:2,
         name:'Hamza',
-        dicount: 8 
+        dicount: 8 ,
+        debt: 500,
     },
     {
         id:3,
         name:'Omar',
-        dicount: 10
+        dicount: 10,
+        debt: 680,
     },
     {
         id:4,
         name:'Mossab',
-        dicount: 10 
+        dicount: 10 ,
+        debt: 1200,
     },
     {
         id:5,
         name:'Amr',
-        dicount: 12.5
+        dicount: 12.5,
+        debt: 1500,
     },
 ]
 const date = new Date();
@@ -205,4 +211,38 @@ export const pendingInvoices = [
             },
         ]
     }
+]
+export const currency =[
+    {
+        id:1,
+        currency:25,
+    },
+    {
+        id:2,
+        currency:50,
+    },
+    {
+        id:3,
+        currency:100,
+    },
+    {
+        id:4,
+        currency:200,
+    },
+    {
+        id:5,
+        currency:500,
+    },
+    {
+        id:6,
+        currency:1000,
+    },
+    {
+        id:7,
+        currency:2000,
+    },
+    {
+        id:8,
+        currency:5000,
+    },
 ]
