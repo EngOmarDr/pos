@@ -4,19 +4,19 @@
     padding: 0;
 }
 :root{
-    --primaryColor: #2A9D8F;
-    --darkerPrimaryColor: #21867A;
-    --secondaryColor: #264653;
-    --thirdColor: #E9C46A; 
-    --darkerThirdColor: #D4A373; 
-    --fourthColor: #F4A261;
-    --darkerFourthColor: #E78C50;
-    --backgroundColor: #F4F4F4;
-    --buttonColor: #E76F51;
-    --buttonColorDarker: #D64B36;
-    --softGray: #E9E9E9;
-    --softBlue:#3085D6;
-    --darkersoftBlue: #256CB5;
+    --primaryColor: #1E3D8F;
+    --darkerPrimaryColor: #162F6B;
+    --secondaryColor: #4F6CB2;
+    --thirdColor: #F28F3B; 
+    --darkerThirdColor: #C86F28; 
+    --fourthColor: #6DB944;
+    --darkerFourthColor: #4F9330;
+    --backgroundColor: #F4F6FA;
+    --buttonColor: #F25C54;
+    --buttonColorDarker: #D6453E;
+    --softGray: #E0E0E0;
+    --softBlue:#4F6CB2;
+    --darkersoftBlue: #3B5291;
     --mainBoxShadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
     --poupupWindowBoxShadow:0px 10px 20px rgba(0, 0, 0, 0.2);
     --mainTransition: 0.3s;
@@ -44,6 +44,8 @@ body{
 .login-img{
     width: 50%;
     height: 100%;
+    border-right: 4px solid var(--backgroundColor);
+    padding-bottom: 25px;
     /* object-fit: contain; */
 }
 .login-info{
@@ -144,10 +146,10 @@ form .input-field{
 }
 .app-navbar a.active-navLink{
     font-weight: bold;
-    color: var(--buttonColor);
+    color: var(--darkerPrimaryColor);
 }
 .app-navbar a:hover{
-    color: var(--primaryColor);
+    color: var(--darkerPrimaryColor);
 }
 .app-navbar a .nav-icon{
     margin-right: 5px;
@@ -180,7 +182,7 @@ form .input-field{
 }
 .options .filters .clear-btn{
     background-color: var(--thirdColor);
-    color: var(--secondaryColor);
+    color: var(--darkerPrimaryColor);
     font-weight: bold;
     border: 3px solid #D4A373; 
     padding: 8px 16px;
@@ -195,7 +197,7 @@ form .input-field{
 }
 .filters .category{
     background-color: var(--thirdColor);
-    color: var(--secondaryColor);
+    color: var(--darkerPrimaryColor);
     padding: 8px 16px;
     border-radius: 6px;
     font-weight: bold;
@@ -205,6 +207,11 @@ form .input-field{
 .category.active{
     background-color: var(--fourthColor);
     color: white;
+}
+.category:hover{
+    background-color: var(--fourthColor);
+    color: white;
+    border-color: var(--buttonColor);
 }
 .options .search-bar{
     display: flex;
@@ -390,13 +397,13 @@ td.trash-can{
     cursor: pointer;
     transition: var(--mainTransition);
 }
-.pend-btn ,
-.return-btn{    
+.pend-btn,
+.copy-btn{    
     background-color: var(--fourthColor);
     color: white;
 }
 .pend-btn:hover,
-.return-btn:hover {
+.copy-btn:hover{
     background-color: var(--darkerFourthColor);
 }
 .complete-btn {
@@ -406,11 +413,13 @@ td.trash-can{
 .complete-btn:hover {
     background-color: var(--darkerPrimaryColor);
 }
-.cancel-btn {
+.cancel-btn,
+.return-btn {
     background-color: var(--buttonColor);
     color: white;
 }
-.cancel-btn:hover {
+.cancel-btn:hover,
+.return-btn:hover {
     background-color: var(--buttonColorDarker)
 }
 /* Payment Popup Window */
@@ -757,21 +766,24 @@ input:focus {
     border: none;
 }
 .complete-btn,
-.copy-btn,
-.new-order-btn,
 .pay-off-btn,
 .debt-closure-btn{
     background-color: var(--primaryColor);
     color: white;
 }
+.new-order-btn{
+    background-color: var(--fourthColor);
+    color: white;
+}
+.new-order-btn:hover{
+    background-color: var(--darkerFourthColor);
+}
 .complete-btn:hover,
-.copy-btn:hover,
-.new-order-btn:hover,
 .pay-off-btn:hover,
 .debt-closure-btn:hover{
     background-color: var(--darkerPrimaryColor);
 }
-.cancel-btn {
+.cancel-btn{
     background-color: var(--buttonColor);
     color: white;
 }

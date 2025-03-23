@@ -1,5 +1,5 @@
 import { FaUser, FaLock ,FaUnlock } from 'react-icons/fa'
-import loginImg from '../assets/Login-img .png'
+import loginImg from '../assets/syrien trading logo - 1 .jpg'
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Login } from '../services/AuthServices'
