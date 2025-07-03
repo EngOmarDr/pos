@@ -1,54 +1,60 @@
-*{
+* {
     box-sizing: border-box;
     margin: 0;
     padding: 0;
 }
-:root{
+
+:root {
     --primaryColor: #1E3D8F;
     --darkerPrimaryColor: #162F6B;
     --secondaryColor: #4F6CB2;
-    --thirdColor: #F28F3B; 
-    --darkerThirdColor: #C86F28; 
+    --thirdColor: #F28F3B;
+    --darkerThirdColor: #C86F28;
     --fourthColor: #6DB944;
     --darkerFourthColor: #4F9330;
     --backgroundColor: #F4F6FA;
     --buttonColor: #F25C54;
     --buttonColorDarker: #D6453E;
     --softGray: #E0E0E0;
-    --softBlue:#4F6CB2;
+    --softBlue: #4F6CB2;
     --darkersoftBlue: #3B5291;
     --mainBoxShadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
-    --poupupWindowBoxShadow:0px 10px 20px rgba(0, 0, 0, 0.2);
+    --poupupWindowBoxShadow: 0px 10px 20px rgba(0, 0, 0, 0.2);
     --mainTransition: 0.3s;
     --mainBorderRadius: 8px;
 }
-body{
+
+body {
     background-color: var(--backgroundColor)
 }
+
 /* LOGIN PAGE  */
-.login-page{
+.login-page {
     height: 100vh;
     display: flex;
     justify-content: center;
     align-items: center;
 }
-.Loign-container{
+
+.Loign-container {
     display: flex;
-    max-width: 800px ;
+    max-width: 800px;
     height: 500px;
     box-shadow: var(--mainBoxShadow);
     border-radius: var(--mainBorderRadius);
     overflow: hidden;
     background-color: white;
 }
-.login-img{
+
+.login-img {
     width: 50%;
     height: 100%;
     border-right: 4px solid var(--backgroundColor);
     padding-bottom: 25px;
     /* object-fit: contain; */
 }
-.login-info{
+
+.login-info {
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -57,25 +63,31 @@ body{
     width: 50%;
     padding: 10px;
 }
+
 .login-info h1 {
     color: var(--secondaryColor);
 }
+
 .login-info p {
     color: #555;
 }
-.login-info form{
+
+.login-info form {
     display: flex;
     flex-direction: column;
     gap: 20px;
 }
-form .input-field{
+
+form .input-field {
     display: flex;
     flex-direction: column;
     gap: 5px;
 }
+
 .input-field .input-container {
     position: relative;
 }
+
 .input-field .input-container input {
     padding: 10px 40px 10px 10px;
     border: 2px solid #ddd;
@@ -84,27 +96,33 @@ form .input-field{
     transition: var(--mainTransition);
     width: 100%;
 }
-.input-field label{
+
+.input-field label {
     font-weight: bold;
     color: var(--secondaryColor);
 }
+
 .input-field .input-container input:focus {
     border-color: var(--primaryColor);
     outline: none;
 }
-.input-field .input-container input::placeholder{
+
+.input-field .input-container input::placeholder {
     transition: var(--mainTransition);
 }
-.input-field .input-container input:focus::placeholder{
+
+.input-field .input-container input:focus::placeholder {
     opacity: 0;
 }
-.input-field .input-container .input-icon{
+
+.input-field .input-container .input-icon {
     color: var(--primaryColor);
     position: absolute;
     top: 50%;
     transform: translateY(-50%);
     right: 10px;
 }
+
 .login-btn {
     background-color: var(--buttonColor);
     color: white;
@@ -115,20 +133,35 @@ form .input-field{
     font-size: 16px;
     transition: var(--mainTransition);
 }
+
 .login-btn:hover {
     background-color: var(--buttonColorDarker);
 }
+
+.login-btn.loading {
+    background-color: #555;
+    cursor: no-drop;
+}
+
+.login-error{
+    font-size: small;
+    font-weight: bold;
+    color: var(--buttonColorDarker);
+}
+
 @media (max-width: 767px) {
-    .login-img{
+    .login-img {
         display: none;
     }
-    .login-info{
+
+    .login-info {
         width: 100%;
     }
 }
+
 /* APP LAYER (NAVBAR) */
 
-.app-navbar{
+.app-navbar {
     height: 75px;
     background-color: var(--secondaryColor);
     box-shadow: var(--mainBoxShadow);
@@ -138,64 +171,74 @@ form .input-field{
     align-items: center;
     gap: 20px;
 }
+
 .app-navbar a {
     color: white;
     text-decoration: none;
     font-size: 18px;
     transition: var(--mainTransition);
 }
-.app-navbar a.active-navLink{
+
+.app-navbar a.active-navLink {
     font-weight: bold;
     color: var(--darkerPrimaryColor);
 }
-.app-navbar a:hover{
+
+.app-navbar a:hover {
     color: var(--darkerPrimaryColor);
 }
-.app-navbar a .nav-icon{
+
+.app-navbar a .nav-icon {
     margin-right: 5px;
     font-size: 18px;
     vertical-align: text-top;
 }
 
 /* Home Page  */
-.home-container{
+.home-container {
     height: calc(100vh - 75px);
     display: flex;
 }
-.products-section{
+
+.products-section {
     height: 100%;
     width: 70%;
     overflow-y: auto;
 }
-.products-section .options{
+
+.products-section .options {
     display: flex;
     justify-content: space-between;
     align-items: center;
     padding: 10px;
-    gap:10px;
+    gap: 10px;
     box-shadow: var(--mainBoxShadow);
     margin-bottom: 15px;
 }
-.options .filters{
+
+.options .filters {
     display: flex;
     gap: 10px;
 }
-.options .filters .clear-btn{
+
+.options .filters .clear-btn {
     background-color: var(--thirdColor);
     color: var(--darkerPrimaryColor);
     font-weight: bold;
-    border: 3px solid #D4A373; 
+    border: 3px solid #D4A373;
     padding: 8px 16px;
     border-radius: 6px;
     cursor: pointer;
     transition: var(--mainTransition);
 }
-.filters .clear-btn:hover{
+
+.filters .clear-btn:hover {
     background-color: var(--fourthColor);
     color: white;
     border-color: var(--buttonColor);
 }
-.filters .category{
+
+.filters .category {
     background-color: var(--thirdColor);
     color: var(--darkerPrimaryColor);
     padding: 8px 16px;
@@ -204,16 +247,19 @@ form .input-field{
     cursor: pointer;
     transition: var(--mainTransition)
 }
-.category.active{
+
+.category.active {
     background-color: var(--fourthColor);
     color: white;
 }
-.category:hover{
+
+.category:hover {
     background-color: var(--fourthColor);
     color: white;
     border-color: var(--buttonColor);
 }
-.options .search-bar{
+
+.options .search-bar {
     display: flex;
     align-items: center;
     background-color: white;
@@ -221,13 +267,15 @@ form .input-field{
     border-radius: 6px;
     border: 2px solid #DDD;
 }
-.search-bar input{
+
+.search-bar input {
     border: none;
     padding: 8px;
     font-size: 16px;
     outline: none;
     width: 200px;
 }
+
 .search-bar button {
     background-color: var(--buttonColor);
     color: white;
@@ -238,17 +286,20 @@ form .input-field{
     font-weight: bold;
     transition: var(--mainTransition);
 }
+
 .search-bar button:hover {
     background-color: var(--buttonColorDarker);
 }
-.products-section .products{
+
+.products-section .products {
     display: flex;
     align-items: center;
     flex-wrap: wrap;
     gap: 20px;
     padding: 10px;
 }
-.products .product-card{
+
+.products .product-card {
     width: 150px;
     height: 150px;
     background-color: #FFFFFF;
@@ -258,37 +309,44 @@ form .input-field{
     transition: var(--mainTransition);
     cursor: pointer;
 }
+
 .product-card:hover {
     background-color: var(--thirdColor);
     transform: scale(1.1);
 }
-.product-card img{
+
+.product-card img {
     width: 100%;
     height: 70%;
 }
-.product-card .product-info{
+
+.product-card .product-info {
     height: 30%;
     display: flex;
     justify-content: space-between;
 }
+
 .product-info .product-name {
     color: var(--secondaryColor);
     font-size: 16px;
     font-weight: bold;
 }
+
 .product-unitPrice {
     color: var(--primaryColor);
     font-size: 14px;
     font-weight: bold;
 }
-.invoice-section{
+
+.invoice-section {
     box-shadow: var(--mainBoxShadow);
     min-height: inherit;
     width: 30%;
     background-color: #DDD;
     padding: 16px;
 }
-.invoice-section .empty-invoice{
+
+.invoice-section .empty-invoice {
     text-align: center;
     display: flex;
     flex-direction: column;
@@ -297,99 +355,120 @@ form .input-field{
     gap: 10px;
     height: 100%;
 }
-.empty-invoice .empty-icon{
+
+.empty-invoice .empty-icon {
     font-size: 50px;
     color: var(--buttonColor);
 }
-.empty-invoice .main-text{
+
+.empty-invoice .main-text {
     color: var(--secondaryColor);
     font-size: 18px;
     font-weight: bold;
 }
-.empty-invoice .sub-text{
+
+.empty-invoice .sub-text {
     font-size: 14px;
     color: #555;
 }
-.invoice-body{
+
+.invoice-body {
     height: 100%;
     display: flex;
     flex-direction: column;
 }
-.invoice-body .invoice-items{
+
+.invoice-body .invoice-items {
     height: 80%;
     overflow-y: auto;
 }
+
 .invoice-items::-webkit-scrollbar {
     width: 8px;
 }
+
 .invoice-items::-webkit-scrollbar-track {
     background: var(--backgroundColor);
     border-radius: var(--mainBorderRadius);
 }
+
 .invoice-items::-webkit-scrollbar-thumb {
     background: var(--primaryColor);
     border-radius: var(--mainBorderRadius);
-    transition:  var(--mainTransition);
+    transition: var(--mainTransition);
 }
+
 .invoice-items::-webkit-scrollbar-thumb:hover {
     background: var(--darkerPrimaryColor);
 }
-table{
+
+table {
     width: 100%;
     border-collapse: collapse;
     background-color: white;
     border-radius: 10px;
 }
-table thead{
-    background-color: var(--secondaryColor); 
+
+table thead {
+    background-color: var(--secondaryColor);
     color: white;
 }
-table tr{
+
+table tr {
     border-bottom: 1px solid #DDD;
 }
-table tbody tr:nth-child(even){
+
+table tbody tr:nth-child(even) {
     background-color: var(--softGray);
 }
-table tfoot{
-    background-color:  var(--thirdColor);
+
+table tfoot {
+    background-color: var(--thirdColor);
     font-weight: bold;
 }
-table td{
+
+table td {
     padding: 10px;
 }
-.invoice-items tbody tr td.quantity{
+
+.invoice-items tbody tr td.quantity {
     display: flex;
     justify-content: center;
     align-items: center;
     gap: 8px;
 }
+
 .quantity .plus-circle {
     color: var(--primaryColor);
     cursor: pointer;
     font-size: 18px;
 }
+
 .quantity .minus-circle {
     color: var(--buttonColor);
     cursor: pointer;
     font-size: 18px;
 }
-td.trash-can{
+
+td.trash-can {
     color: var(--buttonColor);
     cursor: pointer;
     font-size: 18px;
 }
-.invoice-body .invoice-options{
+
+.invoice-body .invoice-options {
     /* height: 20%; */
     display: flex;
     justify-content: space-around;
     gap: 8xp;
     margin-top: 10px;
 }
+
 .invoice-options button {
     display: flex;
     align-items: center;
     gap: 3px;
-    padding: 24px 12px ;
+    padding: 24px 12px;
     border: none;
     border-radius: 6px;
     font-size: 13px;
@@ -397,31 +476,38 @@ td.trash-can{
     cursor: pointer;
     transition: var(--mainTransition);
 }
+
 .pend-btn,
-.copy-btn{    
+.copy-btn {
     background-color: var(--fourthColor);
     color: white;
 }
+
 .pend-btn:hover,
-.copy-btn:hover{
+.copy-btn:hover {
     background-color: var(--darkerFourthColor);
 }
+
 .complete-btn {
     background-color: var(--primaryColor);
     color: white;
 }
+
 .complete-btn:hover {
     background-color: var(--darkerPrimaryColor);
 }
+
 .cancel-btn,
 .return-btn {
     background-color: var(--buttonColor);
     color: white;
 }
+
 .cancel-btn:hover,
 .return-btn:hover {
     background-color: var(--buttonColorDarker)
 }
+
 /* Payment Popup Window */
 .popup-overlay {
     position: fixed;
@@ -436,22 +522,26 @@ td.trash-can{
     align-items: center;
     opacity: 0;
     visibility: hidden;
-    transition:  var(--mainTransition);
+    transition: var(--mainTransition);
 }
+
 .pending-invoice-section .popup-overlay,
-.complated-invoice-section .popup-overlay{
+.complated-invoice-section .popup-overlay {
     padding: 25px;
     overflow-y: auto;
 }
+
 .popup-overlay.show {
     opacity: 1;
     visibility: visible;
 }
+
 .popup-overlay.hide {
     opacity: 0;
     visibility: hidden;
 }
-.popup-payment-window{
+
+.popup-payment-window {
     position: fixed;
     width: 85%;
     height: 85vh;
@@ -465,31 +555,36 @@ td.trash-can{
     transform: scale(0.95);
     animation: fadeIn 0.3s ease-in-out forwards;
 }
-.popup-payment-window.hide{
+
+.popup-payment-window.hide {
     animation: fadeOut 0.3s ease-in-out forwards;
 }
+
 @keyframes fadeIn {
     from {
         opacity: 0;
         transform: scale(0.95);
     }
+
     to {
         opacity: 1;
         transform: scale(1);
     }
 }
+
 @keyframes fadeOut {
     from {
         opacity: 1;
         transform: scale(1);
     }
+
     to {
         opacity: 0;
         transform: scale(0.95);
     }
 }
 
-.close-btn{
+.close-btn {
     position: absolute;
     top: 25px;
     right: 30px;
@@ -500,16 +595,18 @@ td.trash-can{
     color: var(--buttonColor);
     transition: var(--mainTransition)
 }
-.close-btn:hover
-{
+
+.close-btn:hover {
     color: var(--buttonColorDarker)
 }
-.final-invoice-section{
+
+.final-invoice-section {
     height: 100%;
     flex: 0.4;
     overflow-y: auto;
 }
-.payment-section{
+
+.payment-section {
     height: 100%;
     flex: 0.6;
     background-color: var(--backgroundColor);
@@ -517,20 +614,24 @@ td.trash-can{
     border-radius: var(--mainBorderRadius);
     box-shadow: var(--mainBoxShadow);
 }
+
 .process-info h2 {
     color: var(--secondaryColor);
     font-size: 22px;
     margin-bottom: 8px;
 }
-.process-info p{
+
+.process-info p {
     color: #555;
 }
+
 .custmer-discount {
     padding: 10px;
     border-radius: var(--mainBorderRadius);
     margin-top: 10px;
     transition: var(--mainTransition);
 }
+
 .apply-descount {
     display: flex;
     align-items: center;
@@ -539,13 +640,14 @@ td.trash-can{
     border-radius: 6px;
     background-color: var(--backgroundColor);
 }
+
 .apply-descount span {
     font-size: 16px;
     font-weight: bold;
     color: var(--secondaryColor);
 }
 
-.payment-methods{
+.payment-methods {
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -553,6 +655,7 @@ td.trash-can{
     gap: 10px;
     margin: 8px 0;
 }
+
 .payment-methods button {
     width: 80%;
     padding: 12px;
@@ -566,22 +669,27 @@ td.trash-can{
     gap: 8px;
     transition: var(--mainTransition)
 }
+
 .cash-btn {
     background-color: var(--primaryColor);
     color: white;
     border: none;
 }
+
 .cash-btn:hover {
-    background-color: var(--darkerPrimaryColor); 
+    background-color: var(--darkerPrimaryColor);
 }
+
 .custmer-account-btn {
-    background-color: var(--fourthColor); 
+    background-color: var(--fourthColor);
     color: white;
     border: none;
 }
+
 .custmer-account-btn:hover {
     background-color: var(--darkerFourthColor);
 }
+
 .apply-descount-btn {
     background-color: var(--buttonColor);
     color: white;
@@ -595,7 +703,9 @@ td.trash-can{
 .apply-descount-btn:hover {
     background-color: var(--buttonColorDarker);
 }
-.check-cash-btn,.add-to-custmer-acount-btn{
+
+.check-cash-btn,
+.add-to-custmer-acount-btn {
     background-color: var(--primaryColor);
     color: white;
     border: none;
@@ -608,19 +718,24 @@ td.trash-can{
     gap: 5px;
     margin: 8px 0;
 }
-.check-cash-btn:hover, .add-to-custmer-acount-btn:hover {
+
+.check-cash-btn:hover,
+.add-to-custmer-acount-btn:hover {
     background-color: var(--darkerPrimaryColor);
 }
-.process-calculation{
+
+.process-calculation {
     display: flex;
     justify-content: space-between;
     align-items: center;
 }
+
 .process-calculation h2 {
     color: var(--darkerPrimaryColor);
     font-size: 18px;
 }
-.process-calculation .confirm-btn{
+
+.process-calculation .confirm-btn {
     display: flex;
     align-items: center;
     gap: 6px;
@@ -634,9 +749,11 @@ td.trash-can{
     background-color: var(--primaryColor);
     color: white;
 }
-.process-calculation .confirm-btn:hover{
+
+.process-calculation .confirm-btn:hover {
     background-color: var(--darkerPrimaryColor);
 }
+
 label {
     font-weight: bold;
     color: var(--secondaryColor);
@@ -644,21 +761,24 @@ label {
     margin-bottom: 5px;
     display: block;
 }
+
 select {
     width: 100%;
     padding: 10px;
     font-size: 16px;
-    border: 2px solid var(--primaryColor); 
+    border: 2px solid var(--primaryColor);
     border-radius: 6px;
     background-color: white;
     color: var(--secondaryColor);
     transition: var(--mainTransition);
     cursor: pointer;
 }
+
 select:focus {
-    border-color: var(--darkerPrimaryColor); 
+    border-color: var(--darkerPrimaryColor);
     outline: none;
 }
+
 input {
     width: 100%;
     padding: 10px;
@@ -669,11 +789,13 @@ input {
     color: var(--secondaryColor);
     transition: var(--mainTransition);
 }
+
 input:focus {
     border-color: var(--darkerPrimaryColor);
     outline: none;
 }
-.receipt-section{
+
+.receipt-section {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -681,7 +803,8 @@ input:focus {
     gap: 25px;
     flex: 0.6;
 }
-.receipt-section h2{
+
+.receipt-section h2 {
     color: var(--secondaryColor);
     font-size: 22px;
     margin-bottom: 15px;
@@ -694,30 +817,34 @@ input:focus {
         opacity: 0;
         transform: translateY(-10px);
     }
+
     to {
         opacity: 1;
         transform: translateY(0);
     }
 }
+
 .receipt-section .check-svg {
     font-size: 23px;
     margin-left: 15px;
     color: var(--darkerPrimaryColor);
     vertical-align: text-bottom;
 }
+
 /* Payment Popup Window */
 
 /* PendingInvoicesPage &&  Complated Invoice Page  && Custmers Debts Page */
 .pending-invoice-page,
 .complated-invoice-page,
-.custmers-debts-page{
+.custmers-debts-page {
     display: flex;
     justify-content: center;
     margin-top: 15px;
 }
+
 .pending-invoice-section,
 .complated-invoice-section,
-.custmers-debts-section{
+.custmers-debts-section {
     flex: .8;
     padding: 20px;
     overflow-y: auto;
@@ -725,9 +852,10 @@ input:focus {
     background-color: white;
     box-shadow: var(--mainBoxShadow);
 }
+
 .pending-invoice,
 .completed-invoice,
-.custmer-debt{
+.custmer-debt {
     background-color: var(--backgroundColor);
     border-radius: 10px;
     padding: 16px;
@@ -736,23 +864,27 @@ input:focus {
     align-items: center;
     margin-bottom: 10px;
 }
+
 .pending-invoice .info h2,
-.completed-invoice .info h2, 
-.custmer-debt .info h2{ 
+.completed-invoice .info h2,
+.custmer-debt .info h2 {
     color: var(--secondaryColor);
     font-size: 18px;
     margin-bottom: 5px;
 }
+
 .pending-invoice .info p,
 .completed-invoice .info p,
-.custmer-debt .info p{
+.custmer-debt .info p {
     color: #555;
     font-size: 14px;
 }
+
 .options {
     display: flex;
     gap: 8px;
 }
+
 .options button {
     display: flex;
     align-items: center;
@@ -765,47 +897,60 @@ input:focus {
     transition: var(--mainTransition);
     border: none;
 }
+
 .complete-btn,
 .pay-off-btn,
-.debt-closure-btn{
+.debt-closure-btn {
     background-color: var(--primaryColor);
     color: white;
 }
-.new-order-btn{
+
+.new-order-btn {
     background-color: var(--fourthColor);
     color: white;
 }
-.new-order-btn:hover{
+
+.new-order-btn:hover {
     background-color: var(--darkerFourthColor);
 }
+
 .complete-btn:hover,
 .pay-off-btn:hover,
-.debt-closure-btn:hover{
+.debt-closure-btn:hover {
     background-color: var(--darkerPrimaryColor);
 }
-.cancel-btn{
+
+.cancel-btn {
     background-color: var(--buttonColor);
     color: white;
 }
+
 .cancel-btn:hover {
     background-color: var(--buttonColorDarker);
 }
-.show-btn, 
+
+.show-btn,
 .pay-part-btn {
     background-color: var(--thirdColor);
     color: white;
 }
+
 .show-btn:hover,
 .pay-part-btn:hover {
     background-color: var(darkerThirdColor);
 }
+
 .print-btn {
-    background-color: var(--softBlue); /* Blue */
+    background-color: var(--softBlue);
+    /* Blue */
     color: white;
 }
+
 .print-btn:hover {
-    background-color: var(--darkersoftBlue); /* Darker Blue */
+    background-color: var(--darkersoftBlue);
+    /* Darker Blue */
 }
+
 .debts-amount {
     background-color: white;
     padding: 20px;
@@ -819,9 +964,11 @@ input:focus {
     gap: 15px;
 
 }
-.debts-amount input{
+
+.debts-amount input {
     text-align: center;
 }
+
 .debts-amount button {
     width: 80%;
     padding: 10px;
@@ -831,6 +978,7 @@ input:focus {
     margin-top: 8px;
     border: none;
 }
+
 /* Payment Receipt */
 .receipt {
     width: 100%;
@@ -840,28 +988,33 @@ input:focus {
     border: 1px solid #ddd;
     background-color: white;
 }
+
 .receipt table {
     width: 100%;
     margin: 10px 0;
 }
-.receipt th, .receipt td {
+
+.receipt th,
+.receipt td {
     border: 1px solid #ddd;
     padding: 5px;
     text-align: left;
     color: black;
 }
+
 .receipt th {
     background-color: var(--backgroundColor);
 }
 
 /* Shift Close Page  */
-.shift-close-page{
+.shift-close-page {
     display: flex;
     justify-content: center;
     align-items: center;
     height: calc(100vh - 75px);
 }
-.shift-close-section{
+
+.shift-close-section {
     padding: 20px;
     width: 600px;
     overflow-y: auto;
@@ -869,53 +1022,62 @@ input:focus {
     background-color: white;
     box-shadow: var(--mainBoxShadow);
 }
+
 .currency-input-filed input::-webkit-outer-spin-button,
 .currency-input-filed input::-webkit-inner-spin-button {
     -webkit-appearance: none;
     margin: 0;
 }
+
 .currency-input-filed input {
     -moz-appearance: textfield;
 }
+
 .shift-close-section h1 {
     color: var(--primaryColor);
     font-size: 22px;
     margin-bottom: 20px;
 }
-.currency-denominations{
+
+.currency-denominations {
     display: flex;
     flex-wrap: wrap;
     /* justify-content: center; */
     align-items: center;
     gap: 20px;
 }
+
 .currency {
     display: flex;
     flex-direction: column;
     align-items: center;
     margin-bottom: 10px;
 }
+
 .currency label {
     font-size: 16px;
     font-weight: bold;
-    color: var(--secondaryColor); 
+    color: var(--secondaryColor);
     margin-bottom: 5px;
 }
+
 .currency-input-filed {
     display: flex;
     align-items: center;
     gap: 8px;
 }
+
 .currency-input-filed input {
     width: 60px;
     text-align: center;
     font-size: 16px;
     padding: 5px;
-    border: 2px solid var(--primaryColor); 
+    border: 2px solid var(--primaryColor);
     border-radius: var(--mainBorderRadius);
     background-color: white;
     color: var(--secondaryColor);
 }
+
 .currency-input-filed button {
     background: none;
     border: none;
@@ -923,19 +1085,24 @@ input:focus {
     cursor: pointer;
     transition: var(--mainTransition);
 }
+
 .currency-input-filed .increase-btn {
-    color: var(--primaryColor); 
+    color: var(--primaryColor);
 }
+
 .currency-input-filed .increase-btn:hover {
-    color: var(--darkerPrimaryColor); 
+    color: var(--darkerPrimaryColor);
 }
+
 .currency-input-filed .decrease-btn {
-    color: var(--buttonColor); 
+    color: var(--buttonColor);
 }
+
 .currency-input-filed .decrease-btn:hover {
-    color: var(--buttonColorDarker); 
+    color: var(--buttonColorDarker);
 }
-.check-total-btn{
+
+.check-total-btn {
     background-color: var(--primaryColor);
     color: white;
     padding: 10px;
@@ -947,11 +1114,13 @@ input:focus {
     margin: 15px 0;
     transition: var(--mainTransition);
 }
+
 .check-total-btn:hover {
     background-color: var(--darkerPrimaryColor);
 }
+
 .total-amount {
-    color: var(--darkerFourthColor); 
+    color: var(--darkerFourthColor);
     font-size: 20px;
     font-weight: bold;
 }
