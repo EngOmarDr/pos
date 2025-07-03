@@ -1,12 +1,6 @@
-import {
-  categories,
-  pendingInvoices,
-  products,
-  specialCustmers,
-} from "../utilities/dump.js";
-import Category from "../components/Category.jsx";
+import { pendingInvoices, specialCustmers } from "../utilities/dump.js";
 import { useRef, useState } from "react";
-import Product from "../components/Product.jsx";
+import AvailableProducts from "../components/AvailableProducts.jsx";
 import { EmptyInvoice } from "../components/EmptyInvoice.jsx";
 import {
   FaCheckCircle,
@@ -27,11 +21,16 @@ import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useReactToPrint } from "react-to-print";
 import { Receipt } from "../components/Receipt.jsx";
+import useFetchData from "../hooks/useFetchData.js";
+import Filters from "../components/Filters.jsx";
+import { fetchProducts } from "../services/PoductsServices.js";
+import { fetchGroupsTree } from "../services/CroupsServices.js";
 
 export default function HomePage() {
   const fixedTax = 20;
   const receiptRef = useRef();
-  const [activeCatagory, setActiveCatagory] = useState(null);
+  const [activeCatagoryID, setActiveCatagoryID] = useState(null);
+  const [filterdProducts, setFilterdProducts] = useState([]);
   const [onGoingInvoice, setOnGoingInvoice] = useState([]);
   const [showPayment, setShowPayment] = useState(false);
   const [showCashInput, setShowCashInput] = useState(false);
@@ -47,52 +46,20 @@ export default function HomePage() {
   });
   const [showApplyBtn, setShowApplyBtn] = useState(true);
   const [showReceipt, setShowReceipt] = useState(false);
-  const filters = categories.map((category) => {
-    return (
-      <Category
-        key={category.name}
-        id={category.id}
-        categoryName={category.name}
-        onClick={handelActiveFilter}
-        isActive={activeCatagory === category.name ? true : false}
-      />
-    );
-  });
-  const availableProducts =
-    activeCatagory !== null
-      ? products
-          .filter((product) => {
-            return product.category == activeCatagory ? product : null;
-          })
-          .map((product) => {
-            return (
-              <Product
-                key={product.id}
-                id={product.id}
-                name={product.name}
-                unitPrice={product.unitPrice}
-                productImage={product.productImage}
-              />
-            );
-          })
-      : products.map((product) => {
-          return (
-            <Product
-              key={product.id}
-              productFullInfo={product}
-              id={product.id}
-              name={product.name}
-              unitPrice={product.unitPrice}
-              productImage={product.productImage}
-              onClick={handleAddProductToInvoice}
-            />
-          );
-        });
+  const {
+    fetchData: availableProducts,
+    error: errorInFetchingProducts,
+    isFetching: isFetchingProducts,
+  } = useFetchData(fetchProducts);
+
+  const {
+    fetchData: availableGroups,
+    error: errorInFetchingGroups,
+    isFetching: isFetchingGroups,
+  } = useFetchData(fetchGroupsTree);
 
   const MySwal = withReactContent(Swal);
-  function handelActiveFilter(name) {
-    setActiveCatagory(name);
-  }
+
   function handelCheckCash() {
     paymentFormData.cashAmount < paymentInfo.remaining
       ? setPaymentInfo((prev) => ({
@@ -112,8 +79,19 @@ export default function HomePage() {
     ).toFixed(2);
   }
   function handelClearFilter() {
-    setActiveCatagory(null);
+    setActiveCatagoryID(null);
+    setFilterdProducts([]);
   }
+  function handelActiveFilter(groupId) {
+    setFilterdProducts(() => {
+      return availableProducts.filter((product) => {
+        return product.groupId === groupId;
+      });
+    });
+    setActiveCatagoryID(groupId);
+    console.log(filterdProducts);
+  }
+  // Probably It will change when we start with the invoice section
   function handleAddProductToInvoice(product) {
     setOnGoingInvoice((prev) => {
       let isExist = prev.some((pro) => pro.name == product.name);
@@ -435,6 +413,32 @@ export default function HomePage() {
       </div>
     </div>
   );
+
+  let productsSectionContent;
+  if (activeCatagoryID) {
+    if (filterdProducts.length == 0) {
+      productsSectionContent = <h3 className="no-products">No Products By This Type At The store</h3>;
+    } else {
+      productsSectionContent = (
+        <AvailableProducts
+          products={filterdProducts}
+          onAddItem={handleAddProductToInvoice}
+        />
+      );
+    }
+  } else {
+    if (availableProducts.length > 0) {
+      productsSectionContent = (
+        <AvailableProducts
+          products={availableProducts}
+          onAddItem={handleAddProductToInvoice}
+        />
+      );
+    } else {
+      productsSectionContent = <h3 className="no-products">No Products At The store</h3>;
+    }
+  }
+
   return (
     <div className="home-container">
       <div className={`popup-overlay ${showPayment ? "show" : "hide"}`}>
@@ -602,26 +606,32 @@ export default function HomePage() {
           <EmptyInvoice />
         )}
       </div>
-      <div className="products-section">
-        <div className="options">
-          <div className="filters">
-            {filters}
-            <button
-              className="clear-btn"
-              onClick={() => {
-                handelClearFilter();
-              }}
-            >
-              Clear
-            </button>
+
+      {isFetchingProducts || isFetchingGroups ? (
+        <div className="loading-spinner"></div>
+      ) : errorInFetchingProducts || errorInFetchingGroups ? (
+        <h3>
+          {errorInFetchingGroups
+            ? errorInFetchingGroups.message
+            : errorInFetchingProducts.message}
+        </h3>
+      ) : (
+        <div className="products-section">
+          <div className="options">
+            <Filters
+              groupsTree={availableGroups}
+              handelActiveFilter={handelActiveFilter}
+              handelClearFilter={handelClearFilter}
+              activeCatagoryId={activeCatagoryID}
+            />
+            <form className="search-bar">
+              <input type="search" />
+              <button>Search</button>
+            </form>
           </div>
-          <form className="search-bar">
-            <input type="search" />
-            <button>Search</button>
-          </form>
+          <div className="products">{productsSectionContent}</div>
         </div>
-        <div className="products">{availableProducts}</div>
-      </div>
+      )}
     </div>
   );
 }

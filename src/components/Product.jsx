@@ -12,10 +12,10 @@ export default function Product({
         onClick(productFullInfo);
       }}
     >
-      <img src={productImage} />
+      <img src={`http://localhost:8080${productImage}`} />
       <div className="product-info">
-        <h3 className="product-name">{name}</h3>
-        <h3 className="product-unitPrice">{unitPrice} $</h3>
+        <h3 className="product-name"> Poduct Name: {name}</h3>
+        <h3 className="product-unitPrice">Unit Price: {unitPrice} $</h3>
       </div>
     </div>
   );
