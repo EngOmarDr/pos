@@ -1,8 +1,6 @@
 import { pendingInvoices, specialCustmers } from "../utilities/dump.js";
-
 import { useRef, useState } from "react";
 import useFetchData from "../hooks/useFetchData.js";
-
 import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
 import { toast, ToastContainer } from "react-toastify";
@@ -21,13 +19,12 @@ import {
   FaUserCircle,
 } from "react-icons/fa";
 import { useReactToPrint } from "react-to-print";
-
 import { fetchProducts } from "../services/PoductsServices.js";
 import { fetchGroupsTree } from "../services/CroupsServices.js";
-
 import { EmptyInvoice } from "../components/EmptyInvoice.jsx";
 import { Receipt } from "../components/Receipt.jsx";
 import ProductsSection from "../components/ProductSection.jsx";
+import BarcodeScanner from "../components/BarcodeScanner.jsx";
 
 export default function HomePage() {
   const fixedTax = 20;
@@ -130,7 +127,7 @@ export default function HomePage() {
       searchRef.current.value = "";
     }
   }
-  // Probably It will change when we start with the invoice section
+  // Probably It will change when we start with the invoice section (adding a new invoice )
   function handleAddProductToInvoice(product) {
     setOnGoingInvoice((prev) => {
       let isExist = prev.some((pro) => pro.name == product.name);
@@ -145,12 +142,35 @@ export default function HomePage() {
             {
               id: product.id,
               name: product.name,
-              category: product.category,
-              unitPrice: product.unitPrice,
+              code: product.barcodes[0].barcode,
+              unitPrice: product.prices[0].price,
               quantity: 1,
             },
           ];
     });
+  }
+  function handleAddProductToInvoiceByCode(product) {
+    // will come back when we start on going invice if we need any update
+    if (product) {
+      setOnGoingInvoice((prev) => {
+        let isExist = prev.some((pro) => pro.name == product.name);
+        return isExist
+          ? prev.map((pro) => {
+              return pro.name == product.name
+                ? { ...pro, quantity: pro.quantity + 1 }
+                : pro;
+            })
+          : [
+              ...prev,
+              {
+                id: product.id,
+                name: product.name,
+                unitPrice: product.prices[0].price,
+                quantity: 1,
+              },
+            ];
+      });
+    }
   }
   function handleRemoveItemFromInvoice(id) {
     setOnGoingInvoice((prev) => prev.filter((product) => product.id !== id));
@@ -454,6 +474,10 @@ export default function HomePage() {
   );
   return (
     <div className="home-container">
+      <BarcodeScanner
+        onQRScan={handleAddProductToInvoiceByCode}
+        allProdcuts={availableProducts}
+      />
       <div className={`popup-overlay ${showPayment ? "show" : "hide"}`}>
         <div className={`popup-payment-window ${!showPayment ? "hide" : ""}`}>
           <div className="final-invoice-section">{finalInvoiceItems}</div>
