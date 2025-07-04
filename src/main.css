@@ -276,8 +276,12 @@ form .input-field {
     width: 200px;
 }
 
-.search-bar button {
-    background-color: var(--buttonColor);
+.search-bar .search-actions {
+    display: flex;
+    gap: 8px
+}
+
+.search-bar .search-actions button {
     color: white;
     border: none;
     padding: 8px 12px;
@@ -287,9 +291,30 @@ form .input-field {
     transition: var(--mainTransition);
 }
 
-.search-bar button:hover {
+.search-bar .search-actions button#search {
+    background-color: var(--fourthColor);
+}
+
+.search-bar .search-actions button#search:hover {
+    background-color: var(--darkerFourthColor);
+}
+
+.search-bar .search-actions button#reset {
+    background-color: var(--buttonColor);
+    padding: 0;
+    opacity: 0;
+    transition: all .75s ease;
+}
+
+.search-bar .search-actions button#reset:hover {
     background-color: var(--buttonColorDarker);
 }
+
+.search-bar .search-actions button#reset.visible {
+    opacity: 1;
+    padding: 8px 12px;
+}
+
 
 .loading-spinner {
     width: 10rem;
@@ -310,12 +335,14 @@ form .input-field {
         transform: rotate(360deg);
     }
 }
-.no-products{
+
+.no-products {
     font-size: 18px;
     font-weight: bold;
     color: #444;
     margin: auto;
 }
+
 .products-section .products {
     display: flex;
     align-items: center;

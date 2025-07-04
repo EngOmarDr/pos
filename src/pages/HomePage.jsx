@@ -1,7 +1,12 @@
 import { pendingInvoices, specialCustmers } from "../utilities/dump.js";
+
 import { useRef, useState } from "react";
-import AvailableProducts from "../components/AvailableProducts.jsx";
-import { EmptyInvoice } from "../components/EmptyInvoice.jsx";
+import useFetchData from "../hooks/useFetchData.js";
+
+import Swal from "sweetalert2";
+import withReactContent from "sweetalert2-react-content";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import {
   FaCheckCircle,
   FaClock,
@@ -15,20 +20,20 @@ import {
   FaTrashAlt,
   FaUserCircle,
 } from "react-icons/fa";
-import Swal from "sweetalert2";
-import withReactContent from "sweetalert2-react-content";
-import { toast, ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 import { useReactToPrint } from "react-to-print";
-import { Receipt } from "../components/Receipt.jsx";
-import useFetchData from "../hooks/useFetchData.js";
-import Filters from "../components/Filters.jsx";
+
 import { fetchProducts } from "../services/PoductsServices.js";
 import { fetchGroupsTree } from "../services/CroupsServices.js";
+
+import { EmptyInvoice } from "../components/EmptyInvoice.jsx";
+import { Receipt } from "../components/Receipt.jsx";
+import ProductsSection from "../components/ProductSection.jsx";
 
 export default function HomePage() {
   const fixedTax = 20;
   const receiptRef = useRef();
+  const searchRef = useRef();
+  const [searchResult, setSearchResult] = useState(undefined);
   const [activeCatagoryID, setActiveCatagoryID] = useState(null);
   const [filterdProducts, setFilterdProducts] = useState([]);
   const [onGoingInvoice, setOnGoingInvoice] = useState([]);
@@ -57,7 +62,6 @@ export default function HomePage() {
     error: errorInFetchingGroups,
     isFetching: isFetchingGroups,
   } = useFetchData(fetchGroupsTree);
-
   const MySwal = withReactContent(Swal);
 
   function handelCheckCash() {
@@ -90,6 +94,41 @@ export default function HomePage() {
     });
     setActiveCatagoryID(groupId);
     console.log(filterdProducts);
+  }
+  function handelSerchSubmit(event) {
+    event.preventDefault();
+    const { id } = event.target;
+    const searchValue = searchRef.current.value.trim();
+    if (id == "search") {
+      if (searchValue) {
+        if (activeCatagoryID) {
+          setSearchResult(() => {
+            return filterdProducts.length != 0
+              ? filterdProducts.filter((product) => {
+                  return product.name
+                    .toLocaleLowerCase()
+                    .includes(searchValue.toLocaleLowerCase());
+                })
+              : undefined;
+          });
+        } else {
+          setSearchResult(() => {
+            return availableProducts.length !== 0
+              ? availableProducts.filter((product) => {
+                  return product.name
+                    .toLocaleLowerCase()
+                    .includes(searchValue.toLocaleLowerCase());
+                })
+              : undefined;
+          });
+        }
+      } else {
+        setSearchResult(undefined);
+      }
+    } else if (id == "reset") {
+      setSearchResult(undefined);
+      searchRef.current.value = "";
+    }
   }
   // Probably It will change when we start with the invoice section
   function handleAddProductToInvoice(product) {
@@ -413,32 +452,6 @@ export default function HomePage() {
       </div>
     </div>
   );
-
-  let productsSectionContent;
-  if (activeCatagoryID) {
-    if (filterdProducts.length == 0) {
-      productsSectionContent = <h3 className="no-products">No Products By This Type At The store</h3>;
-    } else {
-      productsSectionContent = (
-        <AvailableProducts
-          products={filterdProducts}
-          onAddItem={handleAddProductToInvoice}
-        />
-      );
-    }
-  } else {
-    if (availableProducts.length > 0) {
-      productsSectionContent = (
-        <AvailableProducts
-          products={availableProducts}
-          onAddItem={handleAddProductToInvoice}
-        />
-      );
-    } else {
-      productsSectionContent = <h3 className="no-products">No Products At The store</h3>;
-    }
-  }
-
   return (
     <div className="home-container">
       <div className={`popup-overlay ${showPayment ? "show" : "hide"}`}>
@@ -616,21 +629,19 @@ export default function HomePage() {
             : errorInFetchingProducts.message}
         </h3>
       ) : (
-        <div className="products-section">
-          <div className="options">
-            <Filters
-              groupsTree={availableGroups}
-              handelActiveFilter={handelActiveFilter}
-              handelClearFilter={handelClearFilter}
-              activeCatagoryId={activeCatagoryID}
-            />
-            <form className="search-bar">
-              <input type="search" />
-              <button>Search</button>
-            </form>
-          </div>
-          <div className="products">{productsSectionContent}</div>
-        </div>
+        // There is A lot of props driling, Probably it will change
+        <ProductsSection
+          searchResult={searchResult}
+          activeCatagoryID={activeCatagoryID}
+          availableGroups={availableGroups}
+          availableProducts={availableProducts}
+          filterdProducts={filterdProducts}
+          handelActiveFilter={handelActiveFilter}
+          handelClearFilter={handelClearFilter}
+          handelSerchSubmit={handelSerchSubmit}
+          handleAddProductToInvoice={handleAddProductToInvoice}
+          searchRef={searchRef}
+        />
       )}
     </div>
   );

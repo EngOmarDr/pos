@@ -15,7 +15,7 @@ export default function Product({
       <img src={`http://localhost:8080${productImage}`} />
       <div className="product-info">
         <h3 className="product-name"> Poduct Name: {name}</h3>
-        <h3 className="product-unitPrice">Unit Price: {unitPrice} $</h3>
+        <h3 className="product-unitPrice">Unit Price: {unitPrice} S.P</h3>
       </div>
     </div>
   );
