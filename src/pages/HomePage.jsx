@@ -1,5 +1,5 @@
 import { pendingInvoices, specialCustmers } from "../utilities/dump.js";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import useFetchData from "../hooks/useFetchData.js";
 import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
@@ -7,29 +7,29 @@ import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import {
   FaCheckCircle,
-  FaClock,
-  FaMinusCircle,
   FaMoneyBillWave,
   FaPlusCircle,
   FaPrint,
   FaTags,
   FaTimes,
-  FaTimesCircle,
-  FaTrashAlt,
   FaUserCircle,
 } from "react-icons/fa";
 import { useReactToPrint } from "react-to-print";
 import { fetchProducts } from "../services/PoductsServices.js";
 import { fetchGroupsTree } from "../services/CroupsServices.js";
+import { getTotal } from "../utilities/getTotal.js";
 import { EmptyInvoice } from "../components/EmptyInvoice.jsx";
 import { Receipt } from "../components/Receipt.jsx";
 import ProductsSection from "../components/ProductSection.jsx";
 import BarcodeScanner from "../components/BarcodeScanner.jsx";
+import FinalInvoice from "../components/FinalInvoice.jsx";
+import OnGoingInvoice from "../components/OnGoingInvoice.jsx";
 
 export default function HomePage() {
-  const fixedTax = 20;
   const receiptRef = useRef();
   const searchRef = useRef();
+  const customerWindowRef = useRef(null);
+  const channelRef = useRef();
   const [searchResult, setSearchResult] = useState(undefined);
   const [activeCatagoryID, setActiveCatagoryID] = useState(null);
   const [filterdProducts, setFilterdProducts] = useState([]);
@@ -61,6 +61,29 @@ export default function HomePage() {
   } = useFetchData(fetchGroupsTree);
   const MySwal = withReactContent(Swal);
 
+  if (!channelRef.current) {
+    channelRef.current = new BroadcastChannel("pos-channel");
+  }
+  useEffect(() => {
+    if (onGoingInvoice.length > 0) {
+      if (!customerWindowRef.current || customerWindowRef.current.closed) {
+        customerWindowRef.current = window.open("/custmer-screen", "_blank");
+      }
+    } else {
+      if (customerWindowRef.current && !customerWindowRef.current.closed) {
+        customerWindowRef.current.close();
+      }
+    }
+    // it worked with setTime Out (90% of the time :(  ) !! maybe beacuse the channel is open too fast befor the message is send ?!
+    // it will be beeter if we update the onGoingInvoice State and send the message in one updateing function
+    let timeout = setTimeout(() => {
+      channelRef.current.postMessage({
+        invoice: onGoingInvoice,
+      });
+    }, 500);
+    return () => clearTimeout(timeout);
+  }, [onGoingInvoice]);
+
   function handelCheckCash() {
     paymentFormData.cashAmount < paymentInfo.remaining
       ? setPaymentInfo((prev) => ({
@@ -72,13 +95,7 @@ export default function HomePage() {
           chang: paymentFormData.cashAmount - prev.remaining + prev.chang,
         }));
   }
-  function getTotal() {
-    return (
-      onGoingInvoice.reduce((acc, cur) => {
-        return acc + cur.unitPrice * cur.quantity;
-      }, 0) + fixedTax
-    ).toFixed(2);
-  }
+
   function handelClearFilter() {
     setActiveCatagoryID(null);
     setFilterdProducts([]);
@@ -248,7 +265,7 @@ export default function HomePage() {
   function handelShowPayment() {
     setShowPayment((prev) => !prev);
     setPaymentInfo(() => ({
-      remaining: getTotal(),
+      remaining: getTotal(onGoingInvoice),
       chang: 0,
     }));
     setPaymentFormData({
@@ -364,93 +381,6 @@ export default function HomePage() {
   const handelPrinting = useReactToPrint({
     contentRef: receiptRef,
   });
-  const currentInvoiceItems = (
-    <table>
-      <caption>Invoice Items</caption>
-      <thead>
-        <tr>
-          <td>Name</td>
-          <td>Unit Price</td>
-          <td>Quantity</td>
-          <td>Total</td>
-          <td>Remove</td>
-        </tr>
-      </thead>
-      <tbody>
-        {onGoingInvoice.map((product) => {
-          return (
-            <tr key={product.id}>
-              <td>{product.name}</td>
-              <td>{product.unitPrice}$</td>
-              <td className="quantity">
-                <FaPlusCircle
-                  className="plus-circle"
-                  onClick={() => handleIncreaseQuantity(product.id)}
-                />
-                {product.quantity}
-                <FaMinusCircle
-                  className="minus-circle"
-                  onClick={() => handleDecreaseQuantity(product.id)}
-                />
-              </td>
-              <td>{(product.unitPrice * product.quantity).toFixed(2)}$</td>
-              <td className="trash-can">
-                <FaTrashAlt
-                  onClick={() => handleRemoveItemFromInvoice(product.id)}
-                />
-              </td>
-            </tr>
-          );
-        })}
-      </tbody>
-      <tfoot>
-        <tr>
-          <td colSpan={4}>Taxes:</td>
-          <td>{fixedTax}$</td>
-        </tr>
-        <tr>
-          <td colSpan={4}>Total:</td>
-          <td>{getTotal()}$</td>
-        </tr>
-      </tfoot>
-    </table>
-  );
-
-  const finalInvoiceItems = (
-    <table>
-      <caption>Invoice Items</caption>
-      <thead>
-        <tr>
-          <td>Name</td>
-          <td>Unit Price</td>
-          <td>Quantity</td>
-          <td>Total</td>
-        </tr>
-      </thead>
-      <tbody>
-        {onGoingInvoice.map((product) => {
-          return (
-            <tr key={product.id}>
-              <td>{product.name}</td>
-              <td>{product.unitPrice}$</td>
-              <td className="quantity">{product.quantity}</td>
-              <td>{(product.unitPrice * product.quantity).toFixed(2)}$</td>
-            </tr>
-          );
-        })}
-      </tbody>
-      <tfoot>
-        <tr>
-          <td colSpan={3}>Taxes:</td>
-          <td>{fixedTax}$</td>
-        </tr>
-        <tr>
-          <td colSpan={3}>Total:</td>
-          <td>{getTotal()}$</td>
-        </tr>
-      </tfoot>
-    </table>
-  );
 
   const receiptSection = (
     <div className="receipt-section">
@@ -480,7 +410,7 @@ export default function HomePage() {
       />
       <div className={`popup-overlay ${showPayment ? "show" : "hide"}`}>
         <div className={`popup-payment-window ${!showPayment ? "hide" : ""}`}>
-          <div className="final-invoice-section">{finalInvoiceItems}</div>
+          <FinalInvoice invoice={onGoingInvoice} />
           {showReceipt ? (
             receiptSection
           ) : (
@@ -614,31 +544,15 @@ export default function HomePage() {
       </div>
       <div className="invoice-section">
         {onGoingInvoice.length !== 0 ? (
-          <div className="invoice-body">
-            <div className="invoice-items">{currentInvoiceItems}</div>
-            <div className="invoice-options">
-              <button
-                className="pend-btn"
-                onClick={() => handelPendingOnGoinigInvoice()}
-              >
-                <FaClock /> Pend Invoice
-              </button>
-              <button
-                className="complete-btn"
-                onClick={() => {
-                  handelShowPayment();
-                }}
-              >
-                <FaCheckCircle /> Complete Invoice
-              </button>
-              <button
-                onClick={() => handelCancleOnGoinigInvoice()}
-                className="cancel-btn"
-              >
-                <FaTimesCircle /> Cancle Invoice
-              </button>
-            </div>
-          </div>
+          <OnGoingInvoice
+            onShowPayment={handelShowPayment}
+            onRemoveItemFromInvoice={handleRemoveItemFromInvoice}
+            onPending={handelPendingOnGoinigInvoice}
+            onIncreaseQuantity={handleIncreaseQuantity}
+            onDecreaseQuantity={handleDecreaseQuantity}
+            onGoingInvoice={onGoingInvoice}
+            onCancleOnGoinigInvoice={handelCancleOnGoinigInvoice}
+          />
         ) : (
           <EmptyInvoice />
         )}

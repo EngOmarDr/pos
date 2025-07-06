@@ -68,8 +68,6 @@ export default function ProductsSection({
       );
     }
   }
-  console.log(productsSectionContent);
-
   return (
     <div className="products-section">
       <div className="options">

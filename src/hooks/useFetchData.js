@@ -5,26 +5,27 @@ export default function useFetchData(fetchFN) {
   const [isFetching, setIsFetching] = useState();
   const [error, setError] = useState();
 
-  useEffect(()=>{
+  useEffect(() => {
     async function getData() {
-        setIsFetching(true)
-        try {
-            const data = await fetchFN();
-            console.log(data);
-            setFetchData(data)
-            setIsFetching(false)
-        } catch (responceError) {
-            setError({'message': responceError.response.data.message || 'Faild To Fetch Data'})
-            setIsFetching(false)
-        }
+      setIsFetching(true);
+      try {
+        const data = await fetchFN();
+        setFetchData(data);
+        setIsFetching(false);
+      } catch (responceError) {
+        setError({
+          message: responceError.response.data.message || "Faild To Fetch Data",
+        });
+        setIsFetching(false);
+      }
     }
-    getData()
-  },[])
+    getData();
+  }, []);
 
   return {
     fetchData,
     setFetchData,
     isFetching,
-    error
-  }
+    error,
+  };
 }

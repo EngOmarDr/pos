@@ -9,13 +9,15 @@ import CompletedInvoicesPage from './pages/CompletedInvoicesPage'
 import PendingInvoicesPage from './pages/PendingInvoicesPage.jsx'
 import ShiftClosePage from './pages/ShiftClosePage.jsx'
 import App from './App.jsx'
+import CustmerScreen from './pages/CustmerScreen.jsx'
 
 const root = createRoot(document.getElementById('root'))
   root.render(
-  <StrictMode>
+  // <StrictMode>
     <BrowserRouter>
     <Routes>
       <Route path='/login' element={<LoginPage/>}/>
+      <Route path='/custmer-screen' element={<CustmerScreen/>}/>
       <Route path='/' element={<App/>}>
         <Route index element={<HomePage/>}/>
         <Route path='completed-invoices' element={<CompletedInvoicesPage/>}/>
@@ -25,5 +27,5 @@ const root = createRoot(document.getElementById('root'))
       </Route>
     </Routes>
     </BrowserRouter>
-  </StrictMode>,
+  // </StrictMode>,
 )
