@@ -1,32 +1,22 @@
-import { pendingInvoices, specialCustmers } from "../utilities/dump.js";
 import { useEffect, useRef, useState } from "react";
 import useFetchData from "../hooks/useFetchData.js";
 import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
-import { toast, ToastContainer } from "react-toastify";
+import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import {
-  FaCheckCircle,
-  FaMoneyBillWave,
-  FaPlusCircle,
-  FaPrint,
-  FaTags,
-  FaTimes,
-  FaUserCircle,
-} from "react-icons/fa";
-import { useReactToPrint } from "react-to-print";
 import { fetchProducts } from "../services/PoductsServices.js";
 import { fetchGroupsTree } from "../services/CroupsServices.js";
 import { getTotal } from "../utilities/getTotal.js";
 import { EmptyInvoice } from "../components/EmptyInvoice.jsx";
-import { Receipt } from "../components/Receipt.jsx";
 import ProductsSection from "../components/ProductSection.jsx";
 import BarcodeScanner from "../components/BarcodeScanner.jsx";
-import FinalInvoice from "../components/FinalInvoice.jsx";
 import OnGoingInvoice from "../components/OnGoingInvoice.jsx";
+import useGetInvoiceRelatedData from "../hooks/useGetInvoiceRelatedData.js";
+import PaymentPopupWindow from "../components/PaymentPopupWindow.jsx";
+import Overlay from "../components/Overlay.jsx";
+import { creatInvoice } from "../services/InvoiceServices.js";
 
 export default function HomePage() {
-  const receiptRef = useRef();
   const searchRef = useRef();
   const customerWindowRef = useRef(null);
   const channelRef = useRef();
@@ -34,19 +24,23 @@ export default function HomePage() {
   const [activeCatagoryID, setActiveCatagoryID] = useState(null);
   const [filterdProducts, setFilterdProducts] = useState([]);
   const [onGoingInvoice, setOnGoingInvoice] = useState([]);
+  const [finalInvoice, setFinalInvoice] = useState({
+    reciptDate: null,
+    invoiceID: null,
+  });
   const [showPayment, setShowPayment] = useState(false);
   const [showCashInput, setShowCashInput] = useState(false);
-  const [showCustmerAccountInput, setShowCustmerAccountInput] = useState(false);
+  // const [showCustmerAccountInput, setShowCustmerAccountInput] = useState(false);
   const [paymentInfo, setPaymentInfo] = useState({
     remaining: 0,
     chang: 0,
   });
   const [paymentFormData, setPaymentFormData] = useState({
     cashAmount: 0,
-    custmerAccount: "none",
-    custmerDescount: 0,
+    // custmerAccount: "none",
+    // custmerDescount: 0,
   });
-  const [showApplyBtn, setShowApplyBtn] = useState(true);
+  // const [showApplyBtn, setShowApplyBtn] = useState(true);
   const [showReceipt, setShowReceipt] = useState(false);
   const {
     fetchData: availableProducts,
@@ -54,6 +48,11 @@ export default function HomePage() {
     isFetching: isFetchingProducts,
   } = useFetchData(fetchProducts);
 
+  const {
+    error: errorInInvoiceRelatedData,
+    invoiceRelatedData,
+    isFetching: isFetchingInvoiceRelatedData,
+  } = useGetInvoiceRelatedData();
   const {
     fetchData: availableGroups,
     error: errorInFetchingGroups,
@@ -270,76 +269,79 @@ export default function HomePage() {
     }));
     setPaymentFormData({
       cashAmount: 0,
-      custmerAccount: "none",
-      custmerDescount: 0,
+      // custmerAccount: "none",
+      // custmerDescount: 0,
     });
-    setShowApplyBtn(true);
+    // setShowApplyBtn(true);
   }
   function handelShowCashToggel() {
-    return setShowCashInput((prev) => !prev);
+    setShowCashInput((prev) => !prev);
+    setPaymentFormData({
+      cashAmount: +0,
+    });
   }
-  function setShowCustmerAccountToggel() {
-    return setShowCustmerAccountInput((prev) => !prev);
-  }
-  function handelApplyDescount() {
-    setPaymentInfo((prev) => ({
-      ...prev,
-      remaining:
-        prev.remaining -
-        (paymentFormData.custmerDescount / 100) * prev.remaining,
-    }));
-    setShowApplyBtn(false);
-  }
-  async function handelAddingToCustmerAcount() {
-    let result;
-    if (paymentFormData.custmerAccount == "none") {
-      toast.warn("You Got To Chose One First ! ", {
-        position: "top-right",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: false,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "light",
-      });
-    } else {
-      paymentInfo.remaining == 0
-        ? toast.warn("Nothing Left To Add ", {
-            position: "top-right",
-            autoClose: 5000,
-            hideProgressBar: false,
-            closeOnClick: false,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-            theme: "light",
-          })
-        : // Fake Add debts to custmer Account
-          (result = await MySwal.fire({
-            title: "Add To Custmer Account?",
-            text: `This action will add The ${paymentInfo.remaining}$ To ${paymentFormData.custmerAccount} Account `,
-            icon: "warning",
-            showCancelButton: true,
-            confirmButtonColor: "#E76F51",
-            cancelButtonColor: "#264653",
-            confirmButtonText: "Yes, Add It",
-            cancelButtonText: "No, Do Not Add It",
-          }));
-      if (result.isConfirmed) {
-        setPaymentInfo((prev) => ({
-          ...prev,
-          remaining: 0,
-        }));
-        MySwal.fire({
-          title: "Amount Added successfully",
-          text: `The amount Hase been successfully added To ${paymentFormData.custmerAccount}.`,
-          icon: "success",
-          confirmButtonColor: "#2A9D8F",
-        });
-      }
-    }
-  }
+  // function setShowCustmerAccountToggel() {
+  //   return setShowCustmerAccountInput((prev) => !prev);
+  // }
+  // function handelApplyDescount() {
+  //   setPaymentInfo((prev) => ({
+  //     ...prev,
+  //     remaining:
+  //       prev.remaining -
+  //       (paymentFormData.custmerDescount / 100) * prev.remaining,
+  //   }));
+  //   setShowApplyBtn(false);
+  // }
+  // async function handelAddingToCustmerAcount() {
+  //   let result;
+  //   if (paymentFormData.custmerAccount == "none") {
+  //     toast.warn("You Got To Chose One First ! ", {
+  //       position: "top-right",
+  //       autoClose: 5000,
+  //       hideProgressBar: false,
+  //       closeOnClick: false,
+  //       pauseOnHover: true,
+  //       draggable: true,
+  //       progress: undefined,
+  //       theme: "light",
+  //     });
+  //   } else {
+  //     paymentInfo.remaining == 0
+  //       ? toast.warn("Nothing Left To Add ", {
+  //           position: "top-right",
+  //           autoClose: 5000,
+  //           hideProgressBar: false,
+  //           closeOnClick: false,
+  //           pauseOnHover: true,
+  //           draggable: true,
+  //           progress: undefined,
+  //           theme: "light",
+  //         })
+  //       : // Fake Add debts to custmer Account
+  //         (result = await MySwal.fire({
+  //           title: "Add To Custmer Account?",
+  //           text: `This action will add The ${paymentInfo.remaining}$ To ${paymentFormData.custmerAccount} Account `,
+  //           icon: "warning",
+  //           showCancelButton: true,
+  //           confirmButtonColor: "#E76F51",
+  //           cancelButtonColor: "#264653",
+  //           confirmButtonText: "Yes, Add It",
+  //           cancelButtonText: "No, Do Not Add It",
+  //         }));
+  //     if (result.isConfirmed) {
+  //       setPaymentInfo((prev) => ({
+  //         ...prev,
+  //         remaining: 0,
+  //       }));
+  //       MySwal.fire({
+  //         title: "Amount Added successfully",
+  //         text: `The amount Hase been successfully added To ${paymentFormData.custmerAccount}.`,
+  //         icon: "success",
+  //         confirmButtonColor: "#2A9D8F",
+  //       });
+  //     }
+  //   }
+  // }
   async function handelConfirmPayment() {
     var result;
     paymentInfo.remaining !== 0
@@ -364,7 +366,37 @@ export default function HomePage() {
           cancelButtonText: "No, don't Confirm It ",
         }));
     if (result.isConfirmed) {
-      setShowReceipt((prev) => !prev);
+      try {
+        const invoice = {
+          ...invoiceRelatedData,
+          invoiceItems: onGoingInvoice.map((item) => {
+            return {
+              productId: item.id,
+              qty: item.quantity,
+              price: item.unitPrice,
+            };
+          }),
+        };
+        const responce = await creatInvoice(invoice);
+        setShowReceipt((prev) => !prev);
+        setFinalInvoice({
+          reciptDate: responce.date,
+          invoiceID: responce.id,
+        });
+      } catch (error) {
+        console.log(error);
+
+        toast.warn(`${error.response.data.message || "Faild To Send Data"}`, {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: false,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+        });
+      }
       //   MySwal.fire({
       //     title:'Payment Completed',
       //     text:'The Payment has been successfully Completed.',
@@ -378,170 +410,32 @@ export default function HomePage() {
     setShowPayment((prev) => !prev);
     setShowReceipt((prev) => !prev);
   }
-  const handelPrinting = useReactToPrint({
-    contentRef: receiptRef,
-  });
 
-  const receiptSection = (
-    <div className="receipt-section">
-      <h2>
-        Payment Has Completed successfully{" "}
-        <FaCheckCircle className="check-svg" />{" "}
-      </h2>
-      <div className="options">
-        <button className="print-btn" onClick={handelPrinting}>
-          <FaPrint /> Print Receipt
-        </button>
-        <button className="new-order-btn" onClick={() => handelNewOrder()}>
-          <FaPlusCircle /> New Order
-        </button>
-      </div>
-      {/* Test With Invoice From dump.sj */}
-      <div style={{ display: "none" }}>
-        <Receipt ref={receiptRef} invoiceData={pendingInvoices[0]} />
-      </div>
-    </div>
-  );
   return (
+    // There is A lot of props driling, Probably it will change
     <div className="home-container">
       <BarcodeScanner
         onQRScan={handleAddProductToInvoiceByCode}
         allProdcuts={availableProducts}
       />
-      <div className={`popup-overlay ${showPayment ? "show" : "hide"}`}>
-        <div className={`popup-payment-window ${!showPayment ? "hide" : ""}`}>
-          <FinalInvoice invoice={onGoingInvoice} />
-          {showReceipt ? (
-            receiptSection
-          ) : (
-            <>
-              <div className="payment-section">
-                <div className="process-info">
-                  <h2>Choise A Pyment Methode :</h2>
-                  <p>You Can Chosie More Than one </p>
-                </div>
-                <div className="custmer-discount">
-                  {showApplyBtn && (
-                    <>
-                      <label htmlFor="custmerDescount">
-                        Apply Custmer Discount:
-                      </label>
-                      <select
-                        id="custmerDescount"
-                        name="custmerDescount"
-                        onChange={handelChange}
-                        value={paymentFormData.custmerDescount}
-                      >
-                        {specialCustmers.map((custmer) => {
-                          return (
-                            <option key={custmer.id} value={custmer.dicount}>
-                              {custmer.name}
-                            </option>
-                          );
-                        })}
-                      </select>
-                    </>
-                  )}
-                  {paymentFormData.custmerDescount > 0 && showApplyBtn && (
-                    <div className="apply-descount">
-                      <span>
-                        {" "}
-                        you have a descount of {paymentFormData.custmerDescount}
-                        %
-                      </span>
-                      <button
-                        onClick={() => {
-                          handelApplyDescount();
-                        }}
-                        className="apply-descount-btn"
-                      >
-                        <FaTags className="btn-icon" /> Apply
-                      </button>
-                    </div>
-                  )}
-                </div>
-                <div className="payment-methods">
-                  <button
-                    className="cash-btn"
-                    onClick={() => handelShowCashToggel()}
-                  >
-                    <FaMoneyBillWave className="btn-icon" /> Cash
-                  </button>
-                  <button
-                    className="custmer-account-btn"
-                    onClick={() => setShowCustmerAccountToggel()}
-                  >
-                    <FaUserCircle className="btn-icon" /> Custmer Account
-                  </button>
-                </div>
-                <div className="payments">
-                  {showCashInput && (
-                    <div className="cash-method">
-                      <label htmlFor="cashAmount">Enter An Amount:</label>
-                      <input
-                        id="cashAmount"
-                        name="cashAmount"
-                        value={paymentFormData.cashAmount}
-                        onChange={handelChange}
-                        type="number"
-                        min="0"
-                      />
-                      <button
-                        onClick={() => handelCheckCash()}
-                        className="check-cash-btn"
-                      >
-                        <FaCheckCircle className="btn-icon" /> check
-                      </button>
-                    </div>
-                  )}
-                  {showCustmerAccountInput && (
-                    <div className="custmer-Account-method">
-                      <label htmlFor="custmerAccount">Choise A Custmer:</label>
-                      <select
-                        id="custmerAccount"
-                        name="custmerAccount"
-                        onChange={handelChange}
-                        value={paymentFormData.custmerAccount}
-                      >
-                        {specialCustmers.map((custmer) => {
-                          return (
-                            <option key={custmer.id} value={custmer.name}>
-                              {custmer.name}
-                            </option>
-                          );
-                        })}
-                      </select>
-                      <button
-                        className="add-to-custmer-acount-btn"
-                        onClick={() => handelAddingToCustmerAcount()}
-                      >
-                        <FaPlusCircle /> Add Remaning To Custmer Acount
-                      </button>
-                      <ToastContainer />
-                    </div>
-                  )}
-                  <div className="process-calculation">
-                    <h2 className="pyment-remaining">
-                      Remaining:{paymentInfo.remaining}{" "}
-                    </h2>
-                    <h2 className="pyment-change">chang:{paymentInfo.chang}</h2>
-                    <button
-                      className="confirm-btn"
-                      onClick={() => handelConfirmPayment()}
-                    >
-                      <FaCheckCircle /> Confirm Payment
-                      <ToastContainer />
-                    </button>
-                  </div>
-                </div>
-              </div>
-              <button className="close-btn" onClick={() => handelShowPayment()}>
-                <FaTimes />
-              </button>
-            </>
-          )}
-        </div>
-      </div>
+      <Overlay showPayment={showPayment}>
+        <PaymentPopupWindow
+          startNewOrder={handelNewOrder}
+          showReceipt={showReceipt}
+          showPayment={showPayment}
+          showCashInput={showCashInput}
+          paymentInfo={paymentInfo}
+          paymentFormData={paymentFormData}
+          onGoingInvoice={onGoingInvoice}
+          reciptDate={finalInvoice.reciptDate}
+          invoiceID={finalInvoice.invoiceID}
+          handelChange={handelChange}
+          handelShowPayment={handelShowPayment}
+          handelConfirmPayment={handelConfirmPayment}
+          handelCheckCash={handelCheckCash}
+          handelShowCashToggel={handelShowCashToggel}
+        />
+      </Overlay>
       <div className="invoice-section">
         {onGoingInvoice.length !== 0 ? (
           <OnGoingInvoice
@@ -567,7 +461,6 @@ export default function HomePage() {
             : errorInFetchingProducts.message}
         </h3>
       ) : (
-        // There is A lot of props driling, Probably it will change
         <ProductsSection
           searchResult={searchResult}
           activeCatagoryID={activeCatagoryID}

@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Login } from "../services/AuthServices";
 
-export default function HomePage() {
+export default function LoginPage() {
   const [loginCredentials, setLoginCredentials] = useState({
     username: "",
     password: "",
@@ -31,7 +31,13 @@ export default function HomePage() {
     try {
       setisLoading(true);
       const apiCallResponse = await Login(loginCredentials);
-      localStorage.setItem("userToken", apiCallResponse.token);
+      localStorage.setItem(
+        "loginInfo",
+        JSON.stringify({
+          token: apiCallResponse.token,
+          warehouseId: apiCallResponse.warehouseId,
+        })
+      );
       setisLoading(false);
       navigate("/", { replace: true });
     } catch (error) {

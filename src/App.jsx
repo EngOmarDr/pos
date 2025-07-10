@@ -9,7 +9,10 @@ import {
 } from "react-icons/fa";
 
 export default function App() {
-  if (!localStorage.getItem("userToken")) return <Navigate to="/login" />;
+  const token = JSON.parse(localStorage.getItem("loginInfo"))?.token;
+  if (!token) {
+    return <Navigate to="/login" />;
+  }
   return (
     <div className="app-container">
       <nav className="app-navbar">
