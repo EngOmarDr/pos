@@ -20,8 +20,8 @@ function ReceiptComponent({ invoiceData, reciptDate, invoiceID }, ref) {
             <tr key={index}>
               <td>{item.name}</td>
               <td>{item.quantity}</td>
-              <td>${item.unitPrice.toFixed(2)}</td>
-              <td>${(item.unitPrice * item.quantity).toFixed(2)}</td>
+              <td>${item.price.toFixed(2)}</td>
+              <td>${(item.price * item.quantity).toFixed(2)}</td>
             </tr>
           ))}
         </tbody>

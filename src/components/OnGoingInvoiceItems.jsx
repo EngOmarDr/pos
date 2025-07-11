@@ -24,7 +24,7 @@ export default function OnGoingInvoiceItems({
           return (
             <tr key={product.id}>
               <td>{product.name}</td>
-              <td>{product.unitPrice}$</td>
+              <td>{product.price}$</td>
               <td className="quantity">
                 <FaPlusCircle
                   className="plus-circle"
@@ -36,7 +36,7 @@ export default function OnGoingInvoiceItems({
                   onClick={() => onDecrease(product.id)}
                 />
               </td>
-              <td>{(product.unitPrice * product.quantity).toFixed(2)}$</td>
+              <td>{(product.price * product.quantity).toFixed(2)}$</td>
               <td className="trash-can">
                 <FaTrashAlt onClick={() => onRemove(product.id)} />
               </td>

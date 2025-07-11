@@ -1,11 +1,13 @@
 import { useSymbologyScanner } from "@use-symbology-scanner/react";
+import { getAllByBarcode } from "../services/PoductsServices";
 
-export default function BarcodeScanner({ onQRScan, allProdcuts }) {
+export default function BarcodeScanner({ onQRScan }) {
   useSymbologyScanner((decoded) => {
-    const product = allProdcuts.find((product) => {
-      return product.barcodes[0].barcode == decoded;
-    });
-    onQRScan(product);
+    async function getProduct(code) {
+      const response = await getAllByBarcode(code);
+      onQRScan(response);
+    }
+    getProduct(decoded);
   });
   return null;
 }

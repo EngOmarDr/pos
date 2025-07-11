@@ -202,7 +202,7 @@ form .input-field {
 
 .products-section {
     height: 100%;
-    width: 70%;
+    width: 65%;
     overflow-y: auto;
 }
 
@@ -352,8 +352,8 @@ form .input-field {
 }
 
 .products .product-card {
-    width: 190px;
-    height: 190px;
+    width: 180px;
+    height: 180px;
     background-color: #FFFFFF;
     border-radius: 10px;
     box-shadow: var(--mainBoxShadow);
@@ -397,7 +397,7 @@ form .input-field {
 .invoice-section {
     box-shadow: var(--mainBoxShadow);
     min-height: inherit;
-    width: 30%;
+    width: 35%;
     background-color: #DDD;
     padding: 16px;
 }
@@ -968,7 +968,8 @@ input:focus {
     gap: 8px;
 }
 
-.options button {
+.options button,
+.options a {
     display: flex;
     align-items: center;
     gap: 6px;
@@ -979,6 +980,8 @@ input:focus {
     cursor: pointer;
     transition: var(--mainTransition);
     border: none;
+    /* for the link */
+    text-decoration: none;
 }
 
 .complete-btn,
@@ -1087,6 +1090,45 @@ input:focus {
 
 .receipt th {
     background-color: var(--backgroundColor);
+}
+
+/* MODAL */
+.modal::backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1;
+    width: 100%;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.6);
+}
+
+.modal {
+    min-width: 50rem;
+    min-height: 30rem;
+    padding: 15px;
+    margin: auto;
+    z-index: 2;
+    background: #d5c7bc;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.26);
+    border: none;
+    outline: none;
+    animation: slide-down-fade-in 0.3s ease-out forwards;
+}
+.modal h2{
+    color: var(--darkerPrimaryColor);
+}
+@keyframes slide-down-fade-in {
+    from {
+        opacity: 0;
+        transform: translateY(-3rem);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 /* Shift Close Page  */

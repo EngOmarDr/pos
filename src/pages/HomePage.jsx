@@ -14,16 +14,33 @@ import OnGoingInvoice from "../components/OnGoingInvoice.jsx";
 import useGetInvoiceRelatedData from "../hooks/useGetInvoiceRelatedData.js";
 import PaymentPopupWindow from "../components/PaymentPopupWindow.jsx";
 import Overlay from "../components/Overlay.jsx";
-import { creatInvoice } from "../services/InvoiceServices.js";
+import { creatInvoice, updateInvoice } from "../services/InvoiceServices.js";
+import { useLocation } from "react-router-dom";
+import ChooseProductModal from "../components/ChooseProductModal.jsx";
 
 export default function HomePage() {
   const searchRef = useRef();
   const customerWindowRef = useRef(null);
   const channelRef = useRef();
+  const productWithTheSameBarcode = useRef(null);
+  const loaction = useLocation();
+  const [modalIsOpen, setModalIsOpen] = useState(false);
   const [searchResult, setSearchResult] = useState(undefined);
   const [activeCatagoryID, setActiveCatagoryID] = useState(null);
   const [filterdProducts, setFilterdProducts] = useState([]);
-  const [onGoingInvoice, setOnGoingInvoice] = useState([]);
+  let initaliInvoice;
+  if (loaction.state) {
+    initaliInvoice = loaction.state.invoiceItems.map((item) => ({
+      id: item.productId,
+      name: item.name,
+      // code: product.barcodes[0].barcode,
+      price: item.price,
+      quantity: item.quantity,
+    }));
+  }
+  const [onGoingInvoice, setOnGoingInvoice] = useState(
+    loaction.state ? initaliInvoice : []
+  );
   const [finalInvoice, setFinalInvoice] = useState({
     reciptDate: null,
     invoiceID: null,
@@ -159,33 +176,40 @@ export default function HomePage() {
               id: product.id,
               name: product.name,
               code: product.barcodes[0].barcode,
-              unitPrice: product.prices[0].price,
+              price: product.prices[0].price,
               quantity: 1,
             },
           ];
     });
   }
+  function handelCloseModel() {
+    setModalIsOpen(false);
+  }
   function handleAddProductToInvoiceByCode(product) {
-    // will come back when we start on going invice if we need any update
     if (product) {
-      setOnGoingInvoice((prev) => {
-        let isExist = prev.some((pro) => pro.name == product.name);
-        return isExist
-          ? prev.map((pro) => {
-              return pro.name == product.name
-                ? { ...pro, quantity: pro.quantity + 1 }
-                : pro;
-            })
-          : [
-              ...prev,
-              {
-                id: product.id,
-                name: product.name,
-                unitPrice: product.prices[0].price,
-                quantity: 1,
-              },
-            ];
-      });
+      if (product.length > 1) {
+        productWithTheSameBarcode.current = product;
+        setModalIsOpen(true);
+      } else {
+        setOnGoingInvoice((prev) => {
+          let isExist = prev.some((pro) => pro.name == product[0].name);
+          return isExist
+            ? prev.map((pro) => {
+                return pro.name == product[0].name
+                  ? { ...pro, quantity: pro.quantity + 1 }
+                  : pro;
+              })
+            : [
+                ...prev,
+                {
+                  id: product[0].id,
+                  name: product[0].name,
+                  price: product[0].prices[0].price,
+                  quantity: 1,
+                },
+              ];
+        });
+      }
     }
   }
   function handleRemoveItemFromInvoice(id) {
@@ -245,13 +269,41 @@ export default function HomePage() {
       cancelButtonText: "No, Keep It",
     });
     if (result.isConfirmed) {
-      setOnGoingInvoice([]);
-      MySwal.fire({
-        title: "Invoice Pended",
-        text: "The invoice has been successfully pended.",
-        icon: "success",
-        confirmButtonColor: "#2A9D8F",
-      });
+      try {
+        const invoice = {
+          ...invoiceRelatedData,
+          isSuspended: true,
+          invoiceItems: onGoingInvoice.map((item) => {
+            return {
+              productId: item.id,
+              qty: item.quantity,
+              price: item.price,
+            };
+          }),
+        };
+        const responce = loaction.state?.isPending
+          ? await updateInvoice(loaction.state.invoiceId, invoice)
+          : await creatInvoice(invoice);
+        console.log(responce);
+        setOnGoingInvoice([]);
+        MySwal.fire({
+          title: "Invoice Pended",
+          text: "The invoice has been successfully pended.",
+          icon: "success",
+          confirmButtonColor: "#2A9D8F",
+        });
+      } catch (error) {
+        toast.error(`${error.response.data.message || "Faild To Send Data"}`, {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: false,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+        });
+      }
     }
   }
   function handelChange(event) {
@@ -369,23 +421,24 @@ export default function HomePage() {
       try {
         const invoice = {
           ...invoiceRelatedData,
+          isSuspended: false,
           invoiceItems: onGoingInvoice.map((item) => {
             return {
               productId: item.id,
               qty: item.quantity,
-              price: item.unitPrice,
+              price: item.price,
             };
           }),
         };
-        const responce = await creatInvoice(invoice);
+        const responce = loaction.state?.isPending
+          ? await updateInvoice(loaction.state.invoiceId, invoice)
+          : await creatInvoice(invoice);
         setShowReceipt((prev) => !prev);
         setFinalInvoice({
           reciptDate: responce.date,
           invoiceID: responce.id,
         });
       } catch (error) {
-        console.log(error);
-
         toast.warn(`${error.response.data.message || "Faild To Send Data"}`, {
           position: "top-right",
           autoClose: 5000,
@@ -417,6 +470,12 @@ export default function HomePage() {
       <BarcodeScanner
         onQRScan={handleAddProductToInvoiceByCode}
         allProdcuts={availableProducts}
+      />
+      <ChooseProductModal
+        products={productWithTheSameBarcode.current}
+        open={modalIsOpen}
+        handleAddProductToInvoice={handleAddProductToInvoice}
+        handelCloseModel={handelCloseModel}
       />
       <Overlay showPayment={showPayment}>
         <PaymentPopupWindow

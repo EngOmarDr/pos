@@ -1,6 +1,7 @@
 import { getTotal } from "../utilities/getTotal";
 import loginImg from "../assets/syrien trading logo - 1 .jpg";
 export default function FinalInvoice({ invoice, isCustmerScreen }) {
+  // I add isCompletOrSuspended boolen porop becase from the back-end the names are not the same
   const finalInvoiceItems = (
     <table>
       <caption>Invoice Items</caption>
@@ -17,9 +18,9 @@ export default function FinalInvoice({ invoice, isCustmerScreen }) {
           return (
             <tr key={product.id}>
               <td>{product.name}</td>
-              <td>{product.unitPrice}$</td>
+              <td>{product.price}$</td>
               <td className="quantity">{product.quantity}</td>
-              <td>{(product.unitPrice * product.quantity).toFixed(2)}$</td>
+              <td>{(product.price * product.quantity).toFixed(2)}$</td>
             </tr>
           );
         })}

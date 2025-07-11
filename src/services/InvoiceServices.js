@@ -15,3 +15,23 @@ export async function creatInvoice(invoice) {
   const response = await axiosInstance.post("/invoices", invoice);
   return response.data;
 }
+export async function deleteInvoice(id) {
+  const response = await axiosInstance.delete(`/invoices/${id}`);
+  return response.data;
+}
+export async function updateInvoice(id, invoice) {
+  const response = await axiosInstance.put(`/invoices/${id}`, invoice);
+  return response.data;
+}
+export async function fetchAllInvoices() {
+  const response = await axiosInstance.get("/invoices");
+  const responseData = response.data;
+  const updatedResponse = responseData.map((invoice) => {
+    const updatedInvoiceItems = invoice.invoiceItems.map((item) => {
+      const { qty, productName, ...rest } = item;
+      return { ...rest, quantity: qty, name: productName };
+    });
+    return { ...invoice, invoiceItems: updatedInvoiceItems };
+  });
+  return updatedResponse;
+}
