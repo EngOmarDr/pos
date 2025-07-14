@@ -1,5 +1,7 @@
-import { useEffect, useState , useRef} from "react";
+import { useEffect, useState, useRef } from "react";
 import FinalInvoice from "../components/FinalInvoice";
+import ImagesSlid from "../components/ImagesSlid";
+import VideosSlid from "../components/VideosSlid";
 
 export default function CustmerScreen() {
   const [currentInvoice, setCurrentInvoice] = useState([]);
@@ -10,10 +12,20 @@ export default function CustmerScreen() {
   useEffect(() => {
     channelRef.current.onmessage = (event) => {
       setCurrentInvoice(event.data.invoice);
-      console.log("INSIDE?!");
     };
     return () => channelRef.current.close();
   }, []);
   // The Design may chanage
-  return <FinalInvoice invoice={currentInvoice} isCustmerScreen={true} />;
+  return (
+    <div className="custmer-screen">
+      <div className="custmer-invoice">
+        <h3>Thank You For Shoping With Us</h3>
+        <FinalInvoice invoice={currentInvoice} />
+      </div>
+      <div className="ads-section">
+        <ImagesSlid />
+        <VideosSlid />
+      </div>
+    </div>
+  );
 }

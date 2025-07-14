@@ -9,6 +9,7 @@ export default function OnGoingInvoice({
   onPending,
   onShowPayment,
   onCancleOnGoinigInvoice,
+  handleOpenCustmerScreen,
 }) {
   return (
     <div className="invoice-body">
@@ -37,6 +38,12 @@ export default function OnGoingInvoice({
           <FaTimesCircle /> Cancle Invoice
         </button>
       </div>
+      <button
+        className="open-custmer-page-btn"
+        onClick={handleOpenCustmerScreen}
+      >
+        Show Custmer Page
+      </button>
     </div>
   );
 }

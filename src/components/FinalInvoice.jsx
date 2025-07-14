@@ -1,7 +1,5 @@
 import { getTotal } from "../utilities/getTotal";
-import loginImg from "../assets/syrien trading logo - 1 .jpg";
-export default function FinalInvoice({ invoice, isCustmerScreen }) {
-  // I add isCompletOrSuspended boolen porop becase from the back-end the names are not the same
+export default function FinalInvoice({ invoice }) {
   const finalInvoiceItems = (
     <table>
       <caption>Invoice Items</caption>
@@ -33,15 +31,5 @@ export default function FinalInvoice({ invoice, isCustmerScreen }) {
       </tfoot>
     </table>
   );
-  return (
-    <div
-      className={`final-invoice-section ${
-        isCustmerScreen ? "custmer-screen" : ""
-      }`}
-    >
-      {isCustmerScreen && <img src={loginImg} alt="LOGO" />}
-      {isCustmerScreen && <h3>Thank You For Shoping With Us</h3>}
-      {finalInvoiceItems}
-    </div>
-  );
+  return <div className="final-invoice-section">{finalInvoiceItems}</div>;
 }

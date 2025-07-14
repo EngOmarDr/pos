@@ -81,25 +81,28 @@ export default function HomePage() {
     channelRef.current = new BroadcastChannel("pos-channel");
   }
   useEffect(() => {
-    if (onGoingInvoice.length > 0) {
-      if (!customerWindowRef.current || customerWindowRef.current.closed) {
-        customerWindowRef.current = window.open("/custmer-screen", "_blank");
-      }
-    } else {
+    channelRef.current.postMessage({
+      invoice: onGoingInvoice,
+    });
+    if (onGoingInvoice.length === 0) {
       if (customerWindowRef.current && !customerWindowRef.current.closed) {
         customerWindowRef.current.close();
       }
     }
-    // it worked with setTime Out (90% of the time :(  ) !! maybe beacuse the channel is open too fast befor the message is send ?!
-    // it will be beeter if we update the onGoingInvoice State and send the message in one updateing function
-    let timeout = setTimeout(() => {
+  }, [onGoingInvoice]);
+
+  async function handleOpenCustmerScreen() {
+    let timeOut;
+    clearTimeout(timeOut);
+    timeOut = setTimeout(() => {
       channelRef.current.postMessage({
         invoice: onGoingInvoice,
       });
-    }, 500);
-    return () => clearTimeout(timeout);
-  }, [onGoingInvoice]);
-
+    }, 600);
+    if (!customerWindowRef.current || customerWindowRef.current.closed) {
+      customerWindowRef.current = window.open("/custmer-screen", "_blank");
+    }
+  }
   function handelCheckCash() {
     paymentFormData.cashAmount < paymentInfo.remaining
       ? setPaymentInfo((prev) => ({
@@ -505,6 +508,7 @@ export default function HomePage() {
             onDecreaseQuantity={handleDecreaseQuantity}
             onGoingInvoice={onGoingInvoice}
             onCancleOnGoinigInvoice={handelCancleOnGoinigInvoice}
+            handleOpenCustmerScreen={handleOpenCustmerScreen}
           />
         ) : (
           <EmptyInvoice />
