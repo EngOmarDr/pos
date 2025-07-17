@@ -6,6 +6,7 @@ import {
   FaHourglassHalf,
   //   FaUserClock,
   FaCashRegister,
+  FaHourglassEnd,
 } from "react-icons/fa";
 
 export default function App() {
@@ -45,10 +46,17 @@ export default function App() {
         </NavLink> */}
 
         <NavLink
+          to="shift-start"
+          className={({ isActive }) => (isActive ? "active-navLink" : null)}
+        >
+          <FaCashRegister className="nav-icon" /> Shift Start
+        </NavLink>
+
+        <NavLink
           to="shift-close"
           className={({ isActive }) => (isActive ? "active-navLink" : null)}
         >
-          <FaCashRegister className="nav-icon" /> Shift Close
+          <FaHourglassEnd className="nav-icon"/> Shift Close
         </NavLink>
       </nav>
       <Outlet />

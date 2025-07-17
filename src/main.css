@@ -5,19 +5,19 @@
 }
 
 :root {
-    --primaryColor: #1E3D8F;
-    --darkerPrimaryColor: #162F6B;
-    --secondaryColor: #4F6CB2;
-    --thirdColor: #F28F3B;
-    --darkerThirdColor: #C86F28;
-    --fourthColor: #6DB944;
-    --darkerFourthColor: #4F9330;
-    --backgroundColor: #F4F6FA;
-    --buttonColor: #F25C54;
-    --buttonColorDarker: #D6453E;
-    --softGray: #E0E0E0;
-    --softBlue: #4F6CB2;
-    --darkersoftBlue: #3B5291;
+    --primaryColor: #1e3d8f;
+    --darkerPrimaryColor: #162f6b;
+    --secondaryColor: #4f6cb2;
+    --thirdColor: #f28f3b;
+    --darkerThirdColor: #c86f28;
+    --fourthColor: #6db944;
+    --darkerFourthColor: #4f9330;
+    --backgroundColor: #f4f6fa;
+    --buttonColor: #f25c54;
+    --buttonColorDarker: #d6453e;
+    --softGray: #e0e0e0;
+    --softBlue: #4f6cb2;
+    --darkersoftBlue: #3b5291;
     --mainBoxShadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
     --poupupWindowBoxShadow: 0px 10px 20px rgba(0, 0, 0, 0.2);
     --mainTransition: 0.3s;
@@ -25,7 +25,9 @@
 }
 
 body {
-    background-color: var(--backgroundColor)
+    background-color: var(--backgroundColor);
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+        Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
 }
 
 /* LOGIN PAGE  */
@@ -225,7 +227,7 @@ form .input-field {
     background-color: var(--thirdColor);
     color: var(--darkerPrimaryColor);
     font-weight: bold;
-    border: 3px solid #D4A373;
+    border: 3px solid #d4a373;
     padding: 8px 16px;
     border-radius: 6px;
     cursor: pointer;
@@ -245,7 +247,7 @@ form .input-field {
     border-radius: 6px;
     font-weight: bold;
     cursor: pointer;
-    transition: var(--mainTransition)
+    transition: var(--mainTransition);
 }
 
 .category.active {
@@ -265,7 +267,7 @@ form .input-field {
     background-color: white;
     padding: 5px;
     border-radius: 6px;
-    border: 2px solid #DDD;
+    border: 2px solid #ddd;
 }
 
 .search-bar input {
@@ -278,7 +280,7 @@ form .input-field {
 
 .search-bar .search-actions {
     display: flex;
-    gap: 8px
+    gap: 8px;
 }
 
 .search-bar .search-actions button {
@@ -303,7 +305,7 @@ form .input-field {
     background-color: var(--buttonColor);
     padding: 0;
     opacity: 0;
-    transition: all .75s ease;
+    transition: all 0.75s ease;
 }
 
 .search-bar .search-actions button#reset:hover {
@@ -315,7 +317,6 @@ form .input-field {
     padding: 8px 12px;
 }
 
-
 .loading-spinner {
     width: 10rem;
     height: 10rem;
@@ -323,7 +324,7 @@ form .input-field {
     border-top-color: transparent;
     border-radius: 50%;
     margin: auto;
-    animation: spining 1s infinite .5s linear;
+    animation: spining 1s infinite 0.5s linear;
 }
 
 @keyframes spining {
@@ -354,7 +355,7 @@ form .input-field {
 .products .product-card {
     width: 180px;
     height: 180px;
-    background-color: #FFFFFF;
+    background-color: #ffffff;
     border-radius: 10px;
     box-shadow: var(--mainBoxShadow);
     padding: 12px;
@@ -364,7 +365,7 @@ form .input-field {
 
 .product-card:hover {
     background-color: var(--thirdColor);
-    transform: scale(1.1);
+    transform: scale(1.03);
 }
 
 .product-card img {
@@ -398,7 +399,7 @@ form .input-field {
     box-shadow: var(--mainBoxShadow);
     min-height: inherit;
     width: 35%;
-    background-color: #DDD;
+    background-color: #ddd;
     padding: 16px;
 }
 
@@ -437,6 +438,7 @@ form .input-field {
 .invoice-body .invoice-items {
     height: 80%;
     overflow-y: auto;
+    border-radius: 6px;
 }
 
 .invoice-items::-webkit-scrollbar {
@@ -471,7 +473,7 @@ table thead {
 }
 
 table tr {
-    border-bottom: 1px solid #DDD;
+    border-bottom: 1px solid #ddd;
 }
 
 table tbody tr:nth-child(even) {
@@ -551,6 +553,7 @@ td.trash-can {
     cursor: pointer;
     transition: var(--mainTransition);
 }
+
 .pend-btn,
 .copy-btn {
     background-color: var(--fourthColor);
@@ -579,7 +582,7 @@ td.trash-can {
 
 .cancel-btn:hover,
 .return-btn:hover {
-    background-color: var(--buttonColorDarker)
+    background-color: var(--buttonColorDarker);
 }
 
 /* Payment Popup Window */
@@ -667,11 +670,11 @@ td.trash-can {
     font-size: 20px;
     cursor: pointer;
     color: var(--buttonColor);
-    transition: var(--mainTransition)
+    transition: var(--mainTransition);
 }
 
 .close-btn:hover {
-    color: var(--buttonColorDarker)
+    color: var(--buttonColorDarker);
 }
 
 .final-invoice-section {
@@ -741,7 +744,7 @@ td.trash-can {
     align-items: center;
     justify-content: center;
     gap: 8px;
-    transition: var(--mainTransition)
+    transition: var(--mainTransition);
 }
 
 .cash-btn {
@@ -919,7 +922,7 @@ input:focus {
 .pending-invoice-section,
 .complated-invoice-section,
 .custmers-debts-section {
-    flex: .8;
+    flex: 0.8;
     padding: 20px;
     overflow-y: auto;
     border-radius: var(--mainBorderRadius);
@@ -1039,7 +1042,6 @@ input:focus {
     justify-content: center;
     align-items: center;
     gap: 15px;
-
 }
 
 .debts-amount input {
@@ -1254,13 +1256,13 @@ input:focus {
 .custmer-screen .custmer-invoice {
     width: 30%;
     overflow-y: auto;
-    border-right: 2px solid #E0E0E0;
-    background-color: #F8F8F8;
+    /* border-right: 2px solid #e0e0e0; */
+    background-color: white;
     padding-right: 5px;
 }
 
 .custmer-screen h3 {
-    color: #1E3D8F;
+    color: #1e3d8f;
     font-weight: bold;
     font-size: 22px;
     margin-bottom: 8px;
@@ -1272,20 +1274,39 @@ input:focus {
     display: flex;
     flex-direction: column;
     gap: 0.5rem;
-    padding: 10px;
+    /* padding: 10px; */
 }
 
 .ads-slid {
-    height: 50%;
-}
-
-.ads-slid img {
-    width: 100%;
-    height: 100%;
-    object-fit: fill;
-    overflow: hidden;
+    height: calc(100vh - 32px - 150px);
     border-radius: 8px;
 }
+
+.slick-slide {
+    height: calc(100vh - 32px - 150px) !important;
+}
+
+.slick-slide img {
+    max-height: calc(100vh - 32px - 150px) !important;
+    width: 100% !important;
+    border-radius: 8px;
+    object-fit: contain;
+}
+
+.ads-slid>img {
+    border-radius: 8px;
+    /* height: 100%; */
+    /* width: 100%;
+  object-fit: contain; */
+}
+
+/* .ads-slid img {
+  width: 100%;
+  height: 100%;
+  object-fit: fill;
+  overflow: hidden;
+  border-radius: 8px;
+} */
 
 .videos-slid {
     height: 50%;

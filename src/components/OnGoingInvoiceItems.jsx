@@ -9,7 +9,7 @@ export default function OnGoingInvoiceItems({
 }) {
   const currentInvoiceItems = (
     <table>
-      <caption>Invoice Items</caption>
+      {/* <caption>Invoice Items</caption> */}
       <thead>
         <tr>
           <td>Name</td>
