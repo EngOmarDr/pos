@@ -83,7 +83,7 @@ export default function ProductsSection({
           result={searchResult}
         />
       </div>
-      <div className="products">{productsSectionContent}</div>
+      <div className="grid gap-4 grid-cols-[repeat(auto-fill,minmax(min(100%,180px),1fr))] p-3">{productsSectionContent}</div>
     </div>
   );
 }

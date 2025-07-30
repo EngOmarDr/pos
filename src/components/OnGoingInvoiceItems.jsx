@@ -13,6 +13,7 @@ export default function OnGoingInvoiceItems({
       <thead>
         <tr>
           <td>Name</td>
+          <td>Unit Name</td>
           <td>Unit Price</td>
           <td>Quantity</td>
           <td>Total</td>
@@ -22,23 +23,30 @@ export default function OnGoingInvoiceItems({
       <tbody>
         {invoice.map((product) => {
           return (
-            <tr key={product.id}>
-              <td>{product.name}</td>
-              <td>{product.price}$</td>
-              <td className="quantity">
-                <FaPlusCircle
-                  className="plus-circle"
-                  onClick={() => onIncrease(product.id)}
-                />
-                {product.quantity}
-                <FaMinusCircle
-                  className="minus-circle"
-                  onClick={() => onDecrease(product.id)}
-                />
+            <tr key={product.id + product.unitItemId} className="text-center">
+              <td className="text-center">{product.name}</td>
+              <td className="text-center">{product.unitItemName}</td>
+              <td className="text-center">{product.price}</td>
+              <td className="text-center">
+                <div className="quantity">
+                  <FaPlusCircle
+                    className="plus-circle"
+                    onClick={() => onIncrease(product.id)}
+                  />
+                  {product.quantity}
+                  <FaMinusCircle
+                    className="minus-circle"
+                    onClick={() => onDecrease(product.id)}
+                  />
+                </div>
               </td>
-              <td>{(product.price * product.quantity).toFixed(2)}$</td>
+              <td className="text-center">
+                {(product.price * product.quantity).toFixed(2)}
+              </td>
               <td className="trash-can">
-                <FaTrashAlt onClick={() => onRemove(product.id)} />
+                <div className="flex justify-center">
+                  <FaTrashAlt onClick={() => onRemove(product.id)} />
+                </div>
               </td>
             </tr>
           );
@@ -46,8 +54,8 @@ export default function OnGoingInvoiceItems({
       </tbody>
       <tfoot>
         <tr>
-          <td colSpan={4}>Total:</td>
-          <td>{getTotal(invoice)}$</td>
+          <td colSpan={5}>Total:</td>
+          <td>{getTotal(invoice)}</td>
         </tr>
       </tfoot>
     </table>

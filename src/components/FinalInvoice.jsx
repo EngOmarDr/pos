@@ -12,9 +12,9 @@ export default function FinalInvoice({ invoice }) {
         </tr>
       </thead>
       <tbody>
-        {invoice.map((product) => {
+        {invoice.map((product,index) => {
           return (
-            <tr key={product.id}>
+            <tr key={index}>
               <td>{product.name}</td>
               <td>{product.price}$</td>
               <td className="quantity">{product.quantity}</td>

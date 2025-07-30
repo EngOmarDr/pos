@@ -8,7 +8,6 @@ export default function ChooseProductModal({
   handelCloseModel,
 }) {
   const dialog = useRef();
-  console.log(products);
 
   useEffect(() => {
     if (open) {

@@ -14,7 +14,11 @@ import OnGoingInvoice from "../components/OnGoingInvoice.jsx";
 import useGetInvoiceRelatedData from "../hooks/useGetInvoiceRelatedData.js";
 import PaymentPopupWindow from "../components/PaymentPopupWindow.jsx";
 import Overlay from "../components/Overlay.jsx";
-import { creatInvoice, updateInvoice } from "../services/InvoiceServices.js";
+import {
+  creatInvoice,
+  fetchInvoiceTypeData,
+  updateInvoice,
+} from "../services/InvoiceServices.js";
 import { useLocation } from "react-router-dom";
 import ChooseProductModal from "../components/ChooseProductModal.jsx";
 
@@ -28,6 +32,8 @@ export default function HomePage() {
   const [searchResult, setSearchResult] = useState(undefined);
   const [activeCatagoryID, setActiveCatagoryID] = useState(null);
   const [filterdProducts, setFilterdProducts] = useState([]);
+  const [invoiceType, setInvoiceType] = useState();
+
   let initaliInvoice;
   if (loaction.state) {
     initaliInvoice = loaction.state.invoiceItems.map((item) => ({
@@ -90,6 +96,12 @@ export default function HomePage() {
       }
     }
   }, [onGoingInvoice]);
+
+  useEffect(() => {
+    fetchInvoiceTypeData().then((e) => {
+      setInvoiceType(e);
+    });
+  }, []);
 
   async function handleOpenCustmerScreen() {
     let timeOut;
@@ -165,11 +177,14 @@ export default function HomePage() {
   }
   // Probably It will change when we start with the invoice section (adding a new invoice )
   function handleAddProductToInvoice(product) {
+    let productFromPrice = product.prices.find((e) => {
+      return e.priceId == invoiceType.defaultPriceId;
+    });
     setOnGoingInvoice((prev) => {
-      let isExist = prev.some((pro) => pro.name == product.name);
+      let isExist = prev.some((pro) => pro.id == product.id);
       return isExist
         ? prev.map((pro) => {
-            return pro.name == product.name
+            return pro.id == product.id
               ? { ...pro, quantity: pro.quantity + 1 }
               : pro;
           })
@@ -177,10 +192,21 @@ export default function HomePage() {
             ...prev,
             {
               id: product.id,
-              name: product.name,
-              code: product.barcodes[0].barcode,
-              price: product.prices[0].price,
               quantity: 1,
+              price: productFromPrice?.price ?? 0,
+              unitItemId:
+                productFromPrice?.unitItemId ??
+                product.prices.at(0)?.unitItemId ??
+                null,
+              unitItemName:
+                productFromPrice?.unitItemName ??
+                product.prices.at(0)?.unitItemName ??
+                undefined,
+              name: product.name,
+              code:
+                product.barcodes.find((e) => {
+                  return e.unitItemId == productFromPrice?.unitItemId;
+                })?.barcode ?? null,
             },
           ];
     });
@@ -188,17 +214,32 @@ export default function HomePage() {
   function handelCloseModel() {
     setModalIsOpen(false);
   }
-  function handleAddProductToInvoiceByCode(product) {
+  function handleAddProductToInvoiceByCode(product, barcodeScan) {
     if (product) {
       if (product.length > 1) {
         productWithTheSameBarcode.current = product;
         setModalIsOpen(true);
       } else {
+        console.log(barcodeScan);
+        
+        console.log(product.at(0).barcodes.find(
+          (e) => {
+            console.log(e);
+            
+            return e.barcode == barcodeScan;
+          }
+        ));
+        
+        let { unitItemId, unitItemName, barcode } = product.at(0).barcodes.find(
+          (e) => {
+            return e.barcode == barcodeScan;
+          }
+        );
         setOnGoingInvoice((prev) => {
-          let isExist = prev.some((pro) => pro.name == product[0].name);
+          let isExist = prev.some((pro) => pro.id == product[0].id && pro.unitItemId == unitItemId);
           return isExist
             ? prev.map((pro) => {
-                return pro.name == product[0].name
+                return pro.id == product[0].id && pro.unitItemId == unitItemId
                   ? { ...pro, quantity: pro.quantity + 1 }
                   : pro;
               })
@@ -207,7 +248,15 @@ export default function HomePage() {
                 {
                   id: product[0].id,
                   name: product[0].name,
-                  price: product[0].prices[0].price,
+                  price:
+                    product[0].prices.find((e) => {
+                      return (
+                        e.priceId == invoiceType.defaultPriceId &&
+                        e.unitItemId == unitItemId
+                      );
+                    })?.price ?? 0,
+                  unitItemId: unitItemId ?? null,
+                  unitItemName: unitItemName,
                   quantity: 1,
                 },
               ];
@@ -279,6 +328,7 @@ export default function HomePage() {
           invoiceItems: onGoingInvoice.map((item) => {
             return {
               productId: item.id,
+              unitItemId: item.unitItemId,
               qty: item.quantity,
               price: item.price,
             };
@@ -420,46 +470,48 @@ export default function HomePage() {
           confirmButtonText: "Yes, Confirm It",
           cancelButtonText: "No, don't Confirm It ",
         }));
-    if (result.isConfirmed) {
-      try {
-        const invoice = {
-          ...invoiceRelatedData,
-          isSuspended: false,
-          invoiceItems: onGoingInvoice.map((item) => {
-            return {
-              productId: item.id,
-              qty: item.quantity,
-              price: item.price,
-            };
-          }),
-        };
-        const responce = loaction.state?.isPending
-          ? await updateInvoice(loaction.state.invoiceId, invoice)
-          : await creatInvoice(invoice);
-        setShowReceipt((prev) => !prev);
-        setFinalInvoice({
-          reciptDate: responce.date,
-          invoiceID: responce.id,
-        });
-      } catch (error) {
-        toast.warn(`${error.response.data.message || "Faild To Send Data"}`, {
-          position: "top-right",
-          autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: false,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: "light",
-        });
-      }
-      //   MySwal.fire({
-      //     title:'Payment Completed',
-      //     text:'The Payment has been successfully Completed.',
-      //     icon:'success',
-      //     confirmButtonColor:'#2A9D8F'
-      // });
+
+    // if (result.isConfirmed) {
+    try {
+      const invoice = {
+        ...invoiceRelatedData,
+        isSuspended: false,
+        invoiceItems: onGoingInvoice.map((item) => {
+          return {
+            productId: item.id,
+            unitItemId: item.unitItemId,
+            qty: item.quantity,
+            price: item.price,
+          };
+        }),
+      };
+      const responce = loaction.state?.isPending
+        ? await updateInvoice(loaction.state.invoiceId, invoice)
+        : await creatInvoice(invoice);
+      setShowReceipt((prev) => !prev);
+      setFinalInvoice({
+        reciptDate: responce.date,
+        invoiceID: responce.id,
+      });
+    } catch (error) {
+      toast.warn(`${error.response.data.message || "Faild To Send Data"}`, {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: false,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+      });
     }
+    //   MySwal.fire({
+    //     title:'Payment Completed',
+    //     text:'The Payment has been successfully Completed.',
+    //     icon:'success',
+    //     confirmButtonColor:'#2A9D8F'
+    // });
+    // }
   }
   function handelNewOrder() {
     setOnGoingInvoice([]);

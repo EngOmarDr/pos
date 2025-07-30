@@ -11,7 +11,7 @@ export default function AvailableProducts({ products, onAddItem, isFilterOn }) {
           id={product.id}
           name={product.name}
           // For Now we Will Leave The Price Like This maby we will chang it
-          unitPrice={product.prices[0].price}
+          unitPrice={product.prices[0]?.price ?? 0}
           productImage={product.image}
           onClick={onAddItem}
         />

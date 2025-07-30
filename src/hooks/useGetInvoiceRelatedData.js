@@ -22,12 +22,14 @@ export default function useGetInvoiceRelatedData() {
         );
         setInvoiceRelatedData((prevState) => ({
           ...prevState,
-          invoiceTypeId: invoiceTypeData.type,
+          warehouseId: JSON.parse(localStorage.getItem("loginInfo")).warehouseId ?? invoiceTypeData.defaultWarehouseId,
+          invoiceTypeId: invoiceTypeData.id,
           date: getLocalISODateTime(),
           accountId: invoiceTypeData.defaultCashAccId,
           currencyId: invoiceTypeData.defaultCurrencyId,
           currencyValue: currencyValue.currencyValue,
-          payType: invoiceTypeData.isCashBill ? 0 : 1,
+
+          payType: 0, //invoiceTypeData.isCashBill ? 0 : 1,
         }));
         setIsFetching(false);
       } catch (responceError) {

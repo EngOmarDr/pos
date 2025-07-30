@@ -5,7 +5,7 @@ export default function BarcodeScanner({ onQRScan }) {
   useSymbologyScanner((decoded) => {
     async function getProduct(code) {
       const response = await getAllByBarcode(code);
-      onQRScan(response);
+      onQRScan(response,code);
     }
     getProduct(decoded);
   });
