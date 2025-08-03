@@ -3,6 +3,7 @@ import loginImg from "../assets/syrien trading logo - 1 .jpg";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Login } from "../services/AuthServices";
+import { checkShift } from "../services/ShiftServices";
 
 export default function LoginPage() {
   const [loginCredentials, setLoginCredentials] = useState({
@@ -31,6 +32,7 @@ export default function LoginPage() {
     try {
       setisLoading(true);
       const apiCallResponse = await Login(loginCredentials);
+      await checkShift();
       localStorage.setItem(
         "loginInfo",
         JSON.stringify({

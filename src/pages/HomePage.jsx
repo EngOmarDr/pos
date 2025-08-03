@@ -221,22 +221,24 @@ export default function HomePage() {
         setModalIsOpen(true);
       } else {
         console.log(barcodeScan);
-        
-        console.log(product.at(0).barcodes.find(
-          (e) => {
+
+        console.log(
+          product.at(0).barcodes.find((e) => {
             console.log(e);
-            
+
             return e.barcode == barcodeScan;
-          }
-        ));
-        
-        let { unitItemId, unitItemName, barcode } = product.at(0).barcodes.find(
-          (e) => {
-            return e.barcode == barcodeScan;
-          }
+          })
         );
+
+        let { unitItemId, unitItemName, barcode } = product
+          .at(0)
+          .barcodes.find((e) => {
+            return e.barcode == barcodeScan;
+          });
         setOnGoingInvoice((prev) => {
-          let isExist = prev.some((pro) => pro.id == product[0].id && pro.unitItemId == unitItemId);
+          let isExist = prev.some(
+            (pro) => pro.id == product[0].id && pro.unitItemId == unitItemId
+          );
           return isExist
             ? prev.map((pro) => {
                 return pro.id == product[0].id && pro.unitItemId == unitItemId
@@ -377,6 +379,7 @@ export default function HomePage() {
       // custmerAccount: "none",
       // custmerDescount: 0,
     });
+    setPaymentFormData({ cashAmount: getTotal(onGoingInvoice) });
     // setShowApplyBtn(true);
   }
   function handelShowCashToggel() {

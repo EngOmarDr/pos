@@ -10,6 +10,7 @@ import PendingInvoicesPage from './pages/PendingInvoicesPage.jsx'
 import ShiftClosePage from './pages/ShiftClosePage.jsx'
 import App from './App.jsx'
 import CustmerScreen from './pages/CustmerScreen.jsx'
+import ShiftStartPage from './pages/ShiftStartPage.jsx'
 
 const root = createRoot(document.getElementById('root'))
   root.render(
@@ -24,6 +25,7 @@ const root = createRoot(document.getElementById('root'))
         {/* <Route path='custmers-debts' element={<CustmersDebtsPage/>}/> */}
         <Route path='pending-invoices' element={<PendingInvoicesPage/>}/>
         <Route path='shift-close' element={<ShiftClosePage/>}/>
+        <Route path='shift-start' element={<ShiftStartPage/>}/>
       </Route>
     </Routes>
     </BrowserRouter>

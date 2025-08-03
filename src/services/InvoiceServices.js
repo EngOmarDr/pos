@@ -2,7 +2,10 @@ import axiosInstance from "../utilities/api";
 
 export async function fetchInvoiceTypeData() {
   // FOR NOW IT WILL BE STATIC 1
-  const response = await axiosInstance.get("/invoice-types/4");
+  const res = await axiosInstance.get("/invoice-pos");
+  console.log('from invoice services -> fetch invoice typeData');
+  console.log(res.data);
+  const response = await axiosInstance.get(`/invoice-types/${res.data.at(0).invoiceTypeId}`);
   return response.data;
 }
 export async function fetchCurrencyValue(id) {
