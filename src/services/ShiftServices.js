@@ -5,30 +5,21 @@ export async function fetchAds() {
   return response.data;
 }
 
-
 export async function checkShift() {
-  const response = await axiosInstance.get(
-    `/shifts/check`
-  );
+  const response = await axiosInstance.get(`/shifts/check`);
   console.log(response.data);
-  localStorage.setItem('shiftIsStarted', response.data.endCash == null)
+  localStorage.setItem("shiftIsStarted", response.data.endCash == null);
   return response.data;
 }
 
 export async function startShift(startCash) {
-  const response = await axiosInstance.post(
-    `/shifts`,
-    { startCash }
-  );
-  localStorage.setItem('shiftIsStarted', true)
+  const response = await axiosInstance.post(`/shifts`, { startCash });
+  localStorage.setItem("shiftIsStarted", true);
   return response.data;
 }
 
 export async function closeShift(endCash, notes) {
-  const response = await axiosInstance.put(
-    `/shifts`,
-    { endCash, notes }
-  );
-  localStorage.setItem('shiftIsStarted', false)
+  const response = await axiosInstance.put(`/shifts/close`, { endCash, notes });
+  localStorage.setItem("shiftIsStarted", false);
   return response.data;
 }

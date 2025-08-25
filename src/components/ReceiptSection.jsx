@@ -16,8 +16,8 @@ export default function ReceiptSection({
   return (
     <div className="receipt-section">
       <h2>
-        Payment Has Completed successfully{" "}
-        <FaCheckCircle className="check-svg" />{" "}
+        Payment Has Completed successfully
+        <FaCheckCircle className="check-svg" />
       </h2>
       <div className="options">
         <button className="print-btn" onClick={handelPrinting}>

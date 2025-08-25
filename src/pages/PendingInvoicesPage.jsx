@@ -1,7 +1,7 @@
 import { useState } from "react";
 import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
-import { toast, ToastContainer } from "react-toastify";
+import { toast } from "react-toastify";
 import PendingInvoice from "../components/PendingInvoice";
 import useFetchData from "../hooks/useFetchData";
 import { deleteInvoice, fetchAllInvoices } from "../services/InvoiceServices";
@@ -95,7 +95,6 @@ export default function PendingInvoicesPage() {
           <FinalInvoice invoice={invoiceItems} />
         </div>
       </div>
-      <ToastContainer />
     </div>
   );
 }

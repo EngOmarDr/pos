@@ -1,7 +1,7 @@
 import { useEffect, useState, useRef } from "react";
 import FinalInvoice from "../components/FinalInvoice";
-import ImagesSlid from "../components/ImagesSlid";
-import VideosSlid from "../components/VideosSlid";
+// import ImagesSlid from "../components/ImagesSlid";
+// import VideosSlid from "../components/VideosSlid";
 import { fetchAds } from "../services/AdsServices";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
@@ -130,35 +130,59 @@ export default function CustmerScreen() {
           <FinalInvoice invoice={currentInvoice} />
         </div>
         <div className="ads-section">
-          <Slider
-            ref={sliderRef}
-            {...settings}
-            style={{ backgroundColor: "white" }}
-          >
-            {ads.map((item, index) => (
-              <div key={item.id || index}>
-                {item.mediaUrl.slice(-3) !== "mp4" ? (
-                  <img
-                    src={`http://localhost:8080${item.mediaUrl}`}
-                    alt={item.name}
-                    height="calc(100vh - 32px - 150px)"
-                  />
-                ) : (
-                  <video
-                    src={`http://localhost:8080${item.mediaUrl}`}
-                    autoPlay
-                    muted
-                    loop
-                    style={{
-                      width: "100%",
-                      height: "auto",
-                      borderRadius: "8px",
-                    }}
-                  />
-                )}
-              </div>
-            ))}
-          </Slider>
+          {ads.length === 1 ? (
+            <div className="singal-slide">
+              {ads[0].mediaUrl.slice(-3) !== "mp4" ? (
+                <img
+                  src={`http://localhost:8080${ads[0].mediaUrl}`}
+                  alt={ads[0].name}
+                  height="calc(100vh - 32px - 150px)"
+                />
+              ) : (
+                <video
+                  src={`http://localhost:8080${ads[0].mediaUrl}`}
+                  autoPlay
+                  muted
+                  loop
+                  style={{
+                    width: "100%",
+                    height: "auto",
+                    borderRadius: "8px",
+                  }}
+                />
+              )}
+            </div>
+          ) : (
+            <Slider
+              ref={sliderRef}
+              {...settings}
+              style={{ backgroundColor: "white" }}
+            >
+              {ads.map((item, index) => (
+                <div key={item.id || index}>
+                  {item.mediaUrl.slice(-3) !== "mp4" ? (
+                    <img
+                      src={`http://localhost:8080${item.mediaUrl}`}
+                      alt={item.name}
+                      height="calc(100vh - 32px - 150px)"
+                    />
+                  ) : (
+                    <video
+                      src={`http://localhost:8080${item.mediaUrl}`}
+                      autoPlay
+                      muted
+                      loop
+                      style={{
+                        width: "100%",
+                        height: "auto",
+                        borderRadius: "8px",
+                      }}
+                    />
+                  )}
+                </div>
+              ))}
+            </Slider>
+          )}
 
           <div
             style={{

@@ -30,9 +30,9 @@ export default function CompletedInvoice({
         <button className="show-btn" onClick={() => handelShowItems(items)}>
           <FaEye /> Show
         </button>
-        <button className="return-btn" onClick={handelReturnGoods}>
+        {/* <button className="return-btn" onClick={handelReturnGoods}>
           <FaUndoAlt /> Return
-        </button>
+        </button> */}
       </div>
       <div style={{ display: "none" }}>
         <Receipt

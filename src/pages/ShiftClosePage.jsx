@@ -1,12 +1,13 @@
 import { useEffect, useState } from "react";
+import { toast } from "react-toastify";
 import { CurrencyDenomination } from "../components/CurrencyDenomination";
 import { currency } from "../utilities/dump";
-import { FaCheck } from "react-icons/fa";
+// import { FaCheck } from "react-icons/fa";
 import { closeShift } from "../services/ShiftServices";
+import { useNavigate } from "react-router-dom";
 
 export default function ShiftClosePage() {
-  const [error, setError] = useState();
-  const [res, setRes] = useState();
+  const navigate = useNavigate();
   const [formData, setFormData] = useState(
     currency.map((cur) => ({
       id: cur.id,
@@ -53,15 +54,54 @@ export default function ShiftClosePage() {
   async function handelSumbiting(e) {
     e.preventDefault();
     if (totalAmount == 0) {
-      setError("insert cash");
+      toast.error("insert cash", {
+        position: "top-right",
+        autoClose: 2500,
+        hideProgressBar: false,
+        closeOnClick: false,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+      });
       return;
     }
     try {
       const response = await closeShift(totalAmount);
-      setError(false);
-      setRes(response.endCash - response.startCash - response.expectedEndCash);
+      const endCash = response.endCash;
+      const startCash = response.startCash;
+      const expectedEndCash = response.expectedEndCash;
+      const finalBoxContent = endCash - startCash - expectedEndCash;
+      const toastText =
+        finalBoxContent > 0
+          ? "يوجد زيادة في الصندوق بمقدار " + finalBoxContent
+          : finalBoxContent < 0
+          ? "يوجد نقص في الصندوق بمقدار " + finalBoxContent
+          : "قيم الصندوق صحيحة";
+      toast.info(toastText, {
+        position: "top-right",
+        autoClose: 2500,
+        hideProgressBar: false,
+        closeOnClick: false,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+      });
+      localStorage.removeItem("loginInfo");
+      localStorage.removeItem("shiftIsStarted");
+      navigate("/login", { replace: true });
     } catch (error) {
-      setError(error.response.data.message);
+      toast.error(`${error.response.data.message || "Faild To Send Data"}`, {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: false,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+      });
     }
   }
   function handelIncrease(id) {
@@ -94,19 +134,9 @@ export default function ShiftClosePage() {
           {totalAmount != 0 && (
             <h2 className="total-amount">Total: {totalAmount}</h2>
           )}
-          {error && <span className="text-sm text-red-600">{error}</span>}
           <button className="check-total-btn flex items-center gap-x-2">
             Close Shift
           </button>
-          {res && (
-            <span className="text-sm text-green-600">
-              {res > 0
-                ? "يوجد زيادة في الصندوق بمقدار " + res
-                : res < 0
-                ? "يوجد نقص في الصندوق بمقدار " + res
-                : "قيم الصندوق صحيحة"}
-            </span>
-          )}
         </form>
       </div>
     </div>

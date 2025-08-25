@@ -6,7 +6,7 @@ import {
   FaHourglassHalf,
   //   FaUserClock,
   FaCashRegister,
-  FaHourglassEnd,
+  FaMoneyBill,
 } from "react-icons/fa";
 
 export default function App() {
@@ -56,7 +56,7 @@ export default function App() {
           to="shift-close"
           className={({ isActive }) => (isActive ? "active-navLink" : null)}
         >
-          <FaHourglassEnd className="nav-icon"/> Shift Close
+          <FaMoneyBill className="nav-icon"/> Shift Close
         </NavLink>
       </nav>
       <Outlet />

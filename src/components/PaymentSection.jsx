@@ -1,5 +1,5 @@
 import { FaCheckCircle, FaMoneyBillWave } from "react-icons/fa";
-import { ToastContainer } from "react-toastify";
+// import { ToastContainer } from "react-toastify";
 export default function PaymentSection({
   handelShowCashToggel,
   showCashInput,
@@ -122,7 +122,6 @@ export default function PaymentSection({
             onClick={() => handelConfirmPayment()}
           >
             <FaCheckCircle /> Confirm Payment
-            <ToastContainer />
           </button>
         </div>
       </div>

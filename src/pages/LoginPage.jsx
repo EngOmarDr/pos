@@ -32,7 +32,6 @@ export default function LoginPage() {
     try {
       setisLoading(true);
       const apiCallResponse = await Login(loginCredentials);
-      await checkShift();
       localStorage.setItem(
         "loginInfo",
         JSON.stringify({
@@ -40,10 +39,14 @@ export default function LoginPage() {
           warehouseId: apiCallResponse.warehouseId,
         })
       );
+      await checkShift();
       setisLoading(false);
-      navigate("/", { replace: true });
+      navigate("/shift-start", { replace: true });
+      // navigate("/", { replace: true });
     } catch (error) {
-      console.log(error.response.data.message);
+      if (error.response.data?.status === 400) {
+        navigate("/shift-start");
+      }
       setisLoading(false);
       setErrInLogining(error.response.data.message);
     }

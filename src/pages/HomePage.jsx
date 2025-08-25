@@ -116,14 +116,14 @@ export default function HomePage() {
     }
   }
   function handelCheckCash() {
-    paymentFormData.cashAmount < paymentInfo.remaining
+    +paymentFormData.cashAmount < +paymentInfo.remaining
       ? setPaymentInfo((prev) => ({
           ...prev,
-          remaining: prev.remaining - paymentFormData.cashAmount,
+          remaining: +prev.remaining - +paymentFormData.cashAmount,
         }))
       : setPaymentInfo((prev) => ({
           remaining: 0,
-          chang: paymentFormData.cashAmount - prev.remaining + prev.chang,
+          chang: +paymentFormData.cashAmount - +prev.remaining + +prev.chang,
         }));
   }
 
@@ -474,47 +474,47 @@ export default function HomePage() {
           cancelButtonText: "No, don't Confirm It ",
         }));
 
-    // if (result.isConfirmed) {
-    try {
-      const invoice = {
-        ...invoiceRelatedData,
-        isSuspended: false,
-        invoiceItems: onGoingInvoice.map((item) => {
-          return {
-            productId: item.id,
-            unitItemId: item.unitItemId,
-            qty: item.quantity,
-            price: item.price,
-          };
-        }),
-      };
-      const responce = loaction.state?.isPending
-        ? await updateInvoice(loaction.state.invoiceId, invoice)
-        : await creatInvoice(invoice);
-      setShowReceipt((prev) => !prev);
-      setFinalInvoice({
-        reciptDate: responce.date,
-        invoiceID: responce.id,
-      });
-    } catch (error) {
-      toast.warn(`${error.response.data.message || "Faild To Send Data"}`, {
-        position: "top-right",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: false,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "light",
-      });
+    if (result.isConfirmed) {
+      try {
+        const invoice = {
+          ...invoiceRelatedData,
+          isSuspended: false,
+          invoiceItems: onGoingInvoice.map((item) => {
+            return {
+              productId: item.id,
+              unitItemId: item.unitItemId,
+              qty: item.quantity,
+              price: item.price,
+            };
+          }),
+        };
+        const responce = loaction.state?.isPending
+          ? await updateInvoice(loaction.state.invoiceId, invoice)
+          : await creatInvoice(invoice);
+        setShowReceipt((prev) => !prev);
+        setFinalInvoice({
+          reciptDate: responce.date,
+          invoiceID: responce.id,
+        });
+      } catch (error) {
+        toast.warn(`${error.response.data.message || "Faild To Send Data"}`, {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: false,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+        });
+      }
+      //   MySwal.fire({
+      //     title:'Payment Completed',
+      //     text:'The Payment has been successfully Completed.',
+      //     icon:'success',
+      //     confirmButtonColor:'#2A9D8F'
+      // });
     }
-    //   MySwal.fire({
-    //     title:'Payment Completed',
-    //     text:'The Payment has been successfully Completed.',
-    //     icon:'success',
-    //     confirmButtonColor:'#2A9D8F'
-    // });
-    // }
   }
   function handelNewOrder() {
     setOnGoingInvoice([]);
