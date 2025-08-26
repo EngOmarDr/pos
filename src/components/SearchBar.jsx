@@ -1,12 +1,14 @@
 import { forwardRef } from "react";
+import { useTranslation } from "react-i18next";
 
 const SearchBar = forwardRef(function SearchBar({ onSearch, result }, ref) {
+  const { t } = useTranslation();
   return (
     <form className="search-bar">
       <input type="text" name="search" ref={ref} />
       <p className="search-actions">
         <button id="search" onClick={onSearch}>
-          Search
+          {t("search")}
         </button>
         <button
           id="reset"
@@ -14,7 +16,7 @@ const SearchBar = forwardRef(function SearchBar({ onSearch, result }, ref) {
           onClick={onSearch}
         >
           {/* for the animtion to work correctly*/}
-          {result && "Reset"}
+          {result && t("reset")}
         </button>
       </p>
     </form>

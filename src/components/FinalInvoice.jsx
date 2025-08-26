@@ -1,18 +1,20 @@
+import { useTranslation } from "react-i18next";
 import { getTotal } from "../utilities/getTotal";
 export default function FinalInvoice({ invoice }) {
+  const { t } = useTranslation();
   const finalInvoiceItems = (
     <table>
-      <caption>Invoice Items</caption>
+      <caption>{t("invoiceItems")}</caption>
       <thead>
         <tr>
-          <td>Name</td>
-          <td>Unit Price</td>
-          <td>Quantity</td>
-          <td>Total</td>
+          <td>{t("name")}</td>
+          <td>{t("unitPrice")}</td>
+          <td>{t("quantity")}</td>
+          <td>{t("total")}</td>
         </tr>
       </thead>
       <tbody>
-        {invoice.map((product,index) => {
+        {invoice.map((product, index) => {
           return (
             <tr key={index}>
               <td>{product.name}</td>
@@ -25,7 +27,7 @@ export default function FinalInvoice({ invoice }) {
       </tbody>
       <tfoot>
         <tr>
-          <td colSpan={3}>Total:</td>
+          <td colSpan={3}>{t("totalInvoicePrice")}</td>
           <td>{getTotal(invoice)}$</td>
         </tr>
       </tfoot>

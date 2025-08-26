@@ -1,5 +1,6 @@
 import { FaClock, FaCheckCircle, FaTimesCircle } from "react-icons/fa";
 import OnGoingInvoiceItems from "./OnGoingInvoiceItems";
+import { useTranslation } from "react-i18next";
 
 export default function OnGoingInvoice({
   onGoingInvoice,
@@ -11,6 +12,7 @@ export default function OnGoingInvoice({
   onCancleOnGoinigInvoice,
   handleOpenCustmerScreen,
 }) {
+  const { t } = useTranslation();
   return (
     <div className="invoice-body">
       <OnGoingInvoiceItems
@@ -21,7 +23,7 @@ export default function OnGoingInvoice({
       />
       <div className="invoice-options">
         <button className="pend-btn" onClick={() => onPending()}>
-          <FaClock /> Pend Invoice
+          <FaClock /> {t("pendInvoice")}
         </button>
         <button
           className="complete-btn"
@@ -29,20 +31,20 @@ export default function OnGoingInvoice({
             onShowPayment();
           }}
         >
-          <FaCheckCircle /> Complete Invoice
+          <FaCheckCircle /> {t("completeInvoice")}
         </button>
         <button
           onClick={() => onCancleOnGoinigInvoice()}
           className="cancel-btn"
         >
-          <FaTimesCircle /> Cancle Invoice
+          <FaTimesCircle /> {t("cancleInvoice")}
         </button>
       </div>
       <button
         className="open-custmer-page-btn"
         onClick={handleOpenCustmerScreen}
       >
-        Show Custmer Page
+        {t("showCustmerPage")}
       </button>
     </div>
   );

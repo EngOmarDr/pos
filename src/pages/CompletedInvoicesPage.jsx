@@ -8,8 +8,10 @@ import CompletedInvoice from "../components/CompletedInvoice";
 import useFetchData from "../hooks/useFetchData";
 import { fetchAllInvoices } from "../services/InvoiceServices";
 import FinalInvoice from "../components/FinalInvoice";
+import { useTranslation } from "react-i18next";
 
 export default function CompletedInvoicesPage() {
+  const { t } = useTranslation(); 
   const [showInvoiceItems, setShowInvoiceItems] = useState(false);
   const [invoiceItems, setInvoiceItems] = useState([]);
   const navigate = useNavigate();

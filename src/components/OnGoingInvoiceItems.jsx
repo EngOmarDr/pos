@@ -1,5 +1,6 @@
 import { FaMinusCircle, FaPlusCircle, FaTrashAlt } from "react-icons/fa";
 import { getTotal } from "../utilities/getTotal";
+import { useTranslation } from "react-i18next";
 
 export default function OnGoingInvoiceItems({
   invoice,
@@ -7,17 +8,18 @@ export default function OnGoingInvoiceItems({
   onDecrease,
   onRemove,
 }) {
+  const { t } = useTranslation();
   const currentInvoiceItems = (
     <table>
       {/* <caption>Invoice Items</caption> */}
       <thead>
         <tr>
-          <td>Name</td>
-          <td>Unit Name</td>
-          <td>Unit Price</td>
-          <td>Quantity</td>
-          <td>Total</td>
-          <td>Remove</td>
+          <td>{t("name")}</td>
+          <td>{t("unitName")}</td>
+          <td>{t("unitPrice")}</td>
+          <td>{t("quantity")}</td>
+          <td>{t("total")}</td>
+          <td>{t("remove")}</td>
         </tr>
       </thead>
       <tbody>
@@ -54,7 +56,7 @@ export default function OnGoingInvoiceItems({
       </tbody>
       <tfoot>
         <tr>
-          <td colSpan={5}>Total:</td>
+          <td colSpan={5}>{t("totalInvoicePrice")}</td>
           <td>{getTotal(invoice)}</td>
         </tr>
       </tfoot>

@@ -6,8 +6,10 @@ import { fetchAds } from "../services/AdsServices";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
+import { useTranslation } from "react-i18next";
 
 export default function CustmerScreen() {
+  const { t } = useTranslation();
   const [currentInvoice, setCurrentInvoice] = useState([]);
   const channelRef = useRef();
   if (!channelRef.current) {
@@ -126,7 +128,7 @@ export default function CustmerScreen() {
           className="custmer-invoice"
           style={{ borderRadius: "8px", padding: "8px" }}
         >
-          <h3 style={{ textWrap: "balance" }}>Thank You For Shoping With Us</h3>
+          <h3 style={{ textWrap: "balance" }}>{t('thankYouLetter')}</h3>
           <FinalInvoice invoice={currentInvoice} />
         </div>
         <div className="ads-section">
@@ -183,8 +185,7 @@ export default function CustmerScreen() {
               ))}
             </Slider>
           )}
-
-          <div
+          {/* <div
             style={{
               height: "100%",
               borderRadius: "8px",
@@ -221,14 +222,14 @@ export default function CustmerScreen() {
               }}
             >
               سكر
-            </p>
+            </p> */}
             {/* <h4
               style={{ textAlign: "start", direction: "rtl", fontSize: "19px" }}
             >
               هل تريد شراء:
             </h4>
             <span> حليب</span> */}
-          </div>
+          {/* </div> */}
         </div>
       </div>
       {/* Loading for ads duration */}

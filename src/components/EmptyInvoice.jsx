@@ -1,11 +1,13 @@
-import { FaShoppingCart } from 'react-icons/fa'
+import { useTranslation } from "react-i18next";
+import { FaShoppingCart } from "react-icons/fa";
 
-export function EmptyInvoice(){
-    return(
-        <div className='empty-invoice'>
-            <FaShoppingCart className='empty-icon'/>
-            <p className='main-text'>No Active Invoice</p>
-            <p className='sub-text'>Click a product or scan a QR code to start a new sale</p>
-        </div>
-    )
+export function EmptyInvoice() {
+  const { t } = useTranslation();
+  return (
+    <div className="empty-invoice">
+      <FaShoppingCart className="empty-icon" />
+      <p className="main-text">{t("noInvoice")}</p>
+      <p className="sub-text">{t("startNewInvoice")}</p>
+    </div>
+  );
 }

@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import { FaCheckCircle, FaMoneyBillWave } from "react-icons/fa";
 // import { ToastContainer } from "react-toastify";
 export default function PaymentSection({
@@ -9,11 +10,12 @@ export default function PaymentSection({
   paymentInfo,
   handelConfirmPayment,
 }) {
+  const { t } = useTranslation();
   return (
     <div className="payment-section">
       <div className="process-info">
-        <h2>Choise A Pyment Methode :</h2>
-        <p>You Can Chosie More Than one </p>
+        <h2>{t("choisePyment")}</h2>
+        {/* <p>You Can Chosie More Than one </p> */}
       </div>
       {/* <div className="custmer-discount">
                   {showApplyBtn && (
@@ -57,7 +59,7 @@ export default function PaymentSection({
                 </div> */}
       <div className="payment-methods">
         <button className="cash-btn" onClick={() => handelShowCashToggel()}>
-          <FaMoneyBillWave className="btn-icon" /> Cash
+          <FaMoneyBillWave className="btn-icon" /> {t("cash")}
         </button>
         {/* <button
                     className="custmer-account-btn"
@@ -69,7 +71,7 @@ export default function PaymentSection({
       <div className="payments">
         {showCashInput && (
           <div className="cash-method">
-            <label htmlFor="cashAmount">Enter An Amount:</label>
+            <label htmlFor="cashAmount">{t("enterAmount")}</label>
             <input
               id="cashAmount"
               name="cashAmount"
@@ -82,7 +84,7 @@ export default function PaymentSection({
               onClick={() => handelCheckCash()}
               className="check-cash-btn"
             >
-              <FaCheckCircle className="btn-icon" /> check
+              <FaCheckCircle className="btn-icon" /> {t("check")}
             </button>
           </div>
         )}
@@ -114,14 +116,18 @@ export default function PaymentSection({
                   )} */}
         <div className="process-calculation">
           <h2 className="pyment-remaining">
-            Remaining:{paymentInfo.remaining}{" "}
+            {t("remaining")}
+            {paymentInfo.remaining}
           </h2>
-          <h2 className="pyment-change">chang:{paymentInfo.chang}</h2>
+          <h2 className="pyment-change">
+            {t("chang")}
+            {paymentInfo.chang}
+          </h2>
           <button
             className="confirm-btn"
             onClick={() => handelConfirmPayment()}
           >
-            <FaCheckCircle /> Confirm Payment
+            <FaCheckCircle /> {t("confirmPayment")}
           </button>
         </div>
       </div>

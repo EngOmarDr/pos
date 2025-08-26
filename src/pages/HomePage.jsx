@@ -21,6 +21,7 @@ import {
 } from "../services/InvoiceServices.js";
 import { useLocation } from "react-router-dom";
 import ChooseProductModal from "../components/ChooseProductModal.jsx";
+import { t } from "i18next";
 
 export default function HomePage() {
   const searchRef = useRef();
@@ -292,20 +293,20 @@ export default function HomePage() {
   }
   async function handelCancleOnGoinigInvoice() {
     const result = await MySwal.fire({
-      title: "Cancel Invoice?",
-      text: "This action cannot be undone. All items in this invoice will be lost.",
+      title: t("cancleInvoice") + "؟",
+      text: t("actionCannotUndone"),
       icon: "warning",
       showCancelButton: true,
       confirmButtonColor: "#E76F51",
       cancelButtonColor: "#264653",
-      confirmButtonText: "Yes, Cancel It",
-      cancelButtonText: "No, Keep It",
+      confirmButtonText: t("yesCancel"),
+      cancelButtonText: t("noKeep"),
     });
     if (result.isConfirmed) {
       setOnGoingInvoice([]);
       MySwal.fire({
-        title: "Invoice Canceled",
-        text: "The invoice has been successfully removed.",
+        title: t("invoiceCanceled"),
+        text: t("successfullyRemoved"),
         icon: "success",
         confirmButtonColor: "#2A9D8F",
       });
@@ -313,14 +314,14 @@ export default function HomePage() {
   }
   async function handelPendingOnGoinigInvoice() {
     const result = await MySwal.fire({
-      title: "Pend Invoice?",
-      text: "This action will pend This ongoing Invoice.",
+      title: t("pendInvoice") + "؟",
+      text: t("willPend"),
       icon: "warning",
       showCancelButton: true,
       confirmButtonColor: "#E76F51",
       cancelButtonColor: "#264653",
-      confirmButtonText: "Yes, Pend It",
-      cancelButtonText: "No, Keep It",
+      confirmButtonText: t("yesPend"),
+      cancelButtonText: t("noKeep"),
     });
     if (result.isConfirmed) {
       try {
@@ -342,13 +343,13 @@ export default function HomePage() {
         console.log(responce);
         setOnGoingInvoice([]);
         MySwal.fire({
-          title: "Invoice Pended",
-          text: "The invoice has been successfully pended.",
+          title: t("invoicePended"),
+          text: t("pendSuccessfully"),
           icon: "success",
           confirmButtonColor: "#2A9D8F",
         });
       } catch (error) {
-        toast.error(`${error.response.data.message || "Faild To Send Data"}`, {
+        toast.error(`${error.response.data.message || t("faildToSend")}`, {
           position: "top-right",
           autoClose: 5000,
           hideProgressBar: false,
@@ -453,7 +454,7 @@ export default function HomePage() {
   async function handelConfirmPayment() {
     var result;
     paymentInfo.remaining !== 0
-      ? toast.warn("Amount has not been paid yet ! ", {
+      ? toast.warn(t("notPaid"), {
           position: "top-right",
           autoClose: 5000,
           hideProgressBar: false,
@@ -464,14 +465,14 @@ export default function HomePage() {
           theme: "light",
         })
       : (result = await MySwal.fire({
-          title: "Confirm Payment?",
-          text: "This action will Confirm Payment and Complet The Invoice",
+          title: t("confirmPayment") + "؟",
+          text: t("confirmPayment"),
           icon: "warning",
           showCancelButton: true,
           confirmButtonColor: "#E76F51",
           cancelButtonColor: "#264653",
-          confirmButtonText: "Yes, Confirm It",
-          cancelButtonText: "No, don't Confirm It ",
+          confirmButtonText: t("yesConfirm"),
+          cancelButtonText: t("noConfirm"),
         }));
 
     if (result.isConfirmed) {
@@ -497,7 +498,7 @@ export default function HomePage() {
           invoiceID: responce.id,
         });
       } catch (error) {
-        toast.warn(`${error.response.data.message || "Faild To Send Data"}`, {
+        toast.warn(`${error.response.data.message || t("faildToSend")}`, {
           position: "top-right",
           autoClose: 5000,
           hideProgressBar: false,

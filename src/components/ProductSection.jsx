@@ -1,6 +1,7 @@
 import AvailableProducts from "./AvailableProducts";
 import SearchBar from "./SearchBar";
 import Filters from "./Filters";
+import { useTranslation } from "react-i18next";
 
 export default function ProductsSection({
   activeCatagoryID,
@@ -14,11 +15,12 @@ export default function ProductsSection({
   handelSerchSubmit,
   searchRef,
 }) {
+  const { t } = useTranslation();
   let productsSectionContent;
   if (activeCatagoryID) {
     if (filterdProducts.length == 0) {
       productsSectionContent = (
-        <h3 className="no-products">No Products By This Type At The store</h3>
+        <h3 className="no-products">{t("noProductsByType")}</h3>
       );
     } else {
       if (searchResult && searchResult.length != 0) {
@@ -30,7 +32,7 @@ export default function ProductsSection({
         );
       } else if (searchResult && searchResult.length == 0) {
         productsSectionContent = (
-          <h3 className="no-products">No Product Match The Search Querry</h3>
+          <h3 className="no-products">{t("noProductMatchQuerry")}</h3>
         );
       } else {
         productsSectionContent = (
@@ -52,7 +54,7 @@ export default function ProductsSection({
         );
       } else if (searchResult && searchResult.length == 0) {
         productsSectionContent = (
-          <h3 className="no-products">No Product Match The Search Querry</h3>
+          <h3 className="no-products">{t("noProductMatchQuerry")}</h3>
         );
       } else {
         productsSectionContent = (
@@ -64,7 +66,7 @@ export default function ProductsSection({
       }
     } else {
       productsSectionContent = (
-        <h3 className="no-products">No Products At The store</h3>
+        <h3 className="no-products">{t("noProductsAtStore")}</h3>
       );
     }
   }
@@ -83,7 +85,9 @@ export default function ProductsSection({
           result={searchResult}
         />
       </div>
-      <div className="grid gap-4 grid-cols-[repeat(auto-fill,minmax(min(100%,180px),1fr))] p-3">{productsSectionContent}</div>
+      <div className="grid gap-4 grid-cols-[repeat(auto-fill,minmax(min(100%,180px),1fr))] p-3">
+        {productsSectionContent}
+      </div>
     </div>
   );
 }

@@ -2,6 +2,7 @@ import { useRef } from "react";
 import { useReactToPrint } from "react-to-print";
 import { FaCheckCircle, FaPlusCircle, FaPrint } from "react-icons/fa";
 import { Receipt } from "./Receipt";
+import { useTranslation } from "react-i18next";
 
 export default function ReceiptSection({
   onGoingInvoice,
@@ -10,21 +11,22 @@ export default function ReceiptSection({
   invoiceID,
 }) {
   const receiptRef = useRef();
+  const { t } = useTranslation();
   const handelPrinting = useReactToPrint({
     contentRef: receiptRef,
   });
   return (
     <div className="receipt-section">
       <h2>
-        Payment Has Completed successfully
+        {t("paymentSucceed")}
         <FaCheckCircle className="check-svg" />
       </h2>
       <div className="options">
         <button className="print-btn" onClick={handelPrinting}>
-          <FaPrint /> Print Receipt
+          <FaPrint /> {t("printReceipt")}
         </button>
         <button className="new-order-btn" onClick={() => handelNewOrder()}>
-          <FaPlusCircle /> New Order
+          <FaPlusCircle /> {t("newOrder")}
         </button>
       </div>
       <div style={{ display: "none" }}>

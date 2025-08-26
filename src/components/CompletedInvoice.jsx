@@ -3,6 +3,8 @@ import { useRef } from "react";
 import { useReactToPrint } from "react-to-print";
 import { Receipt } from "./Receipt";
 import { Link } from "react-router-dom";
+import { useTranslation } from "react-i18next";
+import { getLocalISODateTime } from "../utilities/getLocalISODateTime";
 export default function CompletedInvoice({
   invoiceId,
   date,
@@ -10,6 +12,7 @@ export default function CompletedInvoice({
   handelShowItems,
   handelReturnGoods,
 }) {
+  const { t } = useTranslation();
   const receiptRef = useRef();
   const handelPrinting = useReactToPrint({
     contentRef: receiptRef,
@@ -17,18 +20,22 @@ export default function CompletedInvoice({
   return (
     <div className="completed-invoice">
       <div className="info">
-        <h2> Invoice Id: {invoiceId} </h2>
-        <p> Invoice Date: {date}</p>
+        <h2>
+          {t("invoiceIdentifer")} {invoiceId}
+        </h2>
+        <p>
+          {t("invoiceDate")} {getLocalISODateTime(date)}
+        </p>
       </div>
       <div className="options">
         <button className="print-btn" onClick={handelPrinting}>
-          <FaPrint /> Print
+          <FaPrint /> {t("print")}
         </button>
         <Link to="/" state={{ invoiceItems: items }} className="copy-btn">
-          <FaCopy /> Copy
+          <FaCopy /> {t("copy")}
         </Link>
         <button className="show-btn" onClick={() => handelShowItems(items)}>
-          <FaEye /> Show
+          <FaEye /> {t("show")}
         </button>
         {/* <button className="return-btn" onClick={handelReturnGoods}>
           <FaUndoAlt /> Return

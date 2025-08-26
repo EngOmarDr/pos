@@ -7,8 +7,10 @@ import useFetchData from "../hooks/useFetchData";
 import { deleteInvoice, fetchAllInvoices } from "../services/InvoiceServices";
 import { FaTimes } from "react-icons/fa";
 import FinalInvoice from "../components/FinalInvoice";
+import { useTranslation } from "react-i18next";
 
 export default function PendingInvoicesPage() {
+  const { t } = useTranslation();
   const [showInvoiceItems, setShowInvoiceItems] = useState(false);
   const [invoiceItems, setInvoiceItems] = useState([]);
   const {
@@ -35,26 +37,26 @@ export default function PendingInvoicesPage() {
   const MySwal = withReactContent(Swal);
   async function handelCancelingInvoice(id) {
     const result = await MySwal.fire({
-      title: "Cancel Invoice?",
-      text: "This action cannot be undone. All items in this invoice will be lost.",
+      title:  t("cancleInvoice") + "؟",
+      text: t("actionCannotUndone"),
       icon: "warning",
       showCancelButton: true,
       confirmButtonColor: "#E76F51",
       cancelButtonColor: "#264653",
-      confirmButtonText: "Yes, Cancel It",
-      cancelButtonText: "No, Keep It",
+      confirmButtonText: t("yesCancel"),
+      cancelButtonText: t("noKeep"),
     });
     if (result.isConfirmed) {
       try {
         await deleteInvoice(id);
         MySwal.fire({
-          title: "Invoice Canceled",
-          text: "The invoice has been successfully removed.",
+          title: t("invoiceCanceled"),
+          text: t("successfullyRemoved"),
           icon: "success",
           confirmButtonColor: "#2A9D8F",
         });
       } catch (error) {
-        toast.error(`${error.response.data.message || "Faild To Send Data"}`, {
+        toast.error(`${error.response.data.message || t("faildToSend")}`, {
           position: "top-right",
           autoClose: 5000,
           hideProgressBar: false,
@@ -84,7 +86,7 @@ export default function PendingInvoicesPage() {
         ) : errorInFetchInvoices ? (
           <h3>{errorInFetchInvoices.message}</h3>
         ) : pendingInvoices.length == 0 ? (
-          <h2>No Pend invoice yet</h2>
+          <h2>{t("noPendInvoice")}</h2>
         ) : (
           pendingInvoices
         )}

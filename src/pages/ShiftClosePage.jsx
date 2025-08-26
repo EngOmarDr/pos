@@ -5,8 +5,10 @@ import { currency } from "../utilities/dump";
 // import { FaCheck } from "react-icons/fa";
 import { closeShift } from "../services/ShiftServices";
 import { useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
 export default function ShiftClosePage() {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const [formData, setFormData] = useState(
     currency.map((cur) => ({
@@ -54,7 +56,7 @@ export default function ShiftClosePage() {
   async function handelSumbiting(e) {
     e.preventDefault();
     if (totalAmount == 0) {
-      toast.error("insert cash", {
+      toast.error(t("insertCash"), {
         position: "top-right",
         autoClose: 2500,
         hideProgressBar: false,
@@ -74,10 +76,10 @@ export default function ShiftClosePage() {
       const finalBoxContent = endCash - startCash - expectedEndCash;
       const toastText =
         finalBoxContent > 0
-          ? "يوجد زيادة في الصندوق بمقدار " + finalBoxContent
+          ? t("increaseInBox") + finalBoxContent
           : finalBoxContent < 0
-          ? "يوجد نقص في الصندوق بمقدار " + finalBoxContent
-          : "قيم الصندوق صحيحة";
+          ? t("decreaseInBox") + finalBoxContent
+          : t("rightValues");
       toast.info(toastText, {
         position: "top-right",
         autoClose: 2500,
@@ -92,7 +94,7 @@ export default function ShiftClosePage() {
       localStorage.removeItem("shiftIsStarted");
       navigate("/login", { replace: true });
     } catch (error) {
-      toast.error(`${error.response.data.message || "Faild To Send Data"}`, {
+      toast.error(`${error.response.data.message || t("faildToSend")}`, {
         position: "top-right",
         autoClose: 5000,
         hideProgressBar: false,
@@ -128,14 +130,16 @@ export default function ShiftClosePage() {
   return (
     <div className="shift-close-page">
       <div className="shift-close-section">
-        <h1>Enter The Amount Of Each Denomination: </h1>
+        <h1>{t("enterDenomination")}</h1>
         <form onSubmit={handelSumbiting}>
           <div className="currency-denominations">{currencyCategories}</div>
           {totalAmount != 0 && (
-            <h2 className="total-amount">Total: {totalAmount}</h2>
+            <h2 className="total-amount">
+              {t("totalInvoicePrice")}: {totalAmount}
+            </h2>
           )}
           <button className="check-total-btn flex items-center gap-x-2">
-            Close Shift
+            {t("closeShift")}
           </button>
         </form>
       </div>

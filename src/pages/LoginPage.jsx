@@ -4,8 +4,10 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Login } from "../services/AuthServices";
 import { checkShift } from "../services/ShiftServices";
+import { useTranslation } from "react-i18next";
 
 export default function LoginPage() {
+  const { t, i18n } = useTranslation();
   const [loginCredentials, setLoginCredentials] = useState({
     username: "",
     password: "",
@@ -52,18 +54,24 @@ export default function LoginPage() {
     }
   }
   return (
-    <div className="login-page">
+    <div
+      className="login-page"
+      style={{
+        direction: i18n.language === "ar" ? "rtl" : "ltr",
+        textAlign: i18n.language === "ar" ? "right" : "left",
+      }}
+    >
       <div className="Loign-container">
         <img src={loginImg} className="login-img"></img>
         <div className="login-info">
-          <h1>Welcome Back</h1>
-          <p>Sign in to continue managing sales efficiently.</p>
+          <h1>{t("welcome")}</h1>
+          <p>{t("signIn")}</p>
           {errInLogining && (
             <span className="login-error">{errInLogining}</span>
           )}
           <form onSubmit={handelSubmit}>
             <div className="input-field">
-              <label htmlFor="username">UserName</label>
+              <label htmlFor="username">{t("userName")}</label>
               <div className="input-container">
                 <FaUser className="input-icon" />
                 <input
@@ -72,14 +80,14 @@ export default function LoginPage() {
                   name="username"
                   value={loginCredentials.username}
                   onChange={handelInputChange}
-                  placeholder="enter your user name"
+                  placeholder={t("enterName")}
                   required
                 />
               </div>
             </div>
 
             <div className="input-field">
-              <label htmlFor="password">Password</label>
+              <label htmlFor="password">{t("password")}</label>
               <div className="input-container">
                 {showPassword ? (
                   <FaUnlock
@@ -95,7 +103,7 @@ export default function LoginPage() {
                   name="password"
                   value={loginCredentials.password}
                   onChange={handelInputChange}
-                  placeholder="enter your password"
+                  placeholder={t("enterPassword")}
                   required
                   minLength={8}
                 />
@@ -103,7 +111,7 @@ export default function LoginPage() {
             </div>
 
             <button className={`login-btn ${isLoading ? "loading" : ""}`}>
-              {isLoading ? "Loging . . ." : "login"}
+              {isLoading ? t("loging") : t("login")}
             </button>
           </form>
         </div>

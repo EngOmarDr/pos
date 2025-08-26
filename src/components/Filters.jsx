@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import { getLeafNodes } from "../utilities/getLeafNodes";
 import Category from "./Category";
 
@@ -7,6 +8,7 @@ export default function Filters({
   activeCatagoryId,
   handelClearFilter,
 }) {
+  const { t } = useTranslation();
   const leafNodes = getLeafNodes(groupsTree);
   const filters = leafNodes.map((category) => {
     return (
@@ -24,7 +26,7 @@ export default function Filters({
     <div className="filters">
       {filters}
       <button className="clear-btn" onClick={handelClearFilter}>
-        Clear
+        {t("clear")}
       </button>
     </div>
   );

@@ -670,7 +670,7 @@ td.trash-can {
 
 .close-btn {
     position: absolute;
-    top: 25px;
+    top: 15px;
     right: 30px;
     background: none;
     border: none;
@@ -678,6 +678,11 @@ td.trash-can {
     cursor: pointer;
     color: var(--buttonColor);
     transition: var(--mainTransition);
+}
+
+.close-btn.ar {
+    left: 30px;
+    right: unset;
 }
 
 .close-btn:hover {
@@ -1090,11 +1095,12 @@ input:focus {
     text-align: left;
     color: black;
 }
-
+.receipt td{
+    background-color: white;
+}
 .receipt th {
     background-color: var(--backgroundColor);
 }
-
 /* MODAL */
 .modal::backdrop {
     position: fixed;
