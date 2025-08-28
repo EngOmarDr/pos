@@ -1,5 +1,6 @@
 import { useTranslation } from "react-i18next";
 import { FaCheckCircle, FaMoneyBillWave } from "react-icons/fa";
+import { priceFormatter } from "../utilities/priceFormatter";
 // import { ToastContainer } from "react-toastify";
 export default function PaymentSection({
   handelShowCashToggel,
@@ -10,7 +11,7 @@ export default function PaymentSection({
   paymentInfo,
   handelConfirmPayment,
 }) {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   return (
     <div className="payment-section">
       <div className="process-info">
@@ -116,12 +117,22 @@ export default function PaymentSection({
                   )} */}
         <div className="process-calculation">
           <h2 className="pyment-remaining">
-            {t("remaining")}
-            {paymentInfo.remaining}
+            {t("remaining")} 
+            {" "}
+            {priceFormatter(
+              paymentInfo.remaining,
+              "SAR",
+              i18n.language === "ar" ? "ar-SA" : "en-US"
+            )}
           </h2>
           <h2 className="pyment-change">
             {t("chang")}
-            {paymentInfo.chang}
+            {" "}
+            {priceFormatter(
+              paymentInfo.chang,
+              "SAR",
+              i18n.language === "ar" ? "ar-SA" : "en-US"
+            )}
           </h2>
           <button
             className="confirm-btn"

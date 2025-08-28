@@ -22,6 +22,7 @@ import {
 import { useLocation } from "react-router-dom";
 import ChooseProductModal from "../components/ChooseProductModal.jsx";
 import { t } from "i18next";
+import { getPrice } from "../utilities/getPrice.js";
 
 export default function HomePage() {
   const searchRef = useRef();
@@ -34,6 +35,7 @@ export default function HomePage() {
   const [activeCatagoryID, setActiveCatagoryID] = useState(null);
   const [filterdProducts, setFilterdProducts] = useState([]);
   const [invoiceType, setInvoiceType] = useState();
+  const [lastClikedProduct, setLastClikedProduct] = useState(null);
 
   let initaliInvoice;
   if (loaction.state) {
@@ -133,6 +135,8 @@ export default function HomePage() {
     setFilterdProducts([]);
   }
   function handelActiveFilter(groupId) {
+    console.log(groupId);
+
     setFilterdProducts(() => {
       return availableProducts.filter((product) => {
         return product.groupId === groupId;
@@ -178,9 +182,10 @@ export default function HomePage() {
   }
   // Probably It will change when we start with the invoice section (adding a new invoice )
   function handleAddProductToInvoice(product) {
-    let productFromPrice = product.prices.find((e) => {
-      return e.priceId == invoiceType.defaultPriceId;
-    });
+    setLastClikedProduct(product.id);
+    setTimeout(() => setLastClikedProduct(null), 700);
+
+    let productFromPrice = getPrice(product, invoiceType);
     setOnGoingInvoice((prev) => {
       let isExist = prev.some((pro) => pro.id == product.id);
       return isExist
@@ -216,6 +221,8 @@ export default function HomePage() {
     setModalIsOpen(false);
   }
   function handleAddProductToInvoiceByCode(product, barcodeScan) {
+    setLastClikedProduct(product.id);
+    setTimeout(() => setLastClikedProduct(null), 600);
     if (product) {
       if (product.length > 1) {
         productWithTheSameBarcode.current = product;
@@ -591,6 +598,7 @@ export default function HomePage() {
           handelSerchSubmit={handelSerchSubmit}
           handleAddProductToInvoice={handleAddProductToInvoice}
           searchRef={searchRef}
+          lastClikedId={lastClikedProduct}
         />
       )}
     </div>

@@ -6,9 +6,10 @@ import { currency } from "../utilities/dump";
 import { closeShift } from "../services/ShiftServices";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+import { priceFormatter } from "../utilities/priceFormatter";
 
 export default function ShiftClosePage() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const navigate = useNavigate();
   const [formData, setFormData] = useState(
     currency.map((cur) => ({
@@ -74,11 +75,16 @@ export default function ShiftClosePage() {
       const startCash = response.startCash;
       const expectedEndCash = response.expectedEndCash;
       const finalBoxContent = endCash - startCash - expectedEndCash;
+      const formatedFinalBoxContent = priceFormatter(
+        finalBoxContent,
+        "SAR",
+        i18n.language === "ar" ? "ar-SA" : "en-US"
+      );
       const toastText =
         finalBoxContent > 0
-          ? t("increaseInBox") + finalBoxContent
+          ? t("increaseInBox") + formatedFinalBoxContent
           : finalBoxContent < 0
-          ? t("decreaseInBox") + finalBoxContent
+          ? t("decreaseInBox") + formatedFinalBoxContent
           : t("rightValues");
       toast.info(toastText, {
         position: "top-right",
@@ -135,7 +141,12 @@ export default function ShiftClosePage() {
           <div className="currency-denominations">{currencyCategories}</div>
           {totalAmount != 0 && (
             <h2 className="total-amount">
-              {t("totalInvoicePrice")}: {totalAmount}
+              {t("totalInvoicePrice")}:{" "}
+              {priceFormatter(
+                totalAmount,
+                "SAR",
+                i18n.language === "ar" ? "ar-SA" : "en-US"
+              )}
             </h2>
           )}
           <button className="check-total-btn flex items-center gap-x-2">

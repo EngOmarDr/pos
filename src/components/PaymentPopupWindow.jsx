@@ -2,6 +2,7 @@ import { FaTimes } from "react-icons/fa";
 import ReceiptSection from "./ReceiptSection";
 import FinalInvoice from "./FinalInvoice";
 import PaymentSection from "./PaymentSection";
+import { useTranslation } from "react-i18next";
 export default function PaymentPopupWindow({
   showPayment,
   onGoingInvoice,
@@ -18,15 +19,16 @@ export default function PaymentPopupWindow({
   reciptDate,
   invoiceID,
 }) {
+  const { i18n } = useTranslation();
   return (
     <div className={`popup-payment-window ${!showPayment ? "hide" : ""}`}>
-      <FinalInvoice invoice={onGoingInvoice} />
+      <FinalInvoice key={showPayment} invoice={onGoingInvoice}/>
       {showReceipt ? (
         <ReceiptSection
           handelNewOrder={startNewOrder}
           onGoingInvoice={onGoingInvoice}
           invoiceID={invoiceID}
-          reciptDate={reciptDate} 
+          reciptDate={reciptDate}
         />
       ) : (
         <>
@@ -39,7 +41,10 @@ export default function PaymentPopupWindow({
             paymentInfo={paymentInfo}
             showCashInput={showCashInput}
           />
-          <button className="close-btn" onClick={() => handelShowPayment()}>
+          <button
+            className={`close-btn ${i18n.language === "ar" && "ar"}`}
+            onClick={() => handelShowPayment()}
+          >
             <FaTimes />
           </button>
         </>

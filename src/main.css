@@ -169,7 +169,7 @@ form .input-field {
     height: 75px;
     background-color: var(--secondaryColor);
     box-shadow: var(--mainBoxShadow);
-    padding: 5px;
+    padding: 10px 20px;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -178,25 +178,53 @@ form .input-field {
     top: 0;
     right: 0;
     width: 100%;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
 }
 
-.app-navbar a {
+.nav-links {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+    width: 90%;
+}
+
+.language-switcher {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+}
+
+.language-switcher select {
+    padding: 6px 10px;
+    border-radius: 6px;
+    border: 1px solid var(--softGray);
+    background: white;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+.nav-links a {
     color: white;
     text-decoration: none;
     font-size: 18px;
     transition: var(--mainTransition);
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
-.app-navbar a.active-navLink {
+.nav-links a.active-navLink {
     font-weight: bold;
     color: var(--darkerPrimaryColor);
 }
 
-.app-navbar a:hover {
+.nav-links a:hover {
     color: var(--darkerPrimaryColor);
 }
 
-.app-navbar a .nav-icon {
+.nav-links a .nav-icon {
     margin-right: 5px;
     font-size: 18px;
     vertical-align: text-top;
@@ -210,7 +238,7 @@ form .input-field {
 
 .products-section {
     height: 100%;
-    width: 65%;
+    width: 60%;
     overflow-y: auto;
 }
 
@@ -224,16 +252,27 @@ form .input-field {
     margin-bottom: 15px;
 }
 
+
 .options .filters {
     display: flex;
+    align-items: center;
     gap: 10px;
 }
 
+.options .filters select {
+    padding: 8px 12px;
+    border: 1px solid var(--softGray);
+    border-radius: 8px;
+    background-color: white;
+    font-size: 14px;
+    min-width: 180px;
+}
+
 .options .filters .clear-btn {
-    background-color: var(--thirdColor);
-    color: var(--darkerPrimaryColor);
+    background-color: var(--softBlue);
+    color: white;
     font-weight: bold;
-    border: 3px solid #d4a373;
+    /* border: 1px solid var(--darkersoftBlue); */
     padding: 8px 16px;
     border-radius: 6px;
     cursor: pointer;
@@ -241,9 +280,9 @@ form .input-field {
 }
 
 .filters .clear-btn:hover {
-    background-color: var(--fourthColor);
+    background-color: var(--darkersoftBlue);
     color: white;
-    border-color: var(--buttonColor);
+    /* border-color: var(--buttonColor); */
 }
 
 .filters .category {
@@ -404,7 +443,7 @@ form .input-field {
 .invoice-section {
     box-shadow: var(--mainBoxShadow);
     min-height: inherit;
-    width: 35%;
+    width: 40%;
     background-color: #ddd;
     padding: 16px;
 }
@@ -420,25 +459,69 @@ form .input-field {
 }
 
 .empty-invoice .empty-icon {
-    font-size: 50px;
+    font-size: 56px;
     color: var(--buttonColor);
+    animation: empty-bounce-loop 1.8s ease-in-out infinite;
+}
+
+@keyframes empty-bounce-loop {
+
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-10px);
+    }
 }
 
 .empty-invoice .main-text {
     color: var(--secondaryColor);
     font-size: 18px;
-    font-weight: bold;
+    font-weight: 700;
+    animation: empty-fade-up 420ms 120ms ease-out both;
 }
 
 .empty-invoice .sub-text {
     font-size: 14px;
     color: #555;
+    animation: empty-fade-up 420ms 220ms ease-out both;
+}
+
+@keyframes empty-fade-up {
+    0% {
+        transform: translateY(6px);
+        opacity: 0;
+    }
+
+    100% {
+        transform: translateY(0);
+        opacity: 1;
+    }
 }
 
 .invoice-body {
     height: 100%;
     display: flex;
     flex-direction: column;
+    animation: fadeInSlide 0.6s ease-in-out;
+}
+
+/* .animate-invoice-body {
+    animation: fadeInSlide 0.6s ease;
+} */
+
+@keyframes fadeInSlide {
+    0% {
+        opacity: 0;
+        transform: translateY(15px);
+    }
+
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 .invoice-body .invoice-items {
@@ -466,11 +549,16 @@ form .input-field {
     background: var(--darkerPrimaryColor);
 }
 
+.fade-in-row {
+    animation: fadeInSlide 0.3s ease-in-out;
+}
+
 table {
     width: 100%;
     border-collapse: collapse;
     background-color: white;
     border-radius: 10px;
+    overflow: hidden;
 }
 
 table thead {
@@ -490,14 +578,12 @@ table tfoot {
     background-color: var(--thirdColor);
     font-weight: bold;
 }
-
 table td {
     padding: 10px;
 }
 
 .invoice-items tbody tr td .quantity {
     display: flex;
-    height: 100%;
     justify-content: center;
     align-items: center;
     gap: 8px;
@@ -507,24 +593,31 @@ table td {
     color: var(--primaryColor);
     cursor: pointer;
     font-size: 18px;
+    transition: 0.2s;
 }
 
 .quantity .minus-circle {
     color: var(--buttonColor);
     cursor: pointer;
     font-size: 18px;
+    transition: 0.2s;
 }
 
 td.trash-can {
     color: var(--buttonColor);
     cursor: pointer;
     font-size: 18px;
+    transition: 0.2s;
+}
+
+td.trash-can:hover {
+    transform: scale(1.2);
 }
 
 .invoice-body .open-custmer-page-btn {
     width: 80%;
     margin: auto;
-    padding: 5px 10px;
+    padding: 8px 12px;
     border-radius: 8px;
     font-size: 13px;
     font-weight: bold;
@@ -535,24 +628,38 @@ td.trash-can {
     transition: var(--mainTransition);
 }
 
+@keyframes pulseHover {
+    0% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.05);
+    }
+
+    100% {
+        transform: scale(1);
+    }
+}
+
 .invoice-body .open-custmer-page-btn:hover {
     background-color: var(--darkerThirdColor);
     color: #ddd;
+    animation: pulseHover 0.4s ease;
 }
 
 .invoice-body .invoice-options {
-    /* height: 20%; */
     display: flex;
     justify-content: space-around;
-    gap: 8xp;
+    gap: 8px;
     margin: 10px 0;
 }
 
 .invoice-options button {
     display: flex;
     align-items: center;
-    gap: 3px;
-    padding: 24px 12px;
+    gap: 6px;
+    padding: 12px 16px;
     border: none;
     border-radius: 6px;
     font-size: 13px;
@@ -570,6 +677,7 @@ td.trash-can {
 .pend-btn:hover,
 .copy-btn:hover {
     background-color: var(--darkerFourthColor);
+    animation: pulseHover 0.4s ease;
 }
 
 .complete-btn {
@@ -579,6 +687,7 @@ td.trash-can {
 
 .complete-btn:hover {
     background-color: var(--darkerPrimaryColor);
+    animation: pulseHover 0.4s ease;
 }
 
 .cancel-btn,
@@ -590,6 +699,7 @@ td.trash-can {
 .cancel-btn:hover,
 .return-btn:hover {
     background-color: var(--buttonColorDarker);
+    animation: pulseHover 0.4s ease;
 }
 
 /* Payment Popup Window */
@@ -627,6 +737,9 @@ td.trash-can {
 
 .popup-payment-window {
     position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0.9);
     width: 85%;
     height: 85vh;
     background-color: var(--backgroundColor);
@@ -634,14 +747,59 @@ td.trash-can {
     padding: 20px;
     border-radius: var(--mainBorderRadius);
     display: flex;
-    gap: 8px;
+    gap: 12px;
     opacity: 0;
-    transform: scale(0.95);
-    animation: fadeIn 0.3s ease-in-out forwards;
+    animation: popupIn 0.4s ease forwards;
+    z-index: 1000;
+}
+
+@keyframes popupIn {
+    0% {
+        opacity: 0;
+        transform: translate(-50%, -50%) scale(0.85);
+    }
+
+    60% {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(1.02);
+    }
+
+    100% {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(1);
+    }
 }
 
 .popup-payment-window.hide {
-    animation: fadeOut 0.3s ease-in-out forwards;
+    animation: popupOut 0.3s ease forwards;
+}
+
+@keyframes popupOut {
+    0% {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(1);
+    }
+
+    100% {
+        opacity: 0;
+        transform: translate(-50%, -50%) scale(0.8);
+    }
+}
+
+@keyframes fadeOutRow {
+    0% {
+        opacity: 1;
+        transform: translateX(0);
+    }
+
+    100% {
+        opacity: 0;
+        transform: translateX(-20px);
+    }
+}
+
+.fade-out-row {
+    animation: fadeOutRow 0.4s ease forwards;
 }
 
 @keyframes fadeIn {
@@ -670,7 +828,7 @@ td.trash-can {
 
 .close-btn {
     position: absolute;
-    top: 15px;
+    top: 25px;
     right: 30px;
     background: none;
     border: none;
@@ -693,6 +851,19 @@ td.trash-can {
     /* height: 100%; */
     flex: 0.4;
     overflow-y: auto;
+    animation: slideInLeft 0.5s ease;
+}
+
+@keyframes slideInLeft {
+    from {
+        transform: translateX(-20px);
+        opacity: 0;
+    }
+
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
 }
 
 .payment-section {
@@ -702,6 +873,19 @@ td.trash-can {
     padding: 10px;
     border-radius: var(--mainBorderRadius);
     box-shadow: var(--mainBoxShadow);
+    animation: slideInRight 0.5s ease;
+}
+
+@keyframes slideInRight {
+    from {
+        transform: translateX(20px);
+        opacity: 0;
+    }
+
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
 }
 
 .process-info h2 {
@@ -811,6 +995,24 @@ td.trash-can {
 .check-cash-btn:hover,
 .add-to-custmer-acount-btn:hover {
     background-color: var(--darkerPrimaryColor);
+}
+
+.cash-method {
+    animation: expandDown 0.3s ease;
+}
+
+@keyframes expandDown {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+        height: 0;
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+        height: auto;
+    }
 }
 
 .process-calculation {
@@ -1033,6 +1235,7 @@ input:focus {
 .show-btn:hover,
 .pay-part-btn:hover {
     background-color: var(darkerThirdColor);
+    animation: pulseHover 0.4s ease;
 }
 
 .print-btn {
@@ -1043,6 +1246,7 @@ input:focus {
 
 .print-btn:hover {
     background-color: var(--darkersoftBlue);
+    animation: pulseHover 0.4s ease;
     /* Darker Blue */
 }
 
@@ -1095,12 +1299,15 @@ input:focus {
     text-align: left;
     color: black;
 }
-.receipt td{
+
+.receipt td {
     background-color: white;
 }
+
 .receipt th {
     background-color: var(--backgroundColor);
 }
+
 /* MODAL */
 .modal::backdrop {
     position: fixed;

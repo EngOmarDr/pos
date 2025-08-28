@@ -3,7 +3,7 @@ import { ToastContainer } from "react-toastify";
 import { createRoot } from "react-dom/client";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import "./main.css";
-import './utilities/i18next.js'
+import "./utilities/i18next.js";
 import HomePage from "./pages/HomePage.jsx";
 import LoginPage from "./pages/LoginPage.jsx";
 import CompletedInvoicesPage from "./pages/CompletedInvoicesPage";

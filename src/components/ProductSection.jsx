@@ -14,6 +14,7 @@ export default function ProductsSection({
   handelClearFilter,
   handelSerchSubmit,
   searchRef,
+  lastClikedId
 }) {
   const { t } = useTranslation();
   let productsSectionContent;
@@ -28,6 +29,7 @@ export default function ProductsSection({
           <AvailableProducts
             products={searchResult}
             onAddItem={handleAddProductToInvoice}
+            lastClikedId={lastClikedId}
           />
         );
       } else if (searchResult && searchResult.length == 0) {
@@ -39,6 +41,7 @@ export default function ProductsSection({
           <AvailableProducts
             products={filterdProducts}
             onAddItem={handleAddProductToInvoice}
+            lastClikedId={lastClikedId}
           />
         );
       }
@@ -50,6 +53,7 @@ export default function ProductsSection({
           <AvailableProducts
             products={searchResult}
             onAddItem={handleAddProductToInvoice}
+            lastClikedId={lastClikedId}
           />
         );
       } else if (searchResult && searchResult.length == 0) {
@@ -61,6 +65,7 @@ export default function ProductsSection({
           <AvailableProducts
             products={availableProducts}
             onAddItem={handleAddProductToInvoice}
+            lastClikedId={lastClikedId}
           />
         );
       }
@@ -85,7 +90,7 @@ export default function ProductsSection({
           result={searchResult}
         />
       </div>
-      <div className="grid gap-4 grid-cols-[repeat(auto-fill,minmax(min(100%,180px),1fr))] p-3">
+      <div className="grid gap-3 grid-cols-[repeat(auto-fill,minmax(min(100%,150px),1fr))] p-3">
         {productsSectionContent}
       </div>
     </div>
