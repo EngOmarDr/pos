@@ -4,7 +4,7 @@ import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { fetchProducts } from "../services/PoductsServices.js";
+import { fetchProducts, getById } from "../services/PoductsServices.js";
 import { fetchGroupsTree } from "../services/CroupsServices.js";
 import { getTotal } from "../utilities/getTotal.js";
 import { EmptyInvoice } from "../components/EmptyInvoice.jsx";
@@ -21,7 +21,7 @@ import {
 } from "../services/InvoiceServices.js";
 import { useLocation } from "react-router-dom";
 import ChooseProductModal from "../components/ChooseProductModal.jsx";
-import { t } from "i18next";
+import i18next, { t } from "i18next";
 import { getPrice } from "../utilities/getPrice.js";
 
 export default function HomePage() {
@@ -113,7 +113,7 @@ export default function HomePage() {
       channelRef.current.postMessage({
         invoice: onGoingInvoice,
       });
-    }, 600);
+    }, 800);
     if (!customerWindowRef.current || customerWindowRef.current.closed) {
       customerWindowRef.current = window.open("/custmer-screen", "_blank");
     }
@@ -180,7 +180,38 @@ export default function HomePage() {
       searchRef.current.value = "";
     }
   }
-  // Probably It will change when we start with the invoice section (adding a new invoice )
+  function hanelChangePrice(product, newPrice) {
+    setOnGoingInvoice((prev) => {
+      return prev.map((invoiceItem) => {
+        return invoiceItem.id !== product.id
+          ? invoiceItem
+          : {
+              ...invoiceItem,
+              price: newPrice,
+            };
+      });
+    });
+  }
+  async function handelRestPriceToDefult(product) {
+    var productFullInfo;
+    var productFromPrice;
+    if (!product.defaultPrice) {
+      productFullInfo = await getById(product.id);
+      productFromPrice = getPrice(productFullInfo, invoiceType);
+    }
+    setOnGoingInvoice((prev) => {
+      return prev.map((invoiceItem) => {
+        return invoiceItem.id !== product.id
+          ? invoiceItem
+          : {
+              ...invoiceItem,
+              price: invoiceItem.defaultPrice
+                ? invoiceItem.defaultPrice
+                : productFromPrice?.price ?? 0,
+            };
+      });
+    });
+  }
   function handleAddProductToInvoice(product) {
     setLastClikedProduct(product.id);
     setTimeout(() => setLastClikedProduct(null), 700);
@@ -199,6 +230,7 @@ export default function HomePage() {
             {
               id: product.id,
               quantity: 1,
+              defaultPrice: productFromPrice?.price ?? 0,
               price: productFromPrice?.price ?? 0,
               unitItemId:
                 productFromPrice?.unitItemId ??
@@ -572,6 +604,8 @@ export default function HomePage() {
             onGoingInvoice={onGoingInvoice}
             onCancleOnGoinigInvoice={handelCancleOnGoinigInvoice}
             handleOpenCustmerScreen={handleOpenCustmerScreen}
+            hanelChangePrice={hanelChangePrice}
+            handelRestPriceToDefult={handelRestPriceToDefult}
           />
         ) : (
           <EmptyInvoice />

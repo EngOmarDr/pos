@@ -9,6 +9,7 @@ import {
   //   FaUserClock,
   FaCashRegister,
   FaMoneyBill,
+  
 } from "react-icons/fa";
 
 export default function App() {
@@ -30,10 +31,19 @@ export default function App() {
       }}
     >
       <nav className="app-navbar">
-        <div className="language-switcher">
+        <div key={i18n.language} className="language-switcher">
           <select id="lang" onChange={(e) => handelSwitch(e.target.value)}>
-            <option value="en">English</option>
-            <option value="ar">العربية</option>
+            {i18n.language === "en" ? (
+              <>
+                <option value="en">English</option>
+                <option value="ar">العربية</option>
+              </>
+            ) : (
+              <>
+                <option value="ar">العربية</option>
+                <option value="en">English</option>
+              </>
+            )}
           </select>
           {i18n.language === "en" ? (
             <ReactCountryFlag

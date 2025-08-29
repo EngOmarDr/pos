@@ -11,7 +11,7 @@ import FinalInvoice from "../components/FinalInvoice";
 import { useTranslation } from "react-i18next";
 
 export default function CompletedInvoicesPage() {
-  const { t } = useTranslation(); 
+  const { t } = useTranslation();
   const [showInvoiceItems, setShowInvoiceItems] = useState(false);
   const [invoiceItems, setInvoiceItems] = useState([]);
   const navigate = useNavigate();
@@ -24,6 +24,8 @@ export default function CompletedInvoicesPage() {
   const complatedInvoices = allInvoices
     .filter((invoice) => !invoice.isSuspended)
     .map((invoice) => {
+      console.log(invoice.id);
+      console.log(invoice.invoiceItems);
       return (
         <CompletedInvoice
           key={invoice.id}
@@ -82,7 +84,7 @@ export default function CompletedInvoicesPage() {
           <button className="close-btn" onClick={() => handelClosePopup()}>
             <FaTimes />
           </button>
-          <FinalInvoice invoice={invoiceItems}/>
+          <FinalInvoice invoice={invoiceItems} />
         </div>
       </div>
     </div>

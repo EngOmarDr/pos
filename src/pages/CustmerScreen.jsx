@@ -9,7 +9,7 @@ import "slick-carousel/slick/slick-theme.css";
 import { useTranslation } from "react-i18next";
 
 export default function CustmerScreen() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const [currentInvoice, setCurrentInvoice] = useState([]);
   const channelRef = useRef();
   if (!channelRef.current) {
@@ -21,7 +21,6 @@ export default function CustmerScreen() {
     };
     return () => channelRef.current.close();
   }, []);
-
   const sliderRef = useRef(null);
   const [currentSlide, setCurrentSlide] = useState(0);
   const [isPlaying, setIsPlaying] = useState(true);
@@ -119,7 +118,13 @@ export default function CustmerScreen() {
   // The Design may chanage
   return (
     <>
-      <div className="custmer-screen">
+      <div
+        className="custmer-screen"
+        style={{
+          direction: i18n.language === "ar" ? "rtl" : "ltr",
+          textAlign: i18n.language === "ar" ? "right" : "left",
+        }}
+      >
         <div className="custmer-invoice">
           <h3>{t("thankYouLetter")}</h3>
           <FinalInvoice invoice={currentInvoice} />

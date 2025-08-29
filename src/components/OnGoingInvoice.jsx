@@ -11,6 +11,8 @@ export default function OnGoingInvoice({
   onShowPayment,
   onCancleOnGoinigInvoice,
   handleOpenCustmerScreen,
+  hanelChangePrice,
+  handelRestPriceToDefult
 }) {
   const { t } = useTranslation();
   return (
@@ -20,6 +22,8 @@ export default function OnGoingInvoice({
         onIncrease={onIncreaseQuantity}
         onDecrease={onDecreaseQuantity}
         onRemove={onRemoveItemFromInvoice}
+        hanelChangePrice={hanelChangePrice}
+        handelRestPriceToDefult={handelRestPriceToDefult}
       />
       <div className="invoice-options">
         <button className="pend-btn" onClick={() => onPending()}>

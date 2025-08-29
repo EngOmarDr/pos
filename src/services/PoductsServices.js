@@ -10,3 +10,8 @@ export async function getAllByBarcode(QR) {
   );
   return response.data;
 }
+export async function getById(id) {
+  const response = await axiosInstance.get(`/products/${id}`);
+  console.log(response.data);
+  return response.data;
+}

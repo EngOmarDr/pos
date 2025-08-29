@@ -238,7 +238,7 @@ form .input-field {
 
 .products-section {
     height: 100%;
-    width: 60%;
+    width: 58%;
     overflow-y: auto;
 }
 
@@ -444,7 +444,7 @@ form .input-field {
 .invoice-section {
     box-shadow: var(--mainBoxShadow);
     min-height: inherit;
-    width: 40%;
+    width: 42%;
     background-color: #ddd;
     padding: 16px;
 }
@@ -585,11 +585,12 @@ table td {
     padding: 10px;
 }
 
-.invoice-items tbody tr td .quantity {
+.invoice-items tbody tr td .quantity,
+.invoice-items tbody tr td .unitPrice {
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 8px;
+    gap: 5px;
 }
 
 .quantity .plus-circle {
@@ -604,6 +605,38 @@ table td {
     cursor: pointer;
     font-size: 18px;
     transition: 0.2s;
+}
+
+.invoice-items tbody tr td .unitPrice .edit-btn,
+.invoice-items tbody tr td .unitPrice .save-btn,
+.invoice-items tbody tr td .unitPrice .undo-btn {
+    cursor: pointer;
+    font-size: 16px;
+    transition: var(--mainTransition);
+}
+
+.invoice-items tbody tr td .unitPrice .edit-btn,
+.invoice-items tbody tr td .unitPrice .save-btn {
+    color: var(--secondaryColor);
+}
+
+.invoice-items tbody tr td .unitPrice .undo-btn {
+    color: var(--buttonColor);
+}
+
+.invoice-items tbody tr td .unitPrice .edit-btn:hover,
+.invoice-items tbody tr td .unitPrice .save-btn:hover {
+    color: var(--darkersoftBlue);
+}
+
+.invoice-items tbody tr td .unitPrice .undo-btn:hover {
+    color: var(--buttonColorDarker);
+}
+
+.price-chanag-input {
+    border: 1px dashed var(--primaryColor);
+    width: 90px;
+    height: 22px;
 }
 
 td.trash-can {
