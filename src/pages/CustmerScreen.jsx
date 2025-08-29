@@ -75,6 +75,8 @@ export default function CustmerScreen() {
       <div
         style={{
           padding: "5px ",
+          position: "absolute",
+          bottom: "-35px",
         }}
       >
         <ul style={{ margin: "0px" }}> {dots} </ul>
@@ -117,18 +119,9 @@ export default function CustmerScreen() {
   // The Design may chanage
   return (
     <>
-      <div
-        className="custmer-screen"
-        style={{
-          backgroundColor: "#eee",
-          padding: "16px",
-        }}
-      >
-        <div
-          className="custmer-invoice"
-          style={{ borderRadius: "8px", padding: "8px" }}
-        >
-          <h3 style={{ textWrap: "balance" }}>{t('thankYouLetter')}</h3>
+      <div className="custmer-screen">
+        <div className="custmer-invoice">
+          <h3>{t("thankYouLetter")}</h3>
           <FinalInvoice invoice={currentInvoice} />
         </div>
         <div className="ads-section">
@@ -138,7 +131,7 @@ export default function CustmerScreen() {
                 <img
                   src={`http://localhost:8080${ads[0].mediaUrl}`}
                   alt={ads[0].name}
-                  height="calc(100vh - 32px - 150px)"
+                  height="calc(100vh - 50px)"
                 />
               ) : (
                 <video
@@ -148,7 +141,7 @@ export default function CustmerScreen() {
                   loop
                   style={{
                     width: "100%",
-                    height: "auto",
+                    height: "calc(100vh - 50px)",
                     borderRadius: "8px",
                   }}
                 />
@@ -166,7 +159,7 @@ export default function CustmerScreen() {
                     <img
                       src={`http://localhost:8080${item.mediaUrl}`}
                       alt={item.name}
-                      height="calc(100vh - 32px - 150px)"
+                      height="calc(100vh - 50px)"
                     />
                   ) : (
                     <video
@@ -176,7 +169,7 @@ export default function CustmerScreen() {
                       loop
                       style={{
                         width: "100%",
-                        height: "auto",
+                        height: "calc(100vh - 50px)",
                         borderRadius: "8px",
                       }}
                     />
@@ -223,7 +216,7 @@ export default function CustmerScreen() {
             >
               سكر
             </p> */}
-            {/* <h4
+          {/* <h4
               style={{ textAlign: "start", direction: "rtl", fontSize: "19px" }}
             >
               هل تريد شراء:
@@ -233,18 +226,7 @@ export default function CustmerScreen() {
         </div>
       </div>
       {/* Loading for ads duration */}
-      <div
-        style={{
-          position: "absolute",
-          top: 0,
-          left: 0,
-          right: 0,
-          height: "3px",
-          backgroundColor: "rgba(255, 255, 255, 0.3)",
-          zIndex: 1,
-          overflow: "hidden",
-        }}
-      >
+      <div className="progress-bar">
         <div
           style={{
             height: "100%",
