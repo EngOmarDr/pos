@@ -3,9 +3,11 @@ import axiosInstance from "../utilities/api";
 export async function fetchInvoiceTypeData() {
   // FOR NOW IT WILL BE STATIC 1
   const res = await axiosInstance.get("/invoice-pos");
-  console.log('from invoice services -> fetch invoice typeData');
+  console.log("from invoice services -> fetch invoice typeData");
   console.log(res.data);
-  const response = await axiosInstance.get(`/invoice-types/${res.data.at(0).invoiceTypeId}`);
+  const response = await axiosInstance.get(
+    `/invoice-types/${res.data.at(0).invoiceTypeId}`
+  );
   return response.data;
 }
 export async function fetchCurrencyValue(id) {
@@ -13,9 +15,8 @@ export async function fetchCurrencyValue(id) {
   return response.data;
 }
 export async function creatInvoice(invoice) {
-  console.log(invoice);
-
-  const response = await axiosInstance.post("/invoices", invoice);
+  let newInvoice = {...invoice, isPosted:true}
+  const response = await axiosInstance.post("/invoices", newInvoice);
   return response.data;
 }
 export async function deleteInvoice(id) {

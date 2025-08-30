@@ -45,7 +45,7 @@ export default function App() {
               </>
             )}
           </select>
-          {i18n.language === "en" ? (
+          {/* {i18n.language === "en" ? (
             <ReactCountryFlag
               countryCode="US"
               svg
@@ -57,7 +57,7 @@ export default function App() {
               svg
               style={{ width: "1.5rem", height: "1.5rem" }}
             />
-          )}
+          )} */}
         </div>
         <div className="nav-links">
           <NavLink
