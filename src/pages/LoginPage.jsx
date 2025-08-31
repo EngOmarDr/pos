@@ -34,6 +34,12 @@ export default function LoginPage() {
     try {
       setisLoading(true);
       const apiCallResponse = await Login(loginCredentials);
+      console.log(apiCallResponse);
+      if (apiCallResponse.role !== "USER") {
+          setisLoading(false)
+          setErrInLogining('User Should Be an Cashier')
+          return;
+      }
       localStorage.setItem(
         "loginInfo",
         JSON.stringify({
