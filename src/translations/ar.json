@@ -38,7 +38,7 @@
     "noProductMatchQuerry":"لا يوجد منتج يطابق البحث",
     "noProductsAtStore":"لا يجد منتجات في المتجر حاليا",
     "receipt": "ايصال الفاتورة",
-    "thankYouLetter":"شكرا لتسوقكم عندنا ! ",
+    "thankYouLetter":"شكرا لتسوقكم معنا ! ",
     "paymentSucceed":"تم اكمال عملية الدفع بنجاح",
     "printReceipt":"اطلبع الفاتورة",
     "newOrder":"بدء فاتورة جديدة",
@@ -73,6 +73,6 @@
     "pendSuccessfully":"تم تعليق الفاتورة بنجاخ",
     "notPaid":"لم بتم دفع الفاتورة بعد",
     "confirmPayment ":"هذا الاجراء سيأكد الفاتورة ويكمل عملية الدفع",
-    "yesConfirm":"نعم و أكدها",
+    "yesConfirm":"نعم أكدها",
     "noConfirm":"كلا , لا تاكد العملية"
 }

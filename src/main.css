@@ -1321,8 +1321,19 @@ input:focus {
     text-align: center;
     border: 1px solid #ddd;
     background-color: white;
+    margin: 20px;
 }
 
+.receipt header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+}
+.receipt header img {
+    width: 100px;
+    height: 100px;
+}
 .receipt table {
     width: 100%;
     margin: 10px 0;

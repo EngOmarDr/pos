@@ -3,17 +3,23 @@ import { getTotal } from "../utilities/getTotal";
 import { useTranslation } from "react-i18next";
 import { getLocalISODateTime } from "../utilities/getLocalISODateTime";
 import { priceFormatter } from "../utilities/priceFormatter";
+import Logo from "../assets/syrien trading logo - 1 .jpg";
 function ReceiptComponent({ invoiceData, reciptDate, invoiceID }, ref) {
   const { t, i18n } = useTranslation();
   return (
     <div ref={ref} className="receipt">
-      <h2>{t("receipt")}</h2>
-      <p>
-        {t("invoiceIdentifer")} {invoiceID}
-      </p>
-      <p>
-        {t("invoiceDate")} {getLocalISODateTime(reciptDate)}
-      </p>
+      <header>
+        <img src={Logo} />
+        <div className="info">
+          <h2>{t("receipt")}</h2>
+          <p>
+            {t("invoiceIdentifer")} {invoiceID}
+          </p>
+          <p>
+            {t("invoiceDate")} {getLocalISODateTime(reciptDate)}
+          </p>
+        </div>
+      </header>
       <table>
         <thead>
           <tr>
