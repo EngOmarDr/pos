@@ -37,7 +37,7 @@ export default function LoginPage() {
       console.log(apiCallResponse);
       if (apiCallResponse.role !== "USER") {
           setisLoading(false)
-          setErrInLogining('User Should Be an Cashier')
+          setErrInLogining(t('shouldBeCashier'))
           return;
       }
       localStorage.setItem(

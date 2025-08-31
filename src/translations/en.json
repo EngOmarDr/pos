@@ -50,6 +50,7 @@
     "password":"Password",
     "login":"Login",
     "loging":"Loging . . .",
+    "shouldBeCashier":"User Should Be an Cashier",
     "enterName":"enter your user name",
     "enterPassword":"enter your password",
     "actionCannotUndone":"This action cannot be undone. All items in this invoice will be lost.",
